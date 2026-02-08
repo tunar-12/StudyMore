@@ -1,4 +1,4 @@
-package StudyMore;
+package StudyMore.controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,31 +16,31 @@ public class Controller {
 
     @FXML
     private void handleStudy() {
-        loadFXML("fxml/Study.fxml");
+        loadFXML("../fxml/Study.fxml");
     }
 
     @FXML
     private void handleProfile() {
-        loadFXML("fxml/Profile.fxml");
+        loadFXML("../fxml/Profile.fxml");
     }
 
     @FXML
     private void handleFriends() {
-        loadFXML("fxml/Friends.fxml");
+        loadFXML("../fxml/Friends.fxml");
     }
 
     @FXML
     private void handleInventory() {
-        loadFXML("fxml/Inventory.fxml");
+        loadFXML("../fxml/Inventory.fxml");
     }
     @FXML
     private void handleAchievements() {
-        loadFXML("fxml/Achievements.fxml");
+        loadFXML("../fxml/Achievements.fxml");
     }
 
     @FXML
     private void handleSettings() {
-        loadFXML("fxml/Settings.fxml");
+        loadFXML("../fxml/Settings.fxml");
     }
 
     // Helper method to switch the content of the center stage
