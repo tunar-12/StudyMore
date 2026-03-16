@@ -29,7 +29,7 @@
                         </Label>
                         <HBox alignment="CENTER" spacing="16.0">
                            <children>
-                              <Button fx:id="timerControlButton" mnemonicParsing="false" onAction="#timerController" style="-fx-background-color: #dc2626; -fx-text-fill: white; -fx-padding: 12 24;" text="STOP">
+                              <Button fx:id="timerControlButton" mnemonicParsing="false" onAction="#timerController" style="-fx-background-color: #dc2626; -fx-text-fill: white; -fx-padding: 12 24;" text="START">
                                  <font><Font name="System Bold" size="14.0" /></font>
                               </Button>
                               <Button fx:id="shortBreakButton" mnemonicParsing="false" onAction="#shortBreak" style="-fx-background-color: transparent; -fx-border-color: #404040; -fx-text-fill: #d4d4d4; -fx-padding: 11 24;" text="SHORT BREAK">
@@ -123,8 +123,8 @@
                                     
                                  </children>
                               </HBox>
-                              <HBox style="-fx-background-color: black; -fx-border-color: #262626; -fx-padding: 12;">
-                                 <!-- <children>
+                              <!-- <HBox style="-fx-background-color: black; -fx-border-color: #262626; -fx-padding: 12;">
+                                 <children>
                                     add this to add friends
                                     <Label text="2. Bro 1" textFill="#a3a3a3" />
                                     <AnchorPane HBox.hgrow="ALWAYS" />
@@ -132,8 +132,8 @@
                                        <font><Font name="Monospaced Regular" size="14.0" /></font>
                                     </Label>
                                     
-                                 </children> -->
-                              </HBox>
+                                 </children>
+                              </HBox>  -->
                            </children>
                         </VBox>
                      </children>
