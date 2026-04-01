@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #000000; -fx-font-family: 'Segoe UI', Helvetica, Arial, sans-serif;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: #000000; -fx-font-family: 'Segoe UI', Helvetica, Arial, sans-serif;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StudyMore.controllers.InventoryController">
    <children>
-      <ScrollPane fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent;" HBox.hgrow="ALWAYS">
+      <ScrollPane fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent;">
          <padding>
             <Insets />
          </padding>
@@ -66,7 +66,7 @@
                                     <Font name="System Bold" size="12.0" />
                                  </font>
                               </Label>
-                              <Label mnemonicParsing="false" text="N" textFill="BLACK">
+                              <Label fx:id="totalItemsLabel" mnemonicParsing="false" text="0" textFill="BLACK">
                                  <font>
                                     <Font name="Monospaced Bold" size="16.0" />
                                  </font>
@@ -101,74 +101,10 @@
                                     <Insets />
                                  </padding>
                                  <content>
-                                    <HBox spacing="24.0" style="-fx-background-color: #000000;">
+                                    <HBox fx:id="bannersContainer" spacing="24.0" style="-fx-background-color: #000000;">
                                        <padding>
                                           <Insets bottom="24.0" left="24.0" right="24.0" top="24.0" />
                                        </padding>
-                                       <children>
-                                          <VBox alignment="CENTER" minWidth="260.0" prefWidth="260.0" spacing="16.0" style="-fx-background-color: #171717; -fx-border-color: #ffffff; -fx-border-width: 1;">
-                                             <padding>
-                                                <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-                                             </padding>
-                                             <children>
-                                                <StackPane prefHeight="96.0" style="-fx-background-color: #000000; -fx-border-color: #262626; -fx-border-width: 1;">
-                                                   <children>
-                                                      <Label mnemonicParsing="false" style="-fx-background-color: #000000; -fx-border-color: #262626;" text="1" textFill="WHITE">
-                                                         <font>
-                                                            <Font name="Monospaced" size="12.0" />
-                                                         </font>
-                                                         <padding>
-                                                            <Insets bottom="4.0" left="8.0" right="8.0" top="4.0" />
-                                                         </padding>
-                                                      </Label>
-                                                   </children>
-                                                </StackPane>
-                                                <HBox alignment="CENTER">
-                                                   <children>
-                                                      <Label mnemonicParsing="false" text="EQUIPPED" textFill="WHITE">
-                                                         <font>
-                                                            <Font name="System Bold" size="12.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <Region HBox.hgrow="ALWAYS" />
-                                                      <Button mnemonicParsing="false" style="-fx-background-color: #ffffff; -fx-background-radius: 0; -fx-border-color: #ffffff;" text="✔ ACTIVE" textFill="BLACK">
-                                                         <font>
-                                                            <Font name="System Bold" size="10.0" />
-                                                         </font>
-                                                      </Button>
-                                                   </children>
-                                                </HBox>
-                                             </children>
-                                          </VBox>
-                                          <VBox alignment="CENTER" minWidth="260.0" prefWidth="260.0" spacing="16.0" style="-fx-background-color: #000000; -fx-border-color: #262626; -fx-border-width: 1;">
-                                             <padding>
-                                                <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-                                             </padding>
-                                             <children>
-                                                <StackPane prefHeight="96.0" style="-fx-background-color: #171717; -fx-border-color: #262626; -fx-border-width: 1;">
-                                                   <children>
-                                                      <Label mnemonicParsing="false" style="-fx-background-color: #000000; -fx-border-color: #262626;" text="2" textFill="#a3a3a3">
-                                                         <font>
-                                                            <Font name="Monospaced" size="12.0" />
-                                                         </font>
-                                                         <padding>
-                                                            <Insets bottom="4.0" left="8.0" right="8.0" top="4.0" />
-                                                         </padding>
-                                                      </Label>
-                                                   </children>
-                                                </StackPane>
-                                                <HBox alignment="CENTER">
-                                                   <children>
-                                                      <Button mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: #404040; -fx-background-radius: 0;" text="EQUIP" textFill="#d4d4d4">
-                                                         <font>
-                                                            <Font name="System Bold" size="10.0" />
-                                                         </font>
-                                                      </Button>
-                                                   </children>
-                                                </HBox>
-                                             </children>
-                                          </VBox>
-                                       </children>
                                     </HBox>
                                  </content>
                               </ScrollPane>
@@ -198,66 +134,10 @@
                                     <Insets />
                                  </padding>
                                  <content>
-                                    <HBox spacing="24.0" style="-fx-background-color: #000000;">
+                                    <HBox fx:id="titlesContainer" spacing="24.0" style="-fx-background-color: #000000;">
                                        <padding>
                                           <Insets bottom="24.0" left="24.0" right="24.0" top="24.0" />
                                        </padding>
-                                       <children>
-                                          <HBox alignment="CENTER_LEFT" minWidth="260.0" prefWidth="260.0" spacing="16.0" style="-fx-background-color: #171717; -fx-border-color: #ffffff; -fx-border-width: 1;">
-                                             <padding>
-                                                <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-                                             </padding>
-                                             <children>
-                                                <StackPane prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #000000; -fx-border-color: #ffffff; -fx-border-width: 1;">
-                                                   <children>
-                                                      <Label mnemonicParsing="false" text="👑" textFill="WHITE">
-                                                         <font>
-                                                            <Font size="16.0" />
-                                                         </font>
-                                                      </Label>
-                                                   </children>
-                                                </StackPane>
-                                                <Label mnemonicParsing="false" text="GRANDMASTER" textFill="WHITE">
-                                                   <font>
-                                                      <Font name="System Bold" size="12.0" />
-                                                   </font>
-                                                </Label>
-                                                <Region HBox.hgrow="ALWAYS" />
-                                                <Button mnemonicParsing="false" style="-fx-background-color: #ffffff; -fx-background-radius: 0;" text="ACTIVE" textFill="BLACK">
-                                                   <font>
-                                                      <Font name="System Bold" size="10.0" />
-                                                   </font>
-                                                </Button>
-                                             </children>
-                                          </HBox>
-                                          <HBox alignment="CENTER_LEFT" minWidth="260.0" prefWidth="260.0" spacing="16.0" style="-fx-background-color: #000000; -fx-border-color: #262626; -fx-border-width: 1;">
-                                             <padding>
-                                                <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-                                             </padding>
-                                             <children>
-                                                <StackPane prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #000000; -fx-border-color: #404040; -fx-border-width: 1;">
-                                                   <children>
-                                                      <Label mnemonicParsing="false" text="🔥" textFill="#a3a3a3">
-                                                         <font>
-                                                            <Font size="16.0" />
-                                                         </font>
-                                                      </Label>
-                                                   </children>
-                                                </StackPane>
-                                                <Label mnemonicParsing="false" text="EXPERT" textFill="#d4d4d4">
-                                                   <font>
-                                                      <Font name="System Bold" size="12.0" />
-                                                   </font>
-                                                </Label>
-                                                <Region HBox.hgrow="ALWAYS" />
-                                                <Button mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: #404040; -fx-background-radius: 0;" text="EQUIP" textFill="#d4d4d4">
-                                                   <font>
-                                                      <Font name="System Bold" size="10.0" />
-                                                   </font>
-                                                </Button>
-                                             </children>
-                                          </HBox>
-                                       </children>
                                     </HBox>
                                  </content>
                               </ScrollPane>
@@ -289,72 +169,10 @@
                                           <Insets />
                                        </padding>
                                        <content>
-                                          <HBox spacing="16.0" style="-fx-background-color: #000000;">
+                                          <HBox fx:id="medalsContainer" spacing="16.0" style="-fx-background-color: #000000;">
                                              <padding>
                                                 <Insets bottom="24.0" left="24.0" right="24.0" top="24.0" />
                                              </padding>
-                                             <children>
-                                                <VBox alignment="CENTER" minWidth="120.0" prefWidth="120.0" spacing="16.0" style="-fx-background-color: #171717; -fx-border-color: #ffffff; -fx-border-width: 1;">
-                                                   <padding>
-                                                      <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-                                                   </padding>
-                                                   <children>
-                                                      <Label mnemonicParsing="false" text="🥇" textFill="WHITE">
-                                                         <font>
-                                                            <Font size="30.0" />
-                                                         </font>
-                                                         <padding>
-                                                            <Insets top="8.0" />
-                                                         </padding>
-                                                      </Label>
-                                                      <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: #ffffff; -fx-background-radius: 0;" text="ACTIVE" textFill="BLACK">
-                                                         <font>
-                                                            <Font name="System Bold" size="10.0" />
-                                                         </font>
-                                                      </Button>
-                                                   </children>
-                                                </VBox>
-                                                <VBox alignment="CENTER" minWidth="120.0" prefWidth="120.0" spacing="16.0" style="-fx-background-color: #000000; -fx-border-color: #262626; -fx-border-width: 1;">
-                                                   <padding>
-                                                      <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-                                                   </padding>
-                                                   <children>
-                                                      <Label mnemonicParsing="false" text="🥈" textFill="#a3a3a3">
-                                                         <font>
-                                                            <Font size="30.0" />
-                                                         </font>
-                                                         <padding>
-                                                            <Insets top="8.0" />
-                                                         </padding>
-                                                      </Label>
-                                                      <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: #404040; -fx-background-radius: 0;" text="EQUIP" textFill="#d4d4d4">
-                                                         <font>
-                                                            <Font name="System Bold" size="10.0" />
-                                                         </font>
-                                                      </Button>
-                                                   </children>
-                                                </VBox>
-                                                <VBox alignment="CENTER" minWidth="120.0" prefWidth="120.0" spacing="16.0" style="-fx-background-color: #000000; -fx-border-color: #262626; -fx-border-width: 1;">
-                                                   <padding>
-                                                      <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-                                                   </padding>
-                                                   <children>
-                                                      <Label mnemonicParsing="false" text="🥉" textFill="#525252">
-                                                         <font>
-                                                            <Font size="30.0" />
-                                                         </font>
-                                                         <padding>
-                                                            <Insets top="8.0" />
-                                                         </padding>
-                                                      </Label>
-                                                      <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: #404040; -fx-background-radius: 0;" text="EQUIP" textFill="#d4d4d4">
-                                                         <font>
-                                                            <Font name="System Bold" size="10.0" />
-                                                         </font>
-                                                      </Button>
-                                                   </children>
-                                                </VBox>
-                                             </children>
                                           </HBox>
                                        </content>
                                     </ScrollPane>
@@ -384,72 +202,10 @@
                                           <Insets />
                                        </padding>
                                        <content>
-                                          <VBox spacing="16.0" style="-fx-background-color: #000000;">
+                                          <VBox fx:id="avatarsContainer" spacing="16.0" style="-fx-background-color: #000000;">
                                              <padding>
                                                 <Insets bottom="24.0" left="24.0" right="24.0" top="24.0" />
                                              </padding>
-                                             <children>
-                                                <HBox alignment="CENTER_LEFT" spacing="16.0" style="-fx-background-color: #171717; -fx-border-color: #ffffff; -fx-border-width: 1;">
-                                                   <padding>
-                                                      <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
-                                                   </padding>
-                                                   <children>
-                                                      <StackPane prefHeight="48.0" prefWidth="48.0" style="-fx-background-color: #000000; -fx-border-color: #ffffff; -fx-border-width: 1;">
-                                                         <children>
-                                                            <Label mnemonicParsing="false" text="👤" textFill="WHITE">
-                                                               <font>
-                                                                  <Font size="20.0" />
-                                                               </font>
-                                                            </Label>
-                                                         </children>
-                                                      </StackPane>
-                                                      <Label mnemonicParsing="false" text="DEFAULT SILHOUETTE" textFill="WHITE">
-                                                         <font>
-                                                            <Font name="System Bold" size="12.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <Region HBox.hgrow="ALWAYS" />
-                                                      <Button mnemonicParsing="false" style="-fx-background-color: #ffffff; -fx-background-radius: 0;" text="ACTIVE" textFill="BLACK">
-                                                         <font>
-                                                            <Font name="System Bold" size="10.0" />
-                                                         </font>
-                                                         <padding>
-                                                            <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
-                                                         </padding>
-                                                      </Button>
-                                                   </children>
-                                                </HBox>
-                                                <HBox alignment="CENTER_LEFT" spacing="16.0" style="-fx-background-color: #000000; -fx-border-color: #262626; -fx-border-width: 1;">
-                                                   <padding>
-                                                      <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
-                                                   </padding>
-                                                   <children>
-                                                      <StackPane prefHeight="48.0" prefWidth="48.0" style="-fx-background-color: #000000; -fx-border-color: #404040; -fx-border-width: 1;">
-                                                         <children>
-                                                            <Label mnemonicParsing="false" text="💀" textFill="#a3a3a3">
-                                                               <font>
-                                                                  <Font size="20.0" />
-                                                               </font>
-                                                            </Label>
-                                                         </children>
-                                                      </StackPane>
-                                                      <Label mnemonicParsing="false" text="SKULL ICON" textFill="#a3a3a3">
-                                                         <font>
-                                                            <Font name="System Bold" size="12.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <Region HBox.hgrow="ALWAYS" />
-                                                      <Button mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: #404040; -fx-background-radius: 0;" text="EQUIP" textFill="#d4d4d4">
-                                                         <font>
-                                                            <Font name="System Bold" size="10.0" />
-                                                         </font>
-                                                         <padding>
-                                                            <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
-                                                         </padding>
-                                                      </Button>
-                                                   </children>
-                                                </HBox>
-                                             </children>
                                           </VBox>
                                        </content>
                                     </ScrollPane>
@@ -484,46 +240,10 @@
                                           <Insets />
                                        </padding>
                                        <content>
-                                          <HBox spacing="24.0" style="-fx-background-color: #000000;">
+                                          <HBox fx:id="mascotSkinsContainer" spacing="24.0" style="-fx-background-color: #000000;">
                                              <padding>
                                                 <Insets bottom="24.0" left="24.0" right="24.0" top="24.0" />
                                              </padding>
-                                             <children>
-                                                <VBox alignment="CENTER" minWidth="260.0" prefWidth="260.0" spacing="16.0" style="-fx-background-color: #171717; -fx-border-color: #ffffff; -fx-border-width: 1;">
-                                                   <padding>
-                                                      <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-                                                   </padding>
-                                                   <children>
-                                                      <StackPane prefHeight="96.0" style="-fx-background-color: #000000; -fx-border-color: #262626; -fx-border-width: 1;">
-                                                         <children>
-                                                            <Label mnemonicParsing="false" style="-fx-background-color: #000000; -fx-border-color: #262626;" text="CAT1" textFill="WHITE">
-                                                               <font>
-                                                                  <Font name="Monospaced" size="12.0" />
-                                                               </font>
-                                                               <padding>
-                                                                  <Insets bottom="4.0" left="8.0" right="8.0" top="4.0" />
-                                                               </padding>
-                                                            </Label>
-                                                         </children>
-                                                      </StackPane>
-                                                      <HBox alignment="CENTER">
-                                                         <children>
-                                                            <Label mnemonicParsing="false" text="EQUIPPED" textFill="WHITE">
-                                                               <font>
-                                                                  <Font name="System Bold" size="12.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Region HBox.hgrow="ALWAYS" />
-                                                            <Button mnemonicParsing="false" style="-fx-background-color: #ffffff; -fx-background-radius: 0; -fx-border-color: #ffffff;" text="✔ ACTIVE" textFill="BLACK">
-                                                               <font>
-                                                                  <Font name="System Bold" size="10.0" />
-                                                               </font>
-                                                            </Button>
-                                                         </children>
-                                                      </HBox>
-                                                   </children>
-                                                </VBox>
-                                             </children>
                                           </HBox>
                                        </content>
                                     </ScrollPane>
@@ -554,46 +274,10 @@
                                           <Insets />
                                        </padding>
                                        <content>
-                                          <HBox spacing="24.0" style="-fx-background-color: #000000;">
+                                          <HBox fx:id="mascotHousesContainer" spacing="24.0" style="-fx-background-color: #000000;">
                                              <padding>
                                                 <Insets bottom="24.0" left="24.0" right="24.0" top="24.0" />
                                              </padding>
-                                             <children>
-                                                <VBox alignment="CENTER" minWidth="260.0" prefWidth="260.0" spacing="16.0" style="-fx-background-color: #171717; -fx-border-color: #ffffff; -fx-border-width: 1;">
-                                                   <padding>
-                                                      <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-                                                   </padding>
-                                                   <children>
-                                                      <StackPane prefHeight="96.0" style="-fx-background-color: #000000; -fx-border-color: #262626; -fx-border-width: 1;">
-                                                         <children>
-                                                            <Label mnemonicParsing="false" style="-fx-background-color: #000000; -fx-border-color: #262626;" text="House 1" textFill="WHITE">
-                                                               <font>
-                                                                  <Font name="Monospaced" size="12.0" />
-                                                               </font>
-                                                               <padding>
-                                                                  <Insets bottom="4.0" left="8.0" right="8.0" top="4.0" />
-                                                               </padding>
-                                                            </Label>
-                                                         </children>
-                                                      </StackPane>
-                                                      <HBox alignment="CENTER">
-                                                         <children>
-                                                            <Label mnemonicParsing="false" text="EQUIPPED" textFill="WHITE">
-                                                               <font>
-                                                                  <Font name="System Bold" size="12.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Region HBox.hgrow="ALWAYS" />
-                                                            <Button mnemonicParsing="false" style="-fx-background-color: #ffffff; -fx-background-radius: 0; -fx-border-color: #ffffff;" text="✔ ACTIVE" textFill="BLACK">
-                                                               <font>
-                                                                  <Font name="System Bold" size="10.0" />
-                                                               </font>
-                                                            </Button>
-                                                         </children>
-                                                      </HBox>
-                                                   </children>
-                                                </VBox>
-                                             </children>
                                           </HBox>
                                        </content>
                                     </ScrollPane>
@@ -609,4 +293,4 @@
          </content>
       </ScrollPane>
    </children>
-</HBox>
+</StackPane>
