@@ -55,8 +55,8 @@ public class LoginRegisterController {
             """;
 
         try (PreparedStatement pstmt = Main.mngr.getConnection().prepareStatement(sql)) {
-
-            pstmt.setLong(1, SnowflakeIDGenerator.generate());          
+            long id = SnowflakeIDGenerator.generate();
+            pstmt.setLong(1, id);          
             pstmt.setString(2, username);                               
             pstmt.setString(3, email);                                  
             pstmt.setString(4, sha256(password));                       
@@ -67,6 +67,8 @@ public class LoginRegisterController {
             }
 
             System.out.println("INSERTED USER");
+
+            Main.user = Main.mngr.getUser(id);
 
             Parent root = FXMLLoader.load(getClass().getResource("../fxml/Index.fxml"));
             Main.primarStageStatic.setTitle("StudyMore");

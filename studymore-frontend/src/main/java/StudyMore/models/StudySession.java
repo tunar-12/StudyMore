@@ -1,6 +1,9 @@
 package StudyMore.models;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import StudyMore.Main;
 
@@ -26,8 +29,7 @@ public class StudySession {
         this.coinsEarned = 0;
         this.state = SessionState.IDLE;
 
-        //StudySession existing = getTodaysSession(user.getUserId());
-        StudySession existing = null;
+        StudySession existing = Main.mngr.getTodaysStudySession(user);
 
         if (existing != null) {
             this.sessionID = existing.sessionID;
@@ -40,8 +42,24 @@ public class StudySession {
         } else {
             this.sessionID = SnowflakeIDGenerator.generate();
             this.startTime = LocalDateTime.now();
+            saveSession();
             System.out.println("LOG: Created new session ID: " + this.sessionID);
         }
+    }
+
+    // Constructor for restoring a session from the database
+    public StudySession(User user, long sessionID, LocalDateTime startTime, 
+        LocalDateTime endTime, Multiplier multiplier, 
+        int duration, int coinsEarned) {
+        this.user = user;
+        this.sessionID = sessionID;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.multiplier = multiplier;
+        this.duration = duration;
+        this.coinsEarned = coinsEarned;
+        this.state = (endTime != null) ? SessionState.IDLE : SessionState.STUDYING;
+        System.out.println("LOG: Restored session ID: " + this.sessionID);
     }
 
     public void start() {
@@ -59,6 +77,7 @@ public class StudySession {
     public void incrementDuration() {
         duration++; // handles internal duration 
         multiplier.increment(); // handles multiplier
+        updateSession();
     }
 
     public int getDuration() {
@@ -75,6 +94,7 @@ public class StudySession {
         if (state == SessionState.ON_BREAK) {
             breakTimeRemaining--; // handle internal duration
             multiplier.applyCooldown(); // handle cooldown
+            updateSession();
         }
     }
 
@@ -108,11 +128,50 @@ public class StudySession {
     }
 
     public void updateSession() {
-        //TODO
+        if (sessionID == 0) return; // no session in DB yet to update
+
+        String query = """
+            UPDATE sessions
+            SET duration = ?, coins_earned = ?, multiplier_value = ?, end_time = ?
+            WHERE id = ?
+            """;
+
+        try (PreparedStatement stmt = Main.mngr.getConnection().prepareStatement(query)) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+            stmt.setInt(1, duration);
+            stmt.setInt(2, coinsEarned);
+            stmt.setDouble(3, multiplier.getValue());
+            stmt.setString(4, endTime != null ? endTime.format(formatter) : null); 
+            stmt.setLong(5, sessionID);
+            stmt.executeUpdate();
+            System.out.println("LOG: Updated session ID: " + sessionID);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public StudySession getTodaysSession(long id) {
-        //TODO 
-        return null;
+    private void saveSession() {
+        String query = """
+            INSERT INTO sessions (id, user_id, start_time, end_time, multiplier_value, coins_earned, duration)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """;
+
+        try (PreparedStatement stmt = Main.mngr.getConnection().prepareStatement(query)) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+            stmt.setLong(1, sessionID);
+            stmt.setLong(2, user.getUserId());
+            stmt.setString(3, startTime.format(formatter));
+            stmt.setString(4, endTime != null ? endTime.format(formatter) : null);
+            stmt.setDouble(5, multiplier.getValue());
+            stmt.setInt(6, coinsEarned);
+            stmt.setInt(7, duration);
+            stmt.executeUpdate();
+            System.out.println("LOG: Saved new session ID: " + sessionID);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+
 }

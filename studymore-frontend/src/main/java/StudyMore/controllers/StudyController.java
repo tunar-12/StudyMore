@@ -1,5 +1,6 @@
 package StudyMore.controllers;
 
+import StudyMore.Main;
 import StudyMore.models.SessionState;
 import StudyMore.models.StudySession;
 import javafx.animation.KeyFrame;
@@ -25,7 +26,8 @@ public class StudyController {
     private Timeline breakTimeline;
 
     public void initialize() {
-        session = new StudySession(null);
+        session = new StudySession(Main.user);
+        updateTimerLabel(session.getDuration());
         studyTimeline = buildStudyTimeline();
     }
 

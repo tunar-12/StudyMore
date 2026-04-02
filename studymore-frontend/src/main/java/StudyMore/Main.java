@@ -7,16 +7,21 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.sql.*;
+import StudyMore.models.User;
 
 public class Main extends Application {
     public static DatabaseManager mngr;
     public static Stage primarStageStatic;
+    public static User user;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         primarStageStatic = primaryStage; // will use this to change the fxml for the user
+        long check = isUserLoggedIn();
 
-        if(isUserLoggedIn()) {
+        if(check != -1) {
+            user = mngr.getUser(check);
+
             Parent root = FXMLLoader.load(getClass().getResource("fxml/Index.fxml"));
             primaryStage.setTitle("StudyMore");
             primaryStage.setScene(new Scene(root, 1200, 800));
@@ -36,29 +41,31 @@ public class Main extends Application {
         launch(args);
     }
 
-    public static boolean isUserLoggedIn() {
-        //Runs a querry checking if there are any users in the table 
-        //(if there are more than 1 it will delete both and will send you to login page.)
-
-        String querry = "SELECT * from users";
+    public static long isUserLoggedIn() {
+        String query = "SELECT * FROM users";
 
         try (Statement stmt = mngr.getConnection().createStatement();
-            ResultSet rs = stmt.executeQuery(querry)) {
+            ResultSet rs = stmt.executeQuery(query)) {
 
             int count = 0;
-            while(rs.next()) {
+            long userId = -1;
+
+            while (rs.next()) {
                 count++;
-            }
-            
-            if(count != 1) {
-                return false;
+                userId = rs.getLong("id");
             }
 
-            //TODO, save the user in here so other methods can acces without query.
-            return true;
-        } catch(Exception e) {} 
+            if (count != 1) {
+                return -1;
+            }
 
-        return false;
+            return userId;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return -1;
     }
 }
     

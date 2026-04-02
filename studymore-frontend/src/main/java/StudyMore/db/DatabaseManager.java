@@ -1,6 +1,10 @@
 package StudyMore.db;
 
 import java.sql.*;
+import java.util.ArrayList;
+
+import StudyMore.models.*;
+
 
 public class DatabaseManager {
     private static final String DB_URL = "jdbc:sqlite:studymore_database.db";
@@ -254,4 +258,183 @@ public class DatabaseManager {
         }
     }
 
+    public User getUser(long id) {
+        String userQuery = """
+            SELECT u.id, u.username, u.email, u.password_hash,
+                us.rank, us.rating, us.coin_balance, us.study_streak,
+                us.total_study_time, us.daily_study_time
+            FROM users u
+            LEFT JOIN user_stats us ON u.id = us.user_id
+            WHERE u.id = ?
+            """;
+
+        String inventoryQuery = """
+            SELECT i.id AS inventory_id,
+                c.id AS cosmetic_id, c.name, c.type, c.price, c.image_path, c.description,
+                ie.cosmetic_type AS equipped_type
+            FROM inventory i
+            LEFT JOIN inventory_owned_items ioi ON i.id = ioi.inventory_id
+            LEFT JOIN cosmetics c ON ioi.cosmetic_id = c.id
+            LEFT JOIN inventory_equipped_items ie ON i.id = ie.inventory_id AND ie.cosmetic_id = c.id
+            WHERE i.user_id = ?
+            """;
+
+        String friendsQuery = """
+            SELECT friend_id FROM friends WHERE user_id = ?
+            """;
+
+        String tasksQuery = """
+            SELECT id, title, content, srs_enabled, is_complete, next_recall_date, created_at
+            FROM tasks WHERE user_id = ?
+            """;
+
+        try (PreparedStatement userStmt = connection.prepareStatement(userQuery)) {
+            userStmt.setLong(1, id);
+
+            try (ResultSet rs = userStmt.executeQuery()) {
+                if (!rs.next()) return null; // user not found
+
+                long userId = rs.getLong("id");
+
+                // Build Inventory 
+                Inventory inventory = new Inventory((long) id, null);
+                try (PreparedStatement invStmt = connection.prepareStatement(inventoryQuery)) {
+                    invStmt.setLong(1, id);
+                    try (ResultSet invRs = invStmt.executeQuery()) {
+                        while (invRs.next()) {
+                            long cosmeticId = invRs.getLong("cosmetic_id");
+                            if (cosmeticId == 0) continue; 
+
+                            Cosmetic cosmetic = new Cosmetic(
+                                cosmeticId,
+                                invRs.getString("name"),
+                                CosmeticType.valueOf(invRs.getString("type")),
+                                invRs.getInt("price"),
+                                invRs.getString("image_path"),
+                                invRs.getString("description")
+                            );
+                            inventory.addItem(cosmetic);
+
+                            String equippedType = invRs.getString("equipped_type");
+                            if (equippedType != null) {
+                                inventory.equipItem(cosmetic);
+                            }
+                        }
+                    }
+                }
+
+                MascotCat mascotCat = new MascotCat(userId);
+                Cosmetic skin  = inventory.getEquipped(CosmeticType.MASCOT_SKIN);  
+                Cosmetic hat   = inventory.getEquipped(CosmeticType.MASCOT_HAT);    
+                Cosmetic house = inventory.getEquipped(CosmeticType.MASCOT_HOUSE); 
+                if (skin  != null) mascotCat.changeSkin(skin);
+                if (hat   != null) mascotCat.changeMascotHat(hat);
+                if (house != null) mascotCat.changeMascotHouse(house);
+
+                // Build Friends list (shallow — only IDs to avoid infinite recursion)
+                ArrayList<User> friends = new ArrayList<>();
+                try (PreparedStatement friendsStmt = connection.prepareStatement(friendsQuery)) {
+                    friendsStmt.setLong(1, id);
+                    try (ResultSet friendsRs = friendsStmt.executeQuery()) {
+                        while (friendsRs.next()) {
+                            friends.add(new User(friendsRs.getLong("friend_id"))); // uses the User(Long) constructor
+                        }
+                    }
+                }
+
+                // build tasks
+                ArrayList<Task> tasks = new ArrayList<>();
+                try (PreparedStatement tasksStmt = connection.prepareStatement(tasksQuery)) {
+                    tasksStmt.setLong(1, id);
+                    try (ResultSet tasksRs = tasksStmt.executeQuery()) {
+                        while (tasksRs.next()) {
+                            Task task = new Task(
+                                tasksRs.getString("title"),
+                                tasksRs.getString("content"),
+                                tasksRs.getInt("srs_enabled") == 1,
+                                null // ReviewIntensity unknown at load time. handle in Task constructor
+                            );
+                            tasks.add(task);
+                        }
+                    }
+                }
+
+                // make user
+                User user = new User(
+                    userId,
+                    rs.getString("username"),
+                    rs.getString("email"),
+                    rs.getString("password_hash"),
+                    rs.getString("rank") != null ? Rank.valueOf(rs.getString("rank")) : Rank.BRONZE,
+                    rs.getInt("rating"),       // returns 0 if null
+                    rs.getInt("coin_balance"), // returns 0 if null
+                    rs.getInt("study_streak"), // returns 0 if null
+                    rs.getLong("total_study_time"),
+                    rs.getLong("daily_study_time"),
+                    mascotCat,
+                    inventory,
+                    friends,
+                    tasks
+                );
+
+                return user;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public StudySession getTodaysStudySession(User user) {
+        String query = """
+            SELECT s.id, s.start_time, s.end_time, s.multiplier_value, s.coins_earned, s.duration
+            FROM sessions s
+            WHERE s.user_id = ?
+            AND DATE(s.start_time, 'localtime') = DATE('now', 'localtime')
+            ORDER BY s.start_time DESC
+            LIMIT 1
+            """;
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setLong(1, user.getUserId());
+
+            try (PreparedStatement debugStmt = connection.prepareStatement(
+                "SELECT id, user_id, start_time, DATE(start_time), DATE('now'), DATE('now','localtime') FROM sessions")) {
+                try (ResultSet debugRs = debugStmt.executeQuery()) {
+                    while (debugRs.next()) {
+                        System.out.println("DEBUG SESSION ROW: id=" + debugRs.getLong(1) 
+                            + " user_id=" + debugRs.getLong(2)
+                            + " start_time=" + debugRs.getString(3)
+                            + " DATE(start_time)=" + debugRs.getString(4)
+                            + " DATE('now')=" + debugRs.getString(5)
+                            + " DATE('now','localtime')=" + debugRs.getString(6));
+                    }
+                }
+            }
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (!rs.next()) return null;
+
+                Multiplier multiplier = new Multiplier(rs.getDouble("multiplier_value"));
+
+                StudySession session = new StudySession(user, 
+                    rs.getLong("id"),
+                    rs.getTimestamp("start_time").toLocalDateTime(),
+                    rs.getTimestamp("end_time") != null 
+                        ? rs.getTimestamp("end_time").toLocalDateTime() 
+                        : null,
+                    multiplier,
+                    rs.getInt("duration"),
+                    rs.getInt("coins_earned")
+                );
+
+                return session;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

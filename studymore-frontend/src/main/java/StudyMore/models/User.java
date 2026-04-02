@@ -21,7 +21,8 @@ public class User {
     private List<Task> tasks;
 
     public User(Long userId) {
-        // TODO (write the fetch logic from backend -- or cache or local database -- and initlize this user object that fetched user)
+        //Friend
+        this.userId = userId;
     }
 
     // Constructing a new user
@@ -41,6 +42,27 @@ public class User {
         this.friends = new java.util.ArrayList<>();
         this.tasks = new java.util.ArrayList<>();
     }
+
+    // Constructor for database query
+    public User(long id, String username, String email, String passwordHash, Rank rank, int rating,
+        int coinBalance, int studyStreak, long totalStudyTime, long dailyStudyTime, 
+        MascotCat cat, Inventory inventory, ArrayList<User> friends, ArrayList<Task> tasks) {
+            this.userId = id;
+            this.username = username;
+            this.email = email;
+            this.passwordHash = passwordHash;
+            this.rank = rank;
+            this.rating = rating;
+            this.coinBalance = coinBalance;
+            this.studyStreak = studyStreak;
+            this.totalStudyTime = totalStudyTime;
+            this.dailyStudyTime = dailyStudyTime;
+            this.mascotCat = cat;
+            this.inventory = inventory;
+            this.friends = friends;
+            this.tasks = tasks;
+    }
+    
 
     public void login() {
         System.out.println("User " + username + " logged in.");
