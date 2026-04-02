@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class Inventory {
     private Long inventoryId;
-    private User user; // Note: If your IDE shows an error here, it's because Mete hasn't finished the User class yet. We will ignore the red line for now.
+    private User user; 
     private List<Cosmetic> ownedItems;
     private Map<CosmeticType, Cosmetic> equippedItems;
 
