@@ -1,6 +1,11 @@
 package StudyMore.models;
 
 import java.util.List;
+
+import StudyMore.Main;
+
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class User {
@@ -105,7 +110,26 @@ public class User {
     public int getCoinBalance() { 
         return coinBalance; 
     }
-    public int getStudyStreak() { 
+    public int getStudyStreak() {  // It gets the total study sessions to caclulate how many days have it been.
+        String query = "SELECT * FROM sessions";
+
+        try (Statement stmt = Main.mngr.getConnection().createStatement();
+            ResultSet rs = stmt.executeQuery(query)) {
+
+            int count = 0;
+
+            while (rs.next()) {
+                count++;
+                userId = rs.getLong("id");
+            }
+
+            if (count != studyStreak) {
+                studyStreak = count;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return studyStreak; 
     }
     public long getTotalStudyTime() { 

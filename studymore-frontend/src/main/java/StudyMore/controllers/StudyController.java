@@ -13,6 +13,7 @@ import javafx.util.Duration;
 public class StudyController {
 
     @FXML private Label timerLabel;
+    @FXML private Label streakLabel;
     @FXML private Button timerControlButton;
     @FXML private Button longBreakButton;
     @FXML private Button shortBreakButton;
@@ -27,8 +28,9 @@ public class StudyController {
 
     public void initialize() {
         session = new StudySession(Main.user);
+        streakLabel.setText(Main.user.getStudyStreak() + " Days");
         updateTimerLabel(session.getDuration());
-        studyTimeline = buildStudyTimeline();
+        studyTimeline = buildStudyTimeline(); 
     }
 
     // FXML handlers
