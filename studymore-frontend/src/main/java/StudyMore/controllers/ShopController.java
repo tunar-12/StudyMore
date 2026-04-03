@@ -37,7 +37,7 @@ public class ShopController {
             } else if (item.getType() == CosmeticType.MASCOT_HOUSE) {
                 catHousesContainer.getChildren().add(itemCard);
                 
-            }else if (item.getType() == CosmeticType.BANNER || item.getType() == CosmeticType.AVATAR) {
+            }else if (item.getType() == CosmeticType.BANNER || item.getType() == CosmeticType.BACKGROUND) {
                 cosmeticsExtrasContainer.getChildren().add(itemCard);
             }
         }

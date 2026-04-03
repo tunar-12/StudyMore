@@ -24,7 +24,7 @@ public class InventoryController {
     @FXML private HBox bannersContainer;
     @FXML private HBox titlesContainer;
     @FXML private HBox medalsContainer;
-    @FXML private VBox avatarsContainer;
+    @FXML private HBox backgroundsContainer; 
     @FXML private HBox mascotSkinsContainer;
     @FXML private HBox mascotHousesContainer;
 
@@ -34,8 +34,16 @@ public class InventoryController {
     }
 
     private void loadInventoryUI() {
-        List<Cosmetic> myItems = getOwnedCosmeticsFromDatabase();//myItems arraylist stores all the cosmetic items owned by the user 
 
+        bannersContainer.getChildren().clear();
+        titlesContainer.getChildren().clear();
+        mascotSkinsContainer.getChildren().clear();
+        mascotHousesContainer.getChildren().clear();
+        medalsContainer.getChildren().clear();
+        backgroundsContainer.getChildren().clear(); 
+        List<Cosmetic> myItems = getOwnedCosmeticsFromDatabase(); 
+
+        // Make box for each item and add to relevant container
         for (Cosmetic item : myItems) { 
             Node itemNode = createItemBox(item);
 
@@ -49,38 +57,40 @@ public class InventoryController {
                 mascotHousesContainer.getChildren().add(itemNode);
             } else if (item.getType() == CosmeticType.MEDAL) { 
                 medalsContainer.getChildren().add(itemNode); 
-            } else if (item.getType() == CosmeticType.AVATAR) { 
-                avatarsContainer.getChildren().add(itemNode); 
+            } else if (item.getType() == CosmeticType.BACKGROUND) { 
+                backgroundsContainer.getChildren().add(itemNode); 
             }
         }
     }
 
-    private Node createItemBox(Cosmetic item) { //Create different kind of node/box for different cosmetic item type
-        if (item.getType() == CosmeticType.BANNER || item.getType() == CosmeticType.MASCOT_SKIN || item.getType() == CosmeticType.MASCOT_HOUSE) {
-            return createBannerStyleCard(item);
+    private Node createItemBox(Cosmetic item) { 
+        if (item.getType() == CosmeticType.BANNER) {
+            return createBannerStyleCard(item); 
+        } else if (item.getType() == CosmeticType.BACKGROUND || item.getType() == CosmeticType.MASCOT_SKIN || item.getType() == CosmeticType.MASCOT_HOUSE) {
+            return createStandardStyleCard(item); 
         } else if (item.getType() == CosmeticType.TITLE) {
             return createTitleStyleCard(item);
-        } else if (item.getType() == CosmeticType.AVATAR) {
-            return createAvatarStyleCard(item);
         } else if (item.getType() == CosmeticType.MEDAL) {
             return createMedalStyleCard(item);
         }
         return new VBox(); 
     }
 
-    private VBox createBannerStyleCard(Cosmetic item) { //for banner, cats and cat houses 
+    private VBox createBannerStyleCard(Cosmetic item) { 
         VBox card = new VBox(16);
         card.setPadding(new Insets(16));
-        card.setPrefWidth(280);
+        card.setPrefWidth(420); 
         card.setStyle("-fx-border-color: #262626; -fx-background-color: #0a0a0a; -fx-border-width: 1;");
 
-        //Image placeholder
-        //TO DO: ADD ACTUAL IMAGES TO imagePlaceholder
+        //TODO: Replace ImagePlaceHolder with actual image
         StackPane imagePlaceholder = new StackPane();
         imagePlaceholder.setPrefHeight(120);
         imagePlaceholder.setStyle("-fx-background-color: #111111; -fx-border-color: #262626; -fx-border-style: dashed;");
 
-        HBox bottomRow = new HBox(); //area bellow the image
+        Label nameLabel = new Label(item.getName().toUpperCase());
+        nameLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;");
+
+        HBox bottomRow = new HBox(); 
         bottomRow.setAlignment(Pos.CENTER);
 
         Label ownedLabel = new Label("OWNED");
@@ -89,55 +99,61 @@ public class InventoryController {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        Button equipBtn = createEquipButton(item); //TO DO: Button does nothing right now 
+        Button equipBtn = createEquipButton(item); 
 
         bottomRow.getChildren().addAll(ownedLabel, spacer, equipBtn);
-        card.getChildren().addAll(imagePlaceholder, bottomRow);
+        card.getChildren().addAll(imagePlaceholder, nameLabel, bottomRow);
 
         return card;
     }
 
-    private HBox createTitleStyleCard(Cosmetic item) { //for title items types
-        HBox card = new HBox(16);
-        card.setAlignment(Pos.CENTER_LEFT);
-        card.setPadding(new Insets(12, 16, 12, 16));
-        card.setPrefWidth(350);
+    private VBox createStandardStyleCard(Cosmetic item) { 
+        VBox card = new VBox(16);
+        card.setPadding(new Insets(16));
+        card.setPrefWidth(280);
         card.setStyle("-fx-border-color: #262626; -fx-background-color: #0a0a0a; -fx-border-width: 1;");
 
-        Label nameLabel = new Label(item.getName().toUpperCase());
-        nameLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12px;");
-
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-
-        Button equipBtn = createEquipButton(item); //TO DO
-
-        card.getChildren().addAll(nameLabel, spacer, equipBtn);
-        return card;
-    }
-
-    private HBox createAvatarStyleCard(Cosmetic item) {
-        HBox card = new HBox(16);
-        card.setAlignment(Pos.CENTER_LEFT);
-        card.setPadding(new Insets(12, 16, 12, 16));
-        card.setPrefWidth(350);
-        card.setStyle("-fx-border-color: #262626; -fx-background-color: #0a0a0a; -fx-border-width: 1;");
-
-        //TO DO: ADD AVATAR IMAGES HERE TO imagePlaceholder
+        //TODO: Replace ImagePlaceHolder with actual image
         StackPane imagePlaceholder = new StackPane();
-        imagePlaceholder.setPrefSize(48, 48);
-        imagePlaceholder.setMinSize(48, 48);
+        imagePlaceholder.setPrefHeight(120);
         imagePlaceholder.setStyle("-fx-background-color: #111111; -fx-border-color: #262626; -fx-border-style: dashed;");
 
         Label nameLabel = new Label(item.getName().toUpperCase());
+        nameLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;");
+
+        HBox bottomRow = new HBox(); 
+        bottomRow.setAlignment(Pos.CENTER);
+
+        Label ownedLabel = new Label("OWNED");
+        ownedLabel.setStyle("-fx-text-fill: #a3a3a3; -fx-font-weight: bold; -fx-font-size: 10px;");
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        Button equipBtn = createEquipButton(item); 
+
+        bottomRow.getChildren().addAll(ownedLabel, spacer, equipBtn);
+        card.getChildren().addAll(imagePlaceholder, nameLabel, bottomRow); // Restored nameLabel to card
+
+        return card;
+    }
+
+    private HBox createTitleStyleCard(Cosmetic item) { 
+        HBox card = new HBox(16);
+        card.setAlignment(Pos.CENTER_LEFT);
+        card.setPadding(new Insets(12, 16, 12, 16));
+        card.setPrefWidth(350);
+        card.setStyle("-fx-border-color: #262626; -fx-background-color: #0a0a0a; -fx-border-width: 1;");
+
+        Label nameLabel = new Label(item.getName().toUpperCase());
         nameLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12px;");
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        Button equipBtn = createEquipButton(item);
+        Button equipBtn = createEquipButton(item); 
 
-        card.getChildren().addAll(imagePlaceholder, nameLabel, spacer, equipBtn);
+        card.getChildren().addAll(nameLabel, spacer, equipBtn);
         return card;
     }
     
@@ -149,7 +165,7 @@ public class InventoryController {
         card.setPrefHeight(160);
         card.setStyle("-fx-border-color: #262626; -fx-background-color: #0a0a0a; -fx-border-width: 1;");
 
-        //TODO: ADD ACTUAL MEDAL IMAGES TO imagePlaceholder
+        //TODO: Replace ImagePlaceHolder with actual image
         StackPane imagePlaceholder = new StackPane();
         imagePlaceholder.setPrefSize(64, 64);
         imagePlaceholder.setMinSize(64, 64);
@@ -162,7 +178,6 @@ public class InventoryController {
         return card;
     }
 
-    //created general equip button for now to tests. Implement different buttons for different object later
     private Button createEquipButton(Cosmetic item) {
         Button btn = new Button("EQUIP");
         btn.setCursor(javafx.scene.Cursor.HAND);
@@ -171,12 +186,12 @@ public class InventoryController {
         btn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
                 System.out.println("Equipped: " + item.getName());
+                //TODO: ADD EQUIP LOGIC 
             }
         });
         return btn;
     }
 
-    //TO DO: Retrieve actual data from the databases. Using test data for now 
     private List<Cosmetic> getOwnedCosmeticsFromDatabase() {
         return Main.user.getInventory().getOwnedItems();
     }

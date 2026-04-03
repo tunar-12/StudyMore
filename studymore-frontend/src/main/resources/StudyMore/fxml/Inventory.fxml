@@ -105,6 +105,7 @@
                               </ScrollPane>
                            </children>
                         </VBox>
+                        
                         <HBox spacing="32.0">
                            <children>
                               <VBox minWidth="0.0" prefWidth="500.0" style="-fx-background-color: #000000; -fx-border-color: #262626; -fx-border-width: 1;" HBox.hgrow="ALWAYS">
@@ -135,6 +136,7 @@
                                     </ScrollPane>
                                  </children>
                               </VBox>
+                              
                               <VBox minWidth="0.0" prefWidth="500.0" style="-fx-background-color: #000000; -fx-border-color: #262626; -fx-border-width: 1;" HBox.hgrow="ALWAYS">
                                  <children>
                                     <HBox alignment="CENTER_LEFT" spacing="8.0" style="-fx-background-color: #171717; -fx-border-color: #262626; -fx-border-width: 0 0 1 0;">
@@ -142,23 +144,23 @@
                                           <Insets bottom="16.0" left="24.0" right="24.0" top="16.0" />
                                        </padding>
                                        <children>
-                                          <Label mnemonicParsing="false" style="-fx-letter-spacing: 1px;" text="AVATARS" textFill="WHITE">
+                                          <Label mnemonicParsing="false" style="-fx-letter-spacing: 1px;" text="BACKGROUNDS" textFill="WHITE">
                                              <font>
                                                 <Font name="System Bold" size="14.0" />
                                              </font>
                                           </Label>
                                        </children>
                                     </HBox>
-                                    <ScrollPane fitToWidth="true" prefHeight="200.0" style="-fx-background: #000000; -fx-background-color: transparent; -fx-border-color: transparent;" vbarPolicy="AS_NEEDED">
+                                    <ScrollPane fitToHeight="true" style="-fx-background: #000000; -fx-background-color: transparent; -fx-border-color: transparent;" vbarPolicy="NEVER">
                                        <padding>
                                           <Insets />
                                        </padding>
                                        <content>
-                                          <VBox fx:id="avatarsContainer" spacing="16.0" style="-fx-background-color: #000000;">
+                                          <HBox fx:id="backgroundsContainer" spacing="24.0" style="-fx-background-color: #000000;">
                                              <padding>
                                                 <Insets bottom="24.0" left="24.0" right="24.0" top="24.0" />
                                              </padding>
-                                          </VBox>
+                                          </HBox>
                                        </content>
                                     </ScrollPane>
                                  </children>
@@ -227,7 +229,6 @@
                               </VBox>
                            </children>
                         </HBox>
-
                      </children>
                   </VBox>
                </children>
