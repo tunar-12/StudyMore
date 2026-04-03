@@ -3,6 +3,8 @@ package StudyMore.db;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import org.json.*;
@@ -400,6 +402,7 @@ public class DatabaseManager {
     }
 
     public StudySession getTodaysStudySession(User user) {
+
         String query = """
                 SELECT s.id, s.start_time, s.end_time, s.multiplier_value, s.coins_earned, s.duration
                 FROM sessions s
@@ -412,6 +415,7 @@ public class DatabaseManager {
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setLong(1, user.getUserId());
 
+            // I left your debug block intact so you can still track timezone weirdness if needed!
             try (PreparedStatement debugStmt = connection.prepareStatement(
                     "SELECT id, user_id, start_time, DATE(start_time), DATE('now'), DATE('now','localtime') FROM sessions")) {
                 try (ResultSet debugRs = debugStmt.executeQuery()) {
@@ -432,12 +436,19 @@ public class DatabaseManager {
 
                 Multiplier multiplier = new Multiplier(rs.getDouble("multiplier_value"));
 
+                // Safely grab the raw SQLite strings
+                String startStr = rs.getString("start_time");
+                String endStr = rs.getString("end_time");
+
+                // Parse them manually using the formatter
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                LocalDateTime startTime = (startStr != null) ? LocalDateTime.parse(startStr, formatter) : null;
+                LocalDateTime endTime = (endStr != null) ? LocalDateTime.parse(endStr, formatter) : null;
+
                 StudySession session = new StudySession(user,
                         rs.getLong("id"),
-                        rs.getTimestamp("start_time").toLocalDateTime(),
-                        rs.getTimestamp("end_time") != null
-                                ? rs.getTimestamp("end_time").toLocalDateTime()
-                                : null,
+                        startTime,
+                        endTime,
                         multiplier,
                         rs.getInt("duration"),
                         rs.getInt("coins_earned"));
@@ -446,9 +457,57 @@ public class DatabaseManager {
             }
 
         } catch (SQLException e) {
+            System.err.println("Database fetch failed for today's session: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
+    }
+
+    public ArrayList<StudySession> getStudySessions(User user) {
+        ArrayList<StudySession> sessionsList = new ArrayList<>();
+        // Use the exact same formatter you used in StudySession.java
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        
+        String query = """
+                SELECT s.id, s.start_time, s.end_time, s.multiplier_value, s.coins_earned, s.duration
+                FROM sessions s
+                WHERE s.user_id = ?
+                ORDER BY s.start_time DESC
+                """;
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setLong(1, user.getUserId());
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Multiplier multiplier = new Multiplier(rs.getDouble("multiplier_value"));
+
+                    // Safely grab the raw SQLite strings
+                    String startStr = rs.getString("start_time");
+                    String endStr = rs.getString("end_time");
+
+                    // Parse them manually to completely bypass JDBC Timestamp crashes
+                    LocalDateTime startTime = (startStr != null) ? LocalDateTime.parse(startStr, formatter) : null;
+                    LocalDateTime endTime = (endStr != null) ? LocalDateTime.parse(endStr, formatter) : null;
+
+                    StudySession session = new StudySession(user,
+                            rs.getLong("id"),
+                            startTime,
+                            endTime,
+                            multiplier,
+                            rs.getInt("duration"),
+                            rs.getInt("coins_earned"));
+
+                    sessionsList.add(session);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Database fetch failed: " + e.getMessage());
+            e.printStackTrace();
+        }
+        
+        return sessionsList;
     }
 
     private JSONArray loadJsonArray(String resourcePath) {
@@ -642,5 +701,4 @@ public class DatabaseManager {
             }
         }
     }
-
 }

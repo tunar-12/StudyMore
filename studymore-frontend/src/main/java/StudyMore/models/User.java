@@ -113,28 +113,29 @@ public class User {
     public int getCoinBalance() { 
         return coinBalance; 
     }
-    public int getStudyStreak() {  // It gets the total study sessions to caclulate how many days have it been.
-        String query = "SELECT * FROM sessions";
 
-        try (Statement stmt = Main.mngr.getConnection().createStatement();
-            ResultSet rs = stmt.executeQuery(query)) {
+    public int getStudyStreak() {  
+        String query = "SELECT COUNT(*) FROM sessions WHERE user_id = ?";
 
-            int count = 0;
-
-            while (rs.next()) {
-                count++;
-                userId = rs.getLong("id");
-            }
-
-            if (count != studyStreak) {
-                studyStreak = count;
+        try (java.sql.PreparedStatement stmt = Main.mngr.getConnection().prepareStatement(query)) {
+            stmt.setLong(1, this.userId);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt(1); 
+                    
+                    if (count != this.studyStreak) {
+                        this.studyStreak = count;
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return studyStreak; 
+        return this.studyStreak; 
     }
+    
     public long getTotalStudyTime() { 
         return totalStudyTime; 
     }

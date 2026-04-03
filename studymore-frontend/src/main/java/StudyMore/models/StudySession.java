@@ -119,6 +119,10 @@ public class StudySession {
         return state;
     }
 
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
     public Multiplier getMultiplier() {
         return multiplier;
     }
