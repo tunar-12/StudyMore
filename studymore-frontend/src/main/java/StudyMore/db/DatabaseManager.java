@@ -324,11 +324,9 @@ public class DatabaseManager {
                 }
 
                 MascotCat mascotCat = new MascotCat(userId);
-                Cosmetic skin  = inventory.getEquipped(CosmeticType.MASCOT_SKIN);  
-                Cosmetic hat   = inventory.getEquipped(CosmeticType.MASCOT_HAT);    
+                Cosmetic skin  = inventory.getEquipped(CosmeticType.MASCOT_SKIN);   
                 Cosmetic house = inventory.getEquipped(CosmeticType.MASCOT_HOUSE); 
                 if (skin  != null) mascotCat.changeSkin(skin);
-                if (hat   != null) mascotCat.changeMascotHat(hat);
                 if (house != null) mascotCat.changeMascotHouse(house);
 
                 // Build Friends list (shallow — only IDs to avoid infinite recursion)

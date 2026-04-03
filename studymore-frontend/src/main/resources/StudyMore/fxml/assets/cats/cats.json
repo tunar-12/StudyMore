@@ -1,0 +1,58 @@
+[
+    {
+        "id" : 1,
+        "name" : "chad",
+        "type" : "MASCOT_SKIN",
+        "price" : 100,
+        "path" : "assets/cats/",
+        "description" : ""
+    },
+    {
+        "id" : 2,
+        "name" : "cry",
+        "type" : "MASCOT_SKIN",
+        "price" : 100,
+        "path" : "assets/cats/",
+        "description" : ""
+    },
+    {
+        "id" : 3,
+        "name" : "cute",
+        "type" : "MASCOT_SKIN",
+        "price" : 100,
+        "path" : "assets/cats/",
+        "description" : ""
+    },
+    {
+        "id" : 4,
+        "name" : "nerd",
+        "type" : "MASCOT_SKIN",
+        "price" : 100,
+        "path" : "assets/cats/",
+        "description" : ""
+    },
+    {
+        "id" : 5,
+        "name" : "serious",
+        "type" : "MASCOT_SKIN",
+        "price" : 100,
+        "path" : "assets/cats/",
+        "description" : ""
+    },
+    {
+        "id" : 6,
+        "name" : "silly",
+        "type" : "MASCOT_SKIN",
+        "price" : 100,
+        "path" : "assets/cats/",
+        "description" : ""
+    },
+    {
+        "id" : 7,
+        "name" : "war",
+        "type" : "MASCOT_SKIN",
+        "price" : 100,
+        "path" : "assets/cats/",
+        "description" : ""
+    }
+]

@@ -1,0 +1,130 @@
+[
+    {
+        "id" : 1,
+        "name" : "boom",
+        "type" : "BANNER",
+        "price" : 100,
+        "path" : "assets/banners/",
+        "description" : ""
+    },
+    {
+        "id" : 2,
+        "name" : "chess",
+        "type" : "BANNER",
+        "price" : 100,
+        "path" : "assets/banners/",
+        "description" : ""
+    },
+    {
+        "id" : 3,
+        "name" : "cupid",
+        "type" : "BANNER",
+        "price" : 100,
+        "path" : "assets/banners/",
+        "description" : ""
+    },
+    {
+        "id" : 4,
+        "name" : "fireball",
+        "type" : "BANNER",
+        "price" : 100,
+        "path" : "assets/banners/",
+        "description" : ""
+    },
+    {
+        "id" : 5,
+        "name" : "firestorm",
+        "type" : "BANNER",
+        "price" : 100,
+        "path" : "assets/banners/",
+        "description" : ""
+    },
+    {
+        "id" : 6,
+        "name" : "foundry",
+        "type" : "BANNER",
+        "price" : 100,
+        "path" : "assets/banners/",
+        "description" : ""
+    },
+    {
+        "id" : 7,
+        "name" : "graveyard",
+        "type" : "BANNER",
+        "price" : 100,
+        "path" : "assets/banners/",
+        "description" : ""
+    },
+    {
+        "id" : 8,
+        "name" : "green",
+        "type" : "BANNER",
+        "price" : 100,
+        "path" : "assets/banners/",
+        "description" : ""
+    },
+    {
+        "id" : 9,
+        "name" : "mystic",
+        "type" : "BANNER",
+        "price" : 100,
+        "path" : "assets/banners/",
+        "description" : ""
+    },
+    {
+        "id" : 10,
+        "name" : "orange",
+        "type" : "BANNER",
+        "price" : 100,
+        "path" : "assets/banners/",
+        "description" : ""
+    },
+    {
+        "id" : 11,
+        "name" : "purple",
+        "type" : "BANNER",
+        "price" : 100,
+        "path" : "assets/banners/",
+        "description" : ""
+    },
+    {
+        "id" : 12,
+        "name" : "shine",
+        "type" : "BANNER",
+        "price" : 100,
+        "path" : "assets/banners/",
+        "description" : ""
+    },
+    {
+        "id" : 13,
+        "name" : "starry",
+        "type" : "BANNER",
+        "price" : 100,
+        "path" : "assets/banners/",
+        "description" : ""
+    },
+    {
+        "id" : 14,
+        "name" : "sun",
+        "type" : "BANNER",
+        "price" : 100,
+        "path" : "assets/banners/",
+        "description" : ""
+    },
+    {
+        "id" : 15,
+        "name" : "target",
+        "type" : "BANNER",
+        "price" : 100,
+        "path" : "assets/banners/",
+        "description" : ""
+    },
+    {
+        "id" : 16,
+        "name" : "winter",
+        "type" : "BANNER",
+        "price" : 100,
+        "path" : "assets/banners/",
+        "description" : ""
+    }
+]

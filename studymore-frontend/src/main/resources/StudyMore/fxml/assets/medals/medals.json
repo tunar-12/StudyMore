@@ -1,0 +1,82 @@
+[
+    {
+        "id": 1,
+        "name": "bluecircle",
+        "type": "MEDAL",
+        "price": 100,
+        "path": "assets/medals/",
+        "description": ""
+    },
+    {
+        "id": 2,
+        "name": "goldenstar",
+        "type": "MEDAL",
+        "price": 100,
+        "path": "assets/medals/",
+        "description": ""
+    },
+    {
+        "id": 3,
+        "name": "graysquare",
+        "type": "MEDAL",
+        "price": 100,
+        "path": "assets/medals/",
+        "description": ""
+    },
+    {
+        "id": 4,
+        "name": "graystar",
+        "type": "MEDAL",
+        "price": 100,
+        "path": "assets/medals/",
+        "description": ""
+    },
+    {
+        "id": 5,
+        "name": "greencircle",
+        "type": "MEDAL",
+        "price": 100,
+        "path": "assets/medals/",
+        "description": ""
+    },
+    {
+        "id": 6,
+        "name": "greenplus",
+        "type": "MEDAL",
+        "price": 100,
+        "path": "assets/medals/",
+        "description": ""
+    },
+    {
+        "id": 7,
+        "name": "greenstar",
+        "type": "MEDAL",
+        "price": 100,
+        "path": "assets/medals/",
+        "description": ""
+    },
+    {
+        "id": 8,
+        "name": "redarrow",
+        "type": "MEDAL",
+        "price": 100,
+        "path": "assets/medals/",
+        "description": ""
+    },
+    {
+        "id": 9,
+        "name": "redcircle",
+        "type": "MEDAL",
+        "price": 100,
+        "path": "assets/medals/",
+        "description": ""
+    },
+    {
+        "id": 10,
+        "name": "redoctagon",
+        "type": "MEDAL",
+        "price": 100,
+        "path": "assets/medals/",
+        "description": ""
+    }
+]

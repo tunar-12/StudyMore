@@ -1,11 +1,11 @@
 package StudyMore.models;
 
 public enum CosmeticType {
-    AVATAR,
     BANNER,
     MASCOT_SKIN,
-    MASCOT_HAT,
     MASCOT_HOUSE,
     TITLE,
-    MEDAL
+    MEDAL,
+    BACKGROUND,
+    AVATAR // here for debugging purposes will be removed later
 }

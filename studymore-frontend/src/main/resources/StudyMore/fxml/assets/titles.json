@@ -1,0 +1,42 @@
+[
+    {
+        "id": 1,
+        "name": "Grandmaster",
+        "type": "TITLE",
+        "price": 100,
+        "path": "",
+        "description": ""
+    },
+    {
+        "id": 2,
+        "name": "Master",
+        "type": "TITLE",
+        "price": 100,
+        "path": "",
+        "description": ""
+    },
+    {
+        "id": 3,
+        "name": "Rookie",
+        "type": "TITLE",
+        "price": 100,
+        "path": "",
+        "description": ""
+    },
+    {
+        "id": 4,
+        "name": "Elite",
+        "type": "TITLE",
+        "price": 100,
+        "path": "",
+        "description": ""
+    },
+    {
+        "id": 5,
+        "name": "Study Master",
+        "type": "TITLE",
+        "price": 100,
+        "path": "",
+        "description": ""
+    }
+]
