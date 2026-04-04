@@ -46,19 +46,52 @@ public class InventoryController {
         // Make box for each item and add to relevant container
         for (Cosmetic item : myItems) { 
             Node itemNode = createItemBox(item);
+            Cosmetic equippedItem = Main.user.getInventory().getEquipped(item.getType()); //get the equipped item for that type
 
+            //check if the current selected item we are putting in the container is the equipped item
+            boolean isEquipped = false;
+            if (equippedItem != null && item.getName().equals(equippedItem.getName())) {
+                isEquipped = true;
+            }
+
+            //Put it in the correct box. If equipped put it to index 0 of that container
             if (item.getType() == CosmeticType.BANNER) {
-                bannersContainer.getChildren().add(itemNode);
-            }else if (item.getType() == CosmeticType.TITLE) {
-                titlesContainer.getChildren().add(itemNode);
+                if (isEquipped) {
+                    bannersContainer.getChildren().add(0, itemNode);
+                }else{
+                    bannersContainer.getChildren().add(itemNode);
+                }  
+            } else if (item.getType() == CosmeticType.TITLE) {
+                if (isEquipped){
+                    titlesContainer.getChildren().add(0, itemNode);
+                }else{
+                    titlesContainer.getChildren().add(itemNode);
+                }
             } else if (item.getType() == CosmeticType.MASCOT_SKIN) {
-                mascotSkinsContainer.getChildren().add(itemNode);
+                if (isEquipped) {
+                    mascotSkinsContainer.getChildren().add(0, itemNode);
+                }else {
+                    mascotSkinsContainer.getChildren().add(itemNode);
+                }
+                
             } else if (item.getType() == CosmeticType.MASCOT_HOUSE) {
-                mascotHousesContainer.getChildren().add(itemNode);
+                if (isEquipped) {
+                    mascotHousesContainer.getChildren().add(0, itemNode);
+                }else {
+                    mascotHousesContainer.getChildren().add(itemNode);
+                }
             } else if (item.getType() == CosmeticType.MEDAL) { 
-                medalsContainer.getChildren().add(itemNode); 
+                if (isEquipped) {
+                    medalsContainer.getChildren().add(0, itemNode);
+                }else{
+                    medalsContainer.getChildren().add(itemNode);
+                }
             } else if (item.getType() == CosmeticType.BACKGROUND) { 
-                backgroundsContainer.getChildren().add(itemNode); 
+                if (isEquipped) {
+                    backgroundsContainer.getChildren().add(0, itemNode);
+                }else {
+                    backgroundsContainer.getChildren().add(itemNode);
+                }    
             }
         }
     }
@@ -82,8 +115,15 @@ public class InventoryController {
         card.setPrefWidth(420); 
         card.setStyle("-fx-border-color: #262626; -fx-background-color: #0a0a0a; -fx-border-width: 1;");
 
-        //TODO: Replace ImagePlaceHolder with actual image
-        StackPane imagePlaceholder = new StackPane();
+        javafx.scene.image.ImageView imageView = new javafx.scene.image.ImageView();
+        imageView.setFitHeight(100);
+        imageView.setPreserveRatio(true);
+
+        String imageResourcePath = "/StudyMore/" + item.getImagePath();
+        java.io.InputStream imageStream = getClass().getResourceAsStream(imageResourcePath);
+        imageView.setImage(new javafx.scene.image.Image(imageStream));
+        
+        StackPane imagePlaceholder = new StackPane(imageView); 
         imagePlaceholder.setPrefHeight(120);
         imagePlaceholder.setStyle("-fx-background-color: #111111; -fx-border-color: #262626; -fx-border-style: dashed;");
 
@@ -113,8 +153,14 @@ public class InventoryController {
         card.setPrefWidth(280);
         card.setStyle("-fx-border-color: #262626; -fx-background-color: #0a0a0a; -fx-border-width: 1;");
 
-        //TODO: Replace ImagePlaceHolder with actual image
-        StackPane imagePlaceholder = new StackPane();
+        javafx.scene.image.ImageView imageView = new javafx.scene.image.ImageView();
+        imageView.setFitHeight(100);
+        imageView.setPreserveRatio(true);
+        String imageResourcePath = "/StudyMore/" + item.getImagePath();
+        java.io.InputStream imageStream = getClass().getResourceAsStream(imageResourcePath);
+        imageView.setImage(new javafx.scene.image.Image(imageStream));
+
+        StackPane imagePlaceholder = new StackPane(imageView); 
         imagePlaceholder.setPrefHeight(120);
         imagePlaceholder.setStyle("-fx-background-color: #111111; -fx-border-color: #262626; -fx-border-style: dashed;");
 
@@ -133,7 +179,7 @@ public class InventoryController {
         Button equipBtn = createEquipButton(item); 
 
         bottomRow.getChildren().addAll(ownedLabel, spacer, equipBtn);
-        card.getChildren().addAll(imagePlaceholder, nameLabel, bottomRow); // Restored nameLabel to card
+        card.getChildren().addAll(imagePlaceholder, nameLabel, bottomRow);
 
         return card;
     }
@@ -165,8 +211,15 @@ public class InventoryController {
         card.setPrefHeight(160);
         card.setStyle("-fx-border-color: #262626; -fx-background-color: #0a0a0a; -fx-border-width: 1;");
 
-        //TODO: Replace ImagePlaceHolder with actual image
-        StackPane imagePlaceholder = new StackPane();
+        javafx.scene.image.ImageView imageView = new javafx.scene.image.ImageView();
+        imageView.setFitWidth(48);
+        imageView.setFitHeight(48);
+        imageView.setPreserveRatio(true);
+        String imageResourcePath = "/StudyMore/" + item.getImagePath();
+        java.io.InputStream imageStream = getClass().getResourceAsStream(imageResourcePath);
+        imageView.setImage(new javafx.scene.image.Image(imageStream));
+
+        StackPane imagePlaceholder = new StackPane(imageView); 
         imagePlaceholder.setPrefSize(64, 64);
         imagePlaceholder.setMinSize(64, 64);
         imagePlaceholder.setStyle("-fx-background-color: #111111; -fx-border-color: #262626; -fx-border-style: dashed;");
@@ -180,8 +233,15 @@ public class InventoryController {
 
     private Button createEquipButton(Cosmetic item) {
         Button btn = new Button("EQUIP");
-        btn.setCursor(javafx.scene.Cursor.HAND);
-        btn.setStyle("-fx-background-color: transparent; -fx-border-color: #262626; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 15 5 15;");
+        Cosmetic equippedItem = Main.user.getInventory().getEquipped(item.getType());
+        if (equippedItem != null && item.getName().equals(equippedItem.getName())) {
+            btn.setText("EQUIPPED");
+            btn.setStyle("-fx-background-color: #262626; -fx-border-color: #262626; -fx-text-fill: #a3a3a3; -fx-font-weight: bold; -fx-padding: 5 15 5 15;");
+            btn.setDisable(true); // Don't let them click "Equip" on something already equipped
+        } else {
+            btn.setCursor(javafx.scene.Cursor.HAND);
+            btn.setStyle("-fx-background-color: transparent; -fx-border-color: #262626; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 15 5 15;");
+        }
 
         btn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {

@@ -798,5 +798,86 @@ public class DatabaseManager {
         }
         return allItems;
     }
+    public void updateUserCoinBalance(long userId, int newBalance) {
+        String query = "UPDATE user_stats SET coin_balance = ? WHERE user_id = ?";
+        try (java.sql.PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, newBalance); 
+            stmt.setLong(2, userId);    
+            stmt.executeUpdate();       
+        } catch (java.sql.SQLException e) {
+            System.err.println("Failed to save new coin balance: " + e.getMessage());
+        }
+    }
+    public void saveSettings(long userId, Settings settings) {
+        String sql = """
+                INSERT INTO settings (
+                    user_id, dark_mode, lock_in_mode, show_mascot,
+                    study_time, short_break, long_break, long_break_after,
+                    start_sound, break_alert, popups
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(user_id) DO UPDATE SET
+                    dark_mode = excluded.dark_mode,
+                    lock_in_mode = excluded.lock_in_mode,
+                    show_mascot = excluded.show_mascot,
+                    study_time = excluded.study_time,
+                    short_break = excluded.short_break,
+                    long_break = excluded.long_break,
+                    long_break_after = excluded.long_break_after,
+                    start_sound = excluded.start_sound,
+                    break_alert = excluded.break_alert,
+                    popups = excluded.popups
+                """;
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, userId);
+            stmt.setInt(2, settings.isDarkMode() ? 1 : 0);
+            stmt.setInt(3, settings.isLockInMode() ? 1 : 0);
+            stmt.setInt(4, settings.isMascotVisible() ? 1 : 0);
+            stmt.setInt(5, settings.getStudyTime());
+            stmt.setInt(6, settings.getShortBreak());
+            stmt.setInt(7, settings.getLongBreak());
+            stmt.setInt(8, settings.getLongBreakAfter());
+            stmt.setInt(9, settings.isStartSound() ? 1 : 0);
+            stmt.setInt(10, settings.isBreakAlert() ? 1 : 0);
+            stmt.setInt(11, settings.isPopups() ? 1 : 0);
+            stmt.executeUpdate();
+            System.out.println("Settings saved for user " + userId);
+        } catch (SQLException e) {
+            System.err.println("Failed to save settings: " + e.getMessage());
+        }
+    }
+
+    public Settings getSettings(long userId) {
+        String sql = """
+                SELECT dark_mode, lock_in_mode, show_mascot,
+                    study_time, short_break, long_break, long_break_after,
+                    start_sound, break_alert, popups
+                FROM settings WHERE user_id = ?
+                """;
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Settings settings = new Settings();
+                    settings.setDarkMode(rs.getInt("dark_mode") == 1);
+                    settings.setLockInMode(rs.getInt("lock_in_mode") == 1);
+                    settings.setMascotVisible(rs.getInt("show_mascot") == 1);
+                    settings.setStudyTime(rs.getInt("study_time"));
+                    settings.setShortBreak(rs.getInt("short_break"));
+                    settings.setLongBreak(rs.getInt("long_break"));
+                    settings.setLongBreakAfter(rs.getInt("long_break_after"));
+                    settings.setStartSound(rs.getInt("start_sound") == 1);
+                    settings.setBreakAlert(rs.getInt("break_alert") == 1);
+                    settings.setPopups(rs.getInt("popups") == 1);
+                    return settings;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Failed to load settings: " + e.getMessage());
+        }
+
+        return new Settings();
+    }
 
 }
