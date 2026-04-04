@@ -13,7 +13,7 @@
    <children>
       <ScrollPane fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent;">
          <content>
-            <VBox minHeight="800.0" spacing="32.0" style="-fx-background-image: url('https://img.freepik.com/free-vector/black-background-with-wavy-lines_52683-76524.jpg'); -fx-background-size: cover; -fx-background-position: center center;">
+            <VBox minHeight="800.0" spacing="32.0" style="-fx-background: transparent; center;">
                <padding>
                   <Insets bottom="32.0" left="32.0" right="32.0" top="32.0" />
                </padding>

@@ -9,14 +9,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: #000000; -fx-font-family: 'Segoe UI', Helvetica, Arial, sans-serif;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StudyMore.controllers.InventoryController">
+<StackPane prefHeight="800.0" prefWidth="1000.0" style="-fx-background: transparent; -fx-font-family: 'Segoe UI', Helvetica, Arial, sans-serif;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StudyMore.controllers.InventoryController">
    <children>
       <ScrollPane fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent;">
          <padding>
             <Insets />
          </padding>
          <content>
-            <VBox spacing="32.0" style="-fx-background-image: url('https://img.freepik.com/free-vector/black-background-with-wavy-lines_52683-76524.jpg'); -fx-background-size: cover; -fx-background-position: center center;">
+            <VBox spacing="32.0" style="-fx-background: transparent; -fx-background-size: cover; -fx-background-position: center center;">
                <padding>
                   <Insets bottom="32.0" left="32.0" right="32.0" top="32.0" />
                </padding>

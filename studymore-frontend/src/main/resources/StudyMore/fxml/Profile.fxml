@@ -15,149 +15,142 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-control-inner-background: transparent;" 
-            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
-            fx:controller="StudyMore.controllers.ProfileController">
-            
-    <content>
-        <VBox spacing="32.0" style="-fx-padding: 32; -fx-background-color: transparent;">
-
-            <VBox style="-fx-background-color: black; -fx-border-color: #262626; -fx-border-width: 1;">
-                
-                <!-- Banner -->
-                <AnchorPane prefHeight="96.0" style="-fx-background-color: #0a0a0a; -fx-border-color: transparent transparent #262626 transparent; -fx-border-width: 1;">
-                    <Label text="EQUIPPED: VOID MATRIX" 
-                           style="-fx-text-fill: #737373; -fx-font-family: monospace; -fx-background-color: black; -fx-border-color: #262626; -fx-padding: 4 12;" 
-                           AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="16.0" />
-                </AnchorPane>
-                <!-- Banner -->
-
-                <AnchorPane prefHeight="120.0" style="-fx-padding: 24 32 32 32;">
+<StackPane  prefHeight="800" prefWidth="1000" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StudyMore.controllers.ProfileController" style="-fx-background: transparent; -fx-font-family: 'Segoe UI', Helvetica, Arial, sans-serif;">
+    <children>
+        <ScrollPane style="-fx-background-color: transparent; -fx-control-inner-background: transparent;" fitToWidth="true">
                     
-                    <!-- Profile Picture -->
-                    <StackPane style="-fx-background-color: black; -fx-border-color: #262626;" 
-                               prefWidth="128.0" prefHeight="128.0" 
-                               AnchorPane.topAnchor="-88.0" AnchorPane.leftAnchor="0.0">
-                        <Label text="USER" style="-fx-text-fill: #525252; -fx-font-size: 24;" />
-                    </StackPane>
-                    <!-- Profile Picture -->
+            <content>
+                <VBox spacing="32.0" style="-fx-padding: 32; -fx-background-color: transparent;">
 
-                    <VBox spacing="12.0" AnchorPane.leftAnchor="160.0" AnchorPane.topAnchor="-10.0">
-                        <!-- Username -->
-                        <Label fx:id="username" text="USERNAME" style="-fx-text-fill: white; -fx-font-size: 36; -fx-font-family: monospace; -fx-font-weight: bold;" />
-                        <HBox spacing="12.0" alignment="CENTER_LEFT">
-                            <!-- title -->
-                            <Label fx:id="title" text="" style="-fx-background-color: white; -fx-text-fill: black; -fx-padding: 4 12; -fx-font-weight: bold; -fx-font-size: 12;" />
-                            <HBox spacing="8.0" style="-fx-background-color: #171717; -fx-border-color: #262626; -fx-padding: 4 12;">
-                                <!-- Medals -->
+                    <VBox style="-fx-background-color: black; -fx-border-color: #262626; -fx-border-width: 1;">
+                        
+                        <!-- Banner -->
+                        <AnchorPane prefHeight="96.0" style="-fx-background-color: #0a0a0a; -fx-border-color: transparent transparent #262626 transparent; -fx-border-width: 1;">
+                            <Label text="EQUIPPED: VOID MATRIX" 
+                                style="-fx-text-fill: #737373; -fx-font-family: monospace; -fx-background-color: black; -fx-border-color: #262626; -fx-padding: 4 12;" 
+                                AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="16.0" />
+                        </AnchorPane>
+                        <!-- Banner -->
+
+                        <AnchorPane prefHeight="120.0" style="-fx-padding: 24 32 32 32;">
+                            
+                            <!-- Profile Picture -->
+                            <StackPane style="-fx-background-color: black; -fx-border-color: #262626;" 
+                                    prefWidth="128.0" prefHeight="128.0" 
+                                    AnchorPane.topAnchor="-88.0" AnchorPane.leftAnchor="0.0">
+                                <Label text="USER" style="-fx-text-fill: #525252; -fx-font-size: 24;" />
+                            </StackPane>
+                            <!-- Profile Picture -->
+
+                            <VBox spacing="12.0" AnchorPane.leftAnchor="160.0" AnchorPane.topAnchor="-10.0">
+                                <!-- Username -->
+                                <Label fx:id="username" text="USERNAME" style="-fx-text-fill: white; -fx-font-size: 36; -fx-font-family: monospace; -fx-font-weight: bold;" />
+                                <HBox spacing="12.0" alignment="CENTER_LEFT">
+                                    <!-- title -->
+                                    <Label fx:id="title" text="" style="-fx-background-color: white; -fx-text-fill: black; -fx-padding: 4 12; -fx-font-weight: bold; -fx-font-size: 12;" />
+                                    <HBox spacing="8.0" style="-fx-background-color: #171717; -fx-border-color: #262626; -fx-padding: 4 12;">
+                                        <!-- Medals -->
+                                    </HBox>
+                                </HBox>
+                            </VBox>
+                        </AnchorPane>
+                    </VBox>
+
+                    <VBox spacing="24.0" style="-fx-background-color: black; -fx-border-color: #262626; -fx-padding: 32;">
+                        <VBox style="-fx-border-color: transparent transparent #262626 transparent; -fx-padding: 0 0 16 0;">
+                            <Label text="STUDY ACTIVITY" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14;" />
+                        </VBox>
+
+                        <HBox spacing="16.0">
+                            <VBox spacing="12.0" alignment="CENTER_LEFT" style="-fx-padding: 24 0 0 0;">
+                                <Label text="MON" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
+                                <Label text="WED" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
+                                <Label text="FRI" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
+                            </VBox>
+
+                            <VBox spacing="8.0" HBox.hgrow="ALWAYS">
+                                <HBox spacing="24.0">
+                                    <Label text="JAN" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
+                                    <Label text="FEB" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
+                                    <Label text="MAR" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
+                                    <Label text="APR" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
+                                    <Label text="MAY" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
+                                    <Label text="JUN" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
+                                </HBox>
+                                <HBox fx:id="heatmapGrid" prefHeight="80.0" prefWidth="600.0" style="-fx-background-color: #0a0a0a; -fx-border-color: #262626;" />
+                            </VBox>
+                        </HBox>
+
+                        <HBox alignment="CENTER_RIGHT" spacing="8.0" style="-fx-border-color: #262626 transparent transparent transparent; -fx-padding: 16 0 0 0;">
+                            <Label text="LESS" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
+                            <Region prefWidth="12" prefHeight="12" style="-fx-background-color: black; -fx-border-color: #262626;" />
+                            <Region prefWidth="12" prefHeight="12" style="-fx-background-color: #262626;" />
+                            <Region prefWidth="12" prefHeight="12" style="-fx-background-color: #525252;" />
+                            <Region prefWidth="12" prefHeight="12" style="-fx-background-color: #a3a3a3;" />
+                            <Region prefWidth="12" prefHeight="12" style="-fx-background-color: white;" />
+                            <Label text="MORE" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
+                        </HBox>
+                    </VBox>
+
+                    <GridPane hgap="24.0" vgap="24.0">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" percentWidth="33.3" />
+                            <ColumnConstraints hgrow="SOMETIMES" percentWidth="33.3" />
+                            <ColumnConstraints hgrow="SOMETIMES" percentWidth="33.3" />
+                        </columnConstraints>
+
+                        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" spacing="8.0" style="-fx-background-color: black; -fx-border-color: #262626; -fx-padding: 24;">
+                            <Label text="STUDY COINS" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
+                            <HBox alignment="BASELINE_LEFT" spacing="12.0">
+                                <!-- Coins -->
+                                <Label fx:id="coin" text="0" style="-fx-text-fill: white; -fx-font-size: 28; -fx-font-family: monospace; -fx-font-weight: bold;" />
+                                <!-- Multiplier -->
+                                <Label fx:id="multiplier" text="1.0X MULT" style="-fx-background-color: white; -fx-text-fill: black; -fx-padding: 2 6; -fx-font-weight: bold; -fx-font-size: 10;" />
                             </HBox>
-                        </HBox>
-                    </VBox>
-                </AnchorPane>
-            </VBox>
+                        </VBox>
 
-            <VBox spacing="24.0" style="-fx-background-color: black; -fx-border-color: #262626; -fx-padding: 32;">
-                <VBox style="-fx-border-color: transparent transparent #262626 transparent; -fx-padding: 0 0 16 0;">
-                    <Label text="STUDY ACTIVITY" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14;" />
+                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="8.0" style="-fx-background-color: black; -fx-border-color: #262626; -fx-padding: 24;">
+                            <Label text="CURRENT RATING" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
+                            <!-- Rating -->
+                            <Label fx:id="rating" text="0" style="-fx-text-fill: white; -fx-font-size: 28; -fx-font-family: monospace; -fx-font-weight: bold;" />
+                        </VBox>
+
+                        <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" spacing="8.0" style="-fx-background-color: black; -fx-border-color: #262626; -fx-padding: 24;">
+                            <Label text="RANK STATUS" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
+                            <!-- Rank -->
+                            <Label fx:id="rank" text="UNRANKED" style="-fx-text-fill: white; -fx-font-size: 28; -fx-font-family: monospace; -fx-font-weight: bold;" />
+                        </VBox>
+
+                        <VBox GridPane.columnIndex="0" GridPane.rowIndex="1" spacing="8.0" style="-fx-background-color: black; -fx-border-color: #262626; -fx-padding: 24;">
+                            <Label text="TOTAL STUDY TIME" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
+                            <HBox alignment="BASELINE_LEFT" spacing="4.0">
+                                <!-- Total study time -->
+                                <Label fx:id="totalStudyTime" text="0" style="-fx-text-fill: white; -fx-font-size: 28; -fx-font-family: monospace; -fx-font-weight: bold;" />
+                                <Label text="H" style="-fx-text-fill: #525252; -fx-font-size: 18; -fx-font-family: monospace; -fx-font-weight: bold;" />
+                            </HBox>
+                        </VBox>
+
+                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="1" spacing="8.0" style="-fx-background-color: black; -fx-border-color: #262626; -fx-padding: 24;">
+                            <Label text="STUDY STREAK" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
+                            <HBox alignment="BASELINE_LEFT" spacing="4.0">
+                                <!-- Study Streak -->
+                                <Label fx:id="studyStreak" text="0" style="-fx-text-fill: white; -fx-font-size: 28; -fx-font-family: monospace; -fx-font-weight: bold;" />
+                                <Label text="DAYS" style="-fx-text-fill: #525252; -fx-font-size: 18; -fx-font-family: monospace; -fx-font-weight: bold;" />
+                            </HBox>
+                        </VBox>
+
+                        <VBox GridPane.columnIndex="2" GridPane.rowIndex="1" spacing="8.0" style="-fx-background-color: black; -fx-border-color: #262626; -fx-padding: 24;">
+                            <Label text="WEEKLY STUDY TIME" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
+                            <HBox alignment="BASELINE_LEFT" spacing="4.0">
+                                <!-- Weekly study time -->
+                                <Label fx:id="weeklyStudyTime" text="0" style="-fx-text-fill: white; -fx-font-size: 28; -fx-font-family: monospace; -fx-font-weight: bold;" />
+                                <Label text="H" style="-fx-text-fill: #525252; -fx-font-size: 18; -fx-font-family: monospace; -fx-font-weight: bold;" />
+                            </HBox>
+                        </VBox>
+                    </GridPane>
+
                 </VBox>
-
-                <HBox spacing="16.0">
-                    <VBox spacing="12.0" alignment="CENTER_LEFT" style="-fx-padding: 24 0 0 0;">
-                        <Label text="MON" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
-                        <Label text="WED" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
-                        <Label text="FRI" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
-                    </VBox>
-
-                    <VBox spacing="8.0" HBox.hgrow="ALWAYS">
-                        <HBox spacing="24.0">
-                            <Label text="JAN" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
-                            <Label text="FEB" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
-                            <Label text="MAR" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
-                            <Label text="APR" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
-                            <Label text="MAY" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
-                            <Label text="JUN" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
-                        </HBox>
-                        <HBox fx:id="heatmapGrid" prefHeight="80.0" prefWidth="600.0" style="-fx-background-color: #0a0a0a; -fx-border-color: #262626;" />
-                    </VBox>
-
-                    <VBox alignment="BOTTOM_CENTER" spacing="-10.0">
-                        <ImageView fitHeight="64.0" fitWidth="64.0" preserveRatio="true">
-                            <image><Image url="@assets/crycat.png"/></image>
-                        </ImageView>
-                        <ImageView fitHeight="80.0" fitWidth="80.0" preserveRatio="true">
-                            <image><Image url="@assets/cbbox.png"/></image>
-                        </ImageView>
-                    </VBox>
-                </HBox>
-
-                <HBox alignment="CENTER_RIGHT" spacing="8.0" style="-fx-border-color: #262626 transparent transparent transparent; -fx-padding: 16 0 0 0;">
-                    <Label text="LESS" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
-                    <Region prefWidth="12" prefHeight="12" style="-fx-background-color: black; -fx-border-color: #262626;" />
-                    <Region prefWidth="12" prefHeight="12" style="-fx-background-color: #262626;" />
-                    <Region prefWidth="12" prefHeight="12" style="-fx-background-color: #525252;" />
-                    <Region prefWidth="12" prefHeight="12" style="-fx-background-color: #a3a3a3;" />
-                    <Region prefWidth="12" prefHeight="12" style="-fx-background-color: white;" />
-                    <Label text="MORE" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
-                </HBox>
-            </VBox>
-
-            <GridPane hgap="24.0" vgap="24.0">
-                <columnConstraints>
-                    <ColumnConstraints hgrow="SOMETIMES" percentWidth="33.3" />
-                    <ColumnConstraints hgrow="SOMETIMES" percentWidth="33.3" />
-                    <ColumnConstraints hgrow="SOMETIMES" percentWidth="33.3" />
-                </columnConstraints>
-
-                <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" spacing="8.0" style="-fx-background-color: black; -fx-border-color: #262626; -fx-padding: 24;">
-                    <Label text="STUDY COINS" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
-                    <HBox alignment="BASELINE_LEFT" spacing="12.0">
-                        <!-- Coins -->
-                        <Label fx:id="coin" text="0" style="-fx-text-fill: white; -fx-font-size: 28; -fx-font-family: monospace; -fx-font-weight: bold;" />
-                        <!-- Multiplier -->
-                        <Label fx:id="multiplier" text="1.0X MULT" style="-fx-background-color: white; -fx-text-fill: black; -fx-padding: 2 6; -fx-font-weight: bold; -fx-font-size: 10;" />
-                    </HBox>
-                </VBox>
-
-                <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="8.0" style="-fx-background-color: black; -fx-border-color: #262626; -fx-padding: 24;">
-                    <Label text="CURRENT RATING" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
-                    <!-- Rating -->
-                    <Label fx:id="rating" text="0" style="-fx-text-fill: white; -fx-font-size: 28; -fx-font-family: monospace; -fx-font-weight: bold;" />
-                </VBox>
-
-                <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" spacing="8.0" style="-fx-background-color: black; -fx-border-color: #262626; -fx-padding: 24;">
-                    <Label text="RANK STATUS" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
-                    <!-- Rank -->
-                    <Label fx:id="rank" text="UNRANKED" style="-fx-text-fill: white; -fx-font-size: 28; -fx-font-family: monospace; -fx-font-weight: bold;" />
-                </VBox>
-
-                <VBox GridPane.columnIndex="0" GridPane.rowIndex="1" spacing="8.0" style="-fx-background-color: black; -fx-border-color: #262626; -fx-padding: 24;">
-                    <Label text="TOTAL STUDY TIME" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
-                    <HBox alignment="BASELINE_LEFT" spacing="4.0">
-                        <!-- Total study time -->
-                        <Label fx:id="totalStudyTime" text="0" style="-fx-text-fill: white; -fx-font-size: 28; -fx-font-family: monospace; -fx-font-weight: bold;" />
-                        <Label text="H" style="-fx-text-fill: #525252; -fx-font-size: 18; -fx-font-family: monospace; -fx-font-weight: bold;" />
-                    </HBox>
-                </VBox>
-
-                <VBox GridPane.columnIndex="1" GridPane.rowIndex="1" spacing="8.0" style="-fx-background-color: black; -fx-border-color: #262626; -fx-padding: 24;">
-                    <Label text="STUDY STREAK" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
-                    <HBox alignment="BASELINE_LEFT" spacing="4.0">
-                        <!-- Study Streak -->
-                        <Label fx:id="studyStreak" text="0" style="-fx-text-fill: white; -fx-font-size: 28; -fx-font-family: monospace; -fx-font-weight: bold;" />
-                        <Label text="DAYS" style="-fx-text-fill: #525252; -fx-font-size: 18; -fx-font-family: monospace; -fx-font-weight: bold;" />
-                    </HBox>
-                </VBox>
-
-                <VBox GridPane.columnIndex="2" GridPane.rowIndex="1" spacing="8.0" style="-fx-background-color: black; -fx-border-color: #262626; -fx-padding: 24;">
-                    <Label text="WEEKLY STUDY TIME" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
-                    <HBox alignment="BASELINE_LEFT" spacing="4.0">
-                        <!-- Weekly study time -->
-                        <Label fx:id="weeklyStudyTime" text="0" style="-fx-text-fill: white; -fx-font-size: 28; -fx-font-family: monospace; -fx-font-weight: bold;" />
-                        <Label text="H" style="-fx-text-fill: #525252; -fx-font-size: 18; -fx-font-family: monospace; -fx-font-weight: bold;" />
-                    </HBox>
-                </VBox>
-            </GridPane>
-
-        </VBox>
-    </content>
-</ScrollPane>
+            </content>
+        </ScrollPane>
+    </children>
+</StackPane>
