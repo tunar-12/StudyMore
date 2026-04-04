@@ -1,5 +1,6 @@
 package StudyMore.controllers;
 
+import StudyMore.db.DatabaseManager;
 import StudyMore.models.Settings;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -23,10 +24,13 @@ public class SettingsController {
     @FXML private Label unsavedLabel;
 
     private Settings settings;
+    private DatabaseManager db;
+    private long currentUserId = 1L; // replace with actual logged in user id later
 
     @FXML
     public void initialize() {
-        settings = new Settings();
+        db = new DatabaseManager();
+        settings = db.getSettings(currentUserId);
         loadSettings();
     }
 
@@ -68,7 +72,7 @@ public class SettingsController {
             return;
         }
 
-        settings.save();
+        db.saveSettings(currentUserId, settings);
         unsavedLabel.setVisible(false);
         System.out.println("Settings saved successfully.");
     }
@@ -76,6 +80,7 @@ public class SettingsController {
     @FXML
     private void resetDefaults() {
         settings.resetDefaults();
+        db.saveSettings(currentUserId, settings);
         loadSettings();
     }
 }
