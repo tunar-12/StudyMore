@@ -3,6 +3,9 @@ package StudyMore.models;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import StudyMore.Main;
+import StudyMore.controllers.AchievementsController;
+
 public class Task {
     private long taskId;
     private String title;
@@ -46,6 +49,7 @@ public class Task {
         // ask for the difficulty for the srsenabled tasks
         // invoke the methods about srs scheduling
         this.completed = true;
+        AchievementsController.updateProgress(Main.user.getUserId(), "TASK_BASED", 1);
     }
 
     public void scheduleNextRecall(){

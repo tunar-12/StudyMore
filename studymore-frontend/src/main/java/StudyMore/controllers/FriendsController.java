@@ -113,8 +113,6 @@ public class FriendsController {
     }
     private void loadGroupLeaderboard() {
         leaderboardContainer.getChildren().clear();
-
-        // Find the current user's active group
         long groupId   = -1;
         int  studyGoal = 50;
 
@@ -155,8 +153,7 @@ public class FriendsController {
         try (PreparedStatement s = Main.mngr.getConnection().prepareStatement(q)) {
             s.setLong(1, groupId);
             try (ResultSet rs = s.executeQuery()) {
-                // Collect to find max for scaling
-                List<long[]> rows = new ArrayList<>(); // [id, stime]
+                List<long[]> rows = new ArrayList<>();
                 List<String> names = new ArrayList<>();
                 while (rs.next()) {
                     rows.add(new long[]{ rs.getLong("id"), rs.getLong("stime") });
@@ -217,6 +214,57 @@ public class FriendsController {
             });
         });
     }
+
+    @FXML
+    private void onViewRequests() {
+        String query = """
+            SELECT fr.id, u.username FROM friend_requests fr
+            JOIN users u ON fr.sender_id = u.id
+            WHERE fr.receiver_id = ? AND fr.status = 'PENDING'
+            """;
+        try (PreparedStatement s = Main.mngr.getConnection().prepareStatement(query)) {
+            s.setLong(1, Main.user.getUserId());
+            List<String> names = new ArrayList<>();
+            List<Long>   ids   = new ArrayList<>();
+            try (ResultSet rs = s.executeQuery()) {
+                while (rs.next()) { names.add(rs.getString("username")); ids.add(rs.getLong("id")); }
+            }
+            if (names.isEmpty()) { setStatus("No pending requests."); return; }
+
+            ChoiceDialog<String> d = new ChoiceDialog<>(names.get(0), names);
+            d.setTitle("Accept Request"); d.setHeaderText(null); d.setContentText("Accept from:");
+            d.showAndWait().ifPresent(sel -> {
+                int idx = names.indexOf(sel);
+                acceptRequest(ids.get(idx), sel);
+            });
+        } catch (SQLException e) { setStatus("Error: " + e.getMessage()); }
+    }
+
+    private void acceptRequest(long requestId, String senderName) {
+        try {
+            long senderId;
+            try (PreparedStatement s = Main.mngr.getConnection().prepareStatement(
+                    "SELECT sender_id FROM friend_requests WHERE id = ?")) {
+                s.setLong(1, requestId);
+                try (ResultSet rs = s.executeQuery()) {
+                    if (!rs.next()) return;
+                    senderId = rs.getLong("sender_id");
+                }
+            }
+            try (PreparedStatement s = Main.mngr.getConnection().prepareStatement(
+                    "UPDATE friend_requests SET status='ACCEPTED' WHERE id=?")) {
+                s.setLong(1, requestId); s.executeUpdate();
+            }
+            try (PreparedStatement s = Main.mngr.getConnection().prepareStatement(
+                    "INSERT INTO friends (user_id, friend_id) VALUES (?,?) ON CONFLICT DO NOTHING")) {
+                s.setLong(1, Main.user.getUserId()); s.setLong(2, senderId); s.executeUpdate();
+                s.setLong(1, senderId); s.setLong(2, Main.user.getUserId()); s.executeUpdate();
+            }
+            setStatus("Now friends with " + senderName + "!");
+            AchievementsController.updateProgress(Main.user.getUserId(), "SOCIAL", 1);
+            loadFriends(null);
+        } catch (SQLException e) { setStatus("Error: " + e.getMessage()); }
+    }
     @FXML
     private void onAddFriend() {
         TextInputDialog d = new TextInputDialog();
@@ -256,11 +304,8 @@ public class FriendsController {
         } catch (SQLException e) { setStatus("Error: " + e.getMessage()); }
     }
     private HBox buildFriendRow(String username, String statusText, boolean online) {
-        // Status dot
         Circle dot = new Circle(4);
         dot.setFill(online ? Color.web("#4caf50") : Color.web("#2a2a2a"));
-
-        // Avatar circle (dark, with person icon)
         Label avatar = new Label("⬤");
         avatar.setPrefSize(40, 40); avatar.setMinSize(40, 40);
         avatar.setAlignment(Pos.CENTER);

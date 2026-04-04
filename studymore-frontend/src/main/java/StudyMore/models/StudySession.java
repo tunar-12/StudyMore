@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import StudyMore.Main;
+import StudyMore.controllers.AchievementsController;
 
 public class StudySession {
 
@@ -72,6 +73,12 @@ public class StudySession {
 
     public void end() {
         endTime = LocalDateTime.now();
+        
+        int hoursStudied = duration / 3600;
+
+        AchievementsController.updateProgress(user.getUserId(), "TIME_BASED",   hoursStudied);
+        AchievementsController.updateProgress(user.getUserId(), "COIN_BASED",   coinsEarned);
+        AchievementsController.updateProgress(user.getUserId(), "STREAK_BASED", user.getStudyStreak()); 
     }
 
     public void incrementDuration() {

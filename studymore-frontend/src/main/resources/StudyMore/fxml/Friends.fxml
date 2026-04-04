@@ -42,6 +42,11 @@
                     style="-fx-background-color: transparent; -fx-text-fill: #555;
                            -fx-font-size: 10px; -fx-font-family: monospace; -fx-font-weight: bold;
                            -fx-padding: 12 0; -fx-cursor: hand; -fx-border-width: 0;"/>
+              <Button text="📬 REQUESTS" onAction="#onViewRequests"
+        HBox.hgrow="ALWAYS" maxWidth="Infinity"
+        style="-fx-background-color: transparent; -fx-text-fill: #555;
+               -fx-font-size: 10px; -fx-font-family: monospace; -fx-font-weight: bold;
+               -fx-padding: 12 0; -fx-cursor: hand; -fx-border-width: 0;"/>
         </HBox>
 
     </VBox>
