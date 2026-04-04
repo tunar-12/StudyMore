@@ -701,4 +701,77 @@ public class DatabaseManager {
             }
         }
     }
+
+    public void insertAchievements(long userId) {
+        JSONArray achievements = loadJsonArray("StudyMore/assets/achievements.json");
+
+        if (achievements == null) {
+            System.err.println("Failed to load achievements.json");
+            return;
+        }
+
+        String upsertAchievementSQL = """
+                INSERT INTO achievements (id, title, description, type, target_value, reward)
+                VALUES (?, ?, ?, ?, ?, ?)
+                ON CONFLICT(id) DO NOTHING
+                """;
+
+        String insertUserAchievementSQL = """
+                INSERT INTO user_achievements (id, user_id, achievement_id, progress, is_completed)
+                VALUES (?, ?, ?, 0, 0)
+                ON CONFLICT(user_id, achievement_id) DO NOTHING
+                """;
+
+        try {
+            // Disable auto commit to handle this as a single atomic transaction
+            connection.setAutoCommit(false);
+
+            try (PreparedStatement achStmt = connection.prepareStatement(upsertAchievementSQL);
+                 PreparedStatement userAchStmt = connection.prepareStatement(insertUserAchievementSQL)) {
+
+                for (int i = 0; i < achievements.length(); i++) {
+                    JSONObject obj = achievements.getJSONObject(i);
+
+                    long id = obj.getLong("id");
+                    String title = obj.getString("title");
+                    String description = obj.getString("description");
+                    String type = obj.getString("type");
+                    int targetValue = obj.getInt("target_value");
+                    int reward = obj.getInt("reward");
+
+                    // Prepare the master achievement definition batch
+                    achStmt.setLong(1, id);
+                    achStmt.setString(2, title);
+                    achStmt.setString(3, description);
+                    achStmt.setString(4, type);
+                    achStmt.setInt(5, targetValue);
+                    achStmt.setInt(6, reward);
+                    achStmt.addBatch();
+
+                    // Prepare the user-specific progress batch
+                    userAchStmt.setLong(1, SnowflakeIDGenerator.generate());
+                    userAchStmt.setLong(2, userId);
+                    userAchStmt.setLong(3, id);
+                    userAchStmt.addBatch();
+                }
+
+                // Execute both batches
+                achStmt.executeBatch();
+                userAchStmt.executeBatch();
+            }
+
+            connection.commit();
+            System.out.println("Achievements and user progress records initialized successfully.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }

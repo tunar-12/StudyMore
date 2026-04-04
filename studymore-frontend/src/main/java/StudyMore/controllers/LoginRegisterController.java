@@ -69,6 +69,7 @@ public class LoginRegisterController {
             System.out.println("INSERTED USER");
 
             Main.mngr.initializeNewUserInventory(id);
+            Main.mngr.insertAchievements(id);
 
             Main.user = Main.mngr.getUser(id);
 
