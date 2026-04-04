@@ -798,5 +798,15 @@ public class DatabaseManager {
         }
         return allItems;
     }
+    public void updateUserCoinBalance(long userId, int newBalance) {
+        String query = "UPDATE user_stats SET coin_balance = ? WHERE user_id = ?";
+        try (java.sql.PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, newBalance); 
+            stmt.setLong(2, userId);    
+            stmt.executeUpdate();       
+        } catch (java.sql.SQLException e) {
+            System.err.println("Failed to save new coin balance: " + e.getMessage());
+        }
+    }
 
 }

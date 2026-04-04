@@ -13,6 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.control.Alert;
+
 
 public class ShopController {
 
@@ -23,7 +25,7 @@ public class ShopController {
 
     @FXML
     public void initialize() {
-        balanceLabel.setText("0");
+        balanceLabel.setText(String.valueOf(Main.user.getCoinBalance()));
         loadShopUI();
     }
 
@@ -78,20 +80,44 @@ public class ShopController {
         Label nameLabel = new Label(item.getName().toUpperCase());
         nameLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;");
 
-        Button buyBtn = createBuyButton(item);
+        Button buyBtn = createBuyButton(item, card);
         card.getChildren().addAll(imagePlaceholder, nameLabel, buyBtn);
         return card;
     }
 
-private Button createBuyButton(Cosmetic item) {
+    private Button createBuyButton(Cosmetic item, VBox card) {
         String buttonText = "BUY (" + item.getPrice() + ")";
-        Button btn = new Button(buttonText);
-                    
+        Button btn = new Button(buttonText);    
         btn.setStyle("-fx-background-color: transparent; -fx-text-fill: #fbbf24; -fx-border-color: #fbbf24; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4; -fx-font-weight: bold; -fx-padding: 7 15; -fx-cursor: hand;");
+        
         btn.setOnAction(new EventHandler<ActionEvent>() {
-             //TODO: Implement the actual action the buy button does
             public void handle(ActionEvent event) {
-                System.out.println("Attempting to buy: " + item.getName() + " for " + item.getPrice() + " coins.");
+                //check if the user have enough money
+                int currentBalance = Main.user.getCoinBalance();
+                int price = item.getPrice();
+                if (currentBalance >= price) {
+                    int newBalance = currentBalance - price; //deduct the money
+                    Main.user.setCoinBalance(newBalance);    //update their balance 
+                    Main.user.getInventory().addItem(item);  //add the bought item in their owned items
+                    Main.mngr.updateUserCoinBalance(Main.user.getUserId(), newBalance); //save new balance 
+                    item.obtain(Main.user.getUserId(), Main.mngr); //save item to owned item
+                    balanceLabel.setText(String.valueOf(newBalance)); //show new balacne on top right
+                    ((javafx.scene.layout.Pane) card.getParent()).getChildren().remove(card); //remove this item from shop
+                    Alert success = new Alert(Alert.AlertType.INFORMATION);
+                    success.setTitle("Purchase Successful!");
+                    success.setHeaderText(null);
+                    success.setContentText("You successfully bought " + item.getName());
+                    success.show();
+
+                } else {
+                    // SHOW VISUAL
+                    Alert error = new Alert(Alert.AlertType.ERROR);
+                    error.setTitle("Not Enough Coins");
+                    error.setHeaderText(null);
+                    int coinsNeeded = price - currentBalance; //HOW MANY MORE COINS NEEDED
+                    error.setContentText("You need " + coinsNeeded + " more coins to buy this.");
+                    error.show();
+                }
             }
         });
         

@@ -1,6 +1,7 @@
 package StudyMore.controllers;
 
 import StudyMore.Main;
+import StudyMore.models.Cosmetic;
 import StudyMore.models.CosmeticType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -37,7 +38,8 @@ public class Controller {
     private final String INACTIVE_STYLE = "-fx-background-color: transparent; -fx-text-fill: #a3a3a3; -fx-padding: 12 24;";
 
     public void initialize() {
-        mainLayout.setStyle("-fx-background-image: url('/StudyMore/assets/backgrounds/" + Main.user.getInventory().getEquipped(CosmeticType.BACKGROUND).getName() + "_background.jpg'); -fx-background-size: cover; -fx-background-position: center; -fx-background-repeat: no-repeat;");
+        Cosmetic equippedBg = Main.user.getInventory().getEquipped(CosmeticType.BACKGROUND);
+        mainLayout.setStyle("-fx-background-image: url('/StudyMore/" + equippedBg.getImagePath() + "'); -fx-background-size: cover; -fx-background-position: center; -fx-background-repeat: no-repeat;");
         handleStudy(); 
     }
 
