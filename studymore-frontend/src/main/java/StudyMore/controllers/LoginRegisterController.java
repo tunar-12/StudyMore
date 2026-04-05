@@ -74,8 +74,10 @@ public class LoginRegisterController {
 
             Main.user = Main.mngr.getUser(id);
 
-            String syncBody = "{\"username\":\"" + username + "\","
-                + "\"email\":\"" + email + "\"}";
+            String syncBody = "{\"userId\":"        + id                  + ","
+                            + "\"username\":\""     + username            + "\","
+                            + "\"email\":\""        + email               + "\","
+                            + "\"passwordHash\":\"" + sha256(password)    + "\"}";
             ApiClient.post("/auth/users/sync", syncBody);
 
 

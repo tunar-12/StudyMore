@@ -46,15 +46,12 @@ public class AuthController {
     @PostMapping("/users/sync")
     public ResponseEntity<?> syncUser(@RequestBody Map<String, Object> body) {
         try {
+            Long   userId   = Long.valueOf(body.get("userId").toString());
             String username = (String) body.get("username");
             String email    = (String) body.get("email");
-            Optional<User> existing = userService.findByEmail(email);
-            if (existing.isPresent()) {
-                return ResponseEntity.ok(Map.of("status", "exists"));
-            }
-            
-            userService.register(username, email, "LOCAL_USER_NO_PASSWORD");
-            return ResponseEntity.ok(Map.of("status", "created"));
+            String passHash = (String) body.get("passwordHash");
+
+            return ResponseEntity.ok(userService.syncUser(userId, username, email, passHash));
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));

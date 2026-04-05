@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -32,6 +33,16 @@ public class UserService {
 
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public Map<String, String> syncUser(Long userId, String username, String email, String passwordHash) {
+        if (userRepository.existsById(userId)) {
+            return Map.of("status", "exists");
+        }
+        User u = new User(username, email, passwordHash);
+        u.setUserId(userId);
+        userRepository.save(u);
+        return Map.of("status", "created");
     }
 
     private String sha256(String input) {

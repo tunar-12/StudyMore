@@ -12,7 +12,6 @@ import com.codemaxxers.model.enums.Rank;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
     @Column(unique = true, nullable = false)
