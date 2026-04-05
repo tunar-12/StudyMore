@@ -10,51 +10,45 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane fx:id="pageRoot" style="-fx-background-color: #000000;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StudyMore.controllers.TasksController">
+<StackPane fx:id="pageRoot" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StudyMore.controllers.TasksController">
    <children>
       <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
          <content>
             <VBox spacing="40.0">
                <padding>
-                  <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                  <Insets bottom="32.0" left="32.0" right="32.0" top="32.0" />
                </padding>
                <children>
-                  <AnchorPane prefHeight="80.0" style="-fx-background-color: #111; -fx-background-radius: 10; -fx-border-color: #222; -fx-border-radius: 10;">
+                  
+                  <AnchorPane prefHeight="80.0" style="-fx-background-color: black; -fx-border-color: #262626;">
                      <children>
-                        <Label layoutX="20.0" layoutY="28.0" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20;" text="TASKS &amp; SRS TRACKING" AnchorPane.leftAnchor="20.0" />
-                        <Button fx:id="createTaskBtn" layoutX="600.0" layoutY="22.0" onAction="#handleCreateTask" prefHeight="35.0" style="-fx-background-color: white; -fx-text-fill: black; -fx-font-weight: bold; -fx-background-radius: 5;" text="+ CREATE TASK" AnchorPane.rightAnchor="20.0" />
+                        <Label layoutX="24.0" layoutY="26.0" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20;" text="TASKS &amp; SRS TRACKING" AnchorPane.leftAnchor="24.0" />
+                        <Button fx:id="createTaskBtn" layoutX="600.0" layoutY="22.0" onAction="#handleCreateTask" prefHeight="35.0" style="-fx-background-color: white; -fx-text-fill: black; -fx-font-weight: bold; -fx-padding: 8 16;" text="+ CREATE TASK" AnchorPane.rightAnchor="24.0" />
                      </children>
                   </AnchorPane>
 
-                  <VBox spacing="15.0">
+                  <VBox style="-fx-background-color: black; -fx-border-color: #262626;">
                      <children>
-                        <HBox alignment="CENTER_LEFT" maxWidth="-Infinity" prefHeight="40.0" style="-fx-background-color: #111; -fx-background-radius: 8; -fx-border-color: #222; -fx-border-radius: 8;">
+                        <HBox alignment="CENTER_LEFT" style="-fx-background-color: #171717; -fx-padding: 16 20; -fx-border-color: transparent transparent #262626 transparent;">
                            <children>
-                              <Label style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13;" text="NORMAL TASKS">
-                                 <padding>
-                                    <Insets left="20.0" right="20.0" />
-                                 </padding>
-                              </Label>
+                              <Label style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13;" text="NORMAL TASKS" />
                            </children>
                         </HBox>
-                        <FlowPane fx:id="normalTasksContainer" hgap="20.0" vgap="20.0" />
+                        <FlowPane fx:id="normalTasksContainer" hgap="16.0" vgap="16.0" style="-fx-padding: 20;" />
                      </children>
                   </VBox>
 
-                  <VBox spacing="15.0">
+                  <VBox style="-fx-background-color: black; -fx-border-color: #262626;">
                      <children>
-                        <HBox alignment="CENTER_LEFT" maxWidth="-Infinity" prefHeight="40.0" style="-fx-background-color: #111; -fx-background-radius: 8; -fx-border-color: #222; -fx-border-radius: 8;">
+                        <HBox alignment="CENTER_LEFT" style="-fx-background-color: #171717; -fx-padding: 16 20; -fx-border-color: transparent transparent #262626 transparent;">
                            <children>
-                              <Label style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13;" text="SRS TASKS">
-                                 <padding>
-                                    <Insets left="20.0" right="20.0" />
-                                 </padding>
-                              </Label>
+                              <Label style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13;" text="SRS TASKS" />
                            </children>
                         </HBox>
-                        <FlowPane fx:id="srsTasksContainer" hgap="20.0" vgap="20.0" />
+                        <FlowPane fx:id="srsTasksContainer" hgap="16.0" vgap="16.0" style="-fx-padding: 20;" />
                      </children>
                   </VBox>
+
                </children>
             </VBox>
          </content>

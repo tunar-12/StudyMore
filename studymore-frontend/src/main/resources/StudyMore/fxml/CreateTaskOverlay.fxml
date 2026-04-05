@@ -8,34 +8,36 @@
 
 <StackPane fx:id="overlayRoot" style="-fx-background-color: rgba(0, 0, 0, 0.7);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="400.0" spacing="20.0" style="-fx-background-color: #1a1a1a; -fx-background-radius: 15; -fx-border-color: #333; -fx-border-radius: 15;">
+      <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="420.0" spacing="24.0" style="-fx-background-color: black; -fx-border-color: #262626; -fx-padding: 32;">
          <children>
             <Label style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 18;" text="CREATE NEW TASK" />
             
-            <VBox spacing="5.0">
+            <VBox spacing="8.0">
                <children>
-                  <Label style="-fx-text-fill: #888; -fx-font-size: 11;" text="TASK TITLE" />
-                  <TextField fx:id="titleInput" style="-fx-background-color: #0b0b0b; -fx-text-fill: white; -fx-border-color: #333; -fx-border-radius: 5;" />
+                  <Label style="-fx-text-fill: #d4d4d4; -fx-font-size: 11; -fx-font-weight: bold;" text="TASK TITLE" />
+                  <TextField fx:id="titleInput" style="-fx-background-color: black; -fx-text-fill: white; -fx-border-color: #404040; -fx-padding: 8;" />
                </children>
             </VBox>
 
-            <VBox spacing="5.0">
+            <VBox spacing="8.0">
                <children>
-                  <Label style="-fx-text-fill: #888; -fx-font-size: 11;" text="CONTENT" />
-                  <TextArea fx:id="contentInput" prefHeight="100.0" style="-fx-control-inner-background: #0b0b0b; -fx-text-fill: white; -fx-border-color: #333;" wrapText="true" />
+                  <Label style="-fx-text-fill: #d4d4d4; -fx-font-size: 11; -fx-font-weight: bold;" text="CONTENT" />
+                  <TextArea fx:id="contentInput" prefHeight="100.0" style="-fx-control-inner-background: black; -fx-background-color: black; -fx-text-fill: white; -fx-border-color: #404040; -fx-padding: 4;" wrapText="true" />
                </children>
             </VBox>
 
-            <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <HBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-background-color: black; -fx-border-color: #262626; -fx-padding: 16;">
                <children>
-                  <CheckBox fx:id="srsToggle" style="-fx-text-fill: white;" text="Enable SRS Tracking" />
+                  <Label text="ENABLE SRS TRACKING" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 11;" HBox.hgrow="ALWAYS" />
+                  <Region HBox.hgrow="ALWAYS" />
+                  <CheckBox fx:id="srsToggle" style="-fx-text-fill: white;" />
                </children>
             </HBox>
 
-            <VBox spacing="5.0">
+            <VBox spacing="8.0">
                <children>
-                  <Label style="-fx-text-fill: #888; -fx-font-size: 11;" text="REVIEW INTENSITY" />
-                  <ComboBox fx:id="intensityDropdown" disable="${!srsToggle.selected}" prefWidth="400.0" style="-fx-background-color: #0b0b0b; -fx-border-color: #333; -fx-border-radius: 5; -fx-text-fill: white;">
+                  <Label style="-fx-text-fill: #d4d4d4; -fx-font-size: 11; -fx-font-weight: bold;" text="REVIEW INTENSITY" />
+                  <ComboBox fx:id="intensityDropdown" disable="${!srsToggle.selected}" prefWidth="420.0" style="-fx-background-color: black; -fx-border-color: #404040; -fx-text-fill: white; -fx-padding: 4;">
                      <items>
                         <FXCollections fx:factory="observableArrayList">
                            <String fx:value="Intense" />
@@ -50,21 +52,18 @@
                </children>
             </VBox>
 
-            <HBox alignment="CENTER_RIGHT" spacing="15.0">
+            <HBox alignment="CENTER_RIGHT" spacing="16.0" style="-fx-padding: 8 0 0 0;">
                <children>
-                  <Button fx:id="deleteTaskBtn" onAction="#deleteTask" style="-fx-background-color: transparent; -fx-text-fill: #d9534f; -fx-font-weight: bold;" text="DELETE TASK" visible="false" managed="false" />
+                  <Button fx:id="deleteTaskBtn" onAction="#deleteTask" style="-fx-background-color: transparent; -fx-text-fill: #d9534f; -fx-font-weight: bold; -fx-padding: 8 0;" text="DELETE TASK" visible="false" managed="false" />
                   
                   <Region HBox.hgrow="ALWAYS" />
                   
-                  <Button onAction="#closeOverlay" style="-fx-background-color: transparent; -fx-text-fill: #888;" text="CANCEL" />
-                  <Button fx:id="saveTaskBtn" onAction="#saveTask" prefWidth="100.0" style="-fx-background-color: white; -fx-text-fill: black; -fx-font-weight: bold;" text="SAVE" />
+                  <Button onAction="#closeOverlay" style="-fx-background-color: transparent; -fx-text-fill: #737373; -fx-font-weight: bold; -fx-padding: 8 16;" text="CANCEL" />
+                  <Button fx:id="saveTaskBtn" onAction="#saveTask" prefWidth="120.0" style="-fx-background-color: white; -fx-text-fill: black; -fx-font-weight: bold; -fx-padding: 8 24;" text="SAVE" />
                </children>
             </HBox>
             
          </children>
-         <padding>
-            <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
-         </padding>
       </VBox>
    </children>
 </StackPane>

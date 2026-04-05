@@ -235,29 +235,35 @@ public class TasksController {
 
             if (task.isCompleted()) {
                 // COMPLETED TASK: grayed out task card + vibrant complete button
-                card.setOpacity(0.4); 
-                
-                if (completeBtn != null) {
-                    completeBtn.setStyle("-fx-background-color: transparent; -fx-border-color: #4CAF50; -fx-text-fill: #4CAF50; -fx-border-radius: 5;");
-                    completeBtn.setDisable(true); 
-                }
-                
-                // Locking the config button (user cant modify a completed task)
+                if (titleLabel != null) titleLabel.setOpacity(0.4);
+                if (contentLabel != null) contentLabel.setOpacity(0.4);
+                if (srsBadge != null) srsBadge.setOpacity(0.4);
+                card.getChildren().get(2).setOpacity(0.1);
+
                 if (configBtn != null) {
+                    configBtn.setOpacity(0.4);
                     configBtn.setDisable(true);
                 }
 
+                if (completeBtn != null) {
+                    completeBtn.setStyle("-fx-background-color: transparent; -fx-border-color: #00ff08; -fx-text-fill: #00ff08; -fx-border-radius: 5;");
+                    completeBtn.setDisable(true); 
+                }
             } else {
                 // ACTIVE TASK: brighter task card + slightly grayed out complete button
-                card.setOpacity(1.0);
-                
-                if (completeBtn != null) {
-                    completeBtn.setStyle("-fx-background-color: transparent; -fx-border-color: #444; -fx-text-fill: #555; -fx-border-radius: 5; -fx-cursor: hand;");
-                    completeBtn.setOnAction(event -> markTaskAsCompleted(task));
-                }
-                
+                if (titleLabel != null) titleLabel.setOpacity(1.0);
+                if (contentLabel != null) contentLabel.setOpacity(1.0);
+                if (srsBadge != null) srsBadge.setOpacity(1.0);
+                card.getChildren().get(2).setOpacity(0.5);
+
                 if (configBtn != null) {
+                    configBtn.setOpacity(1.0);
                     configBtn.setOnAction(event -> openTaskConfig(task));
+                }
+
+                if (completeBtn != null) {
+                    completeBtn.setStyle("-fx-background-color: transparent; -fx-border-color: #404040; -fx-text-fill: #737373; -fx-border-radius: 5; -fx-cursor: hand;");
+                    completeBtn.setOnAction(event -> markTaskAsCompleted(task));
                 }
             }
 

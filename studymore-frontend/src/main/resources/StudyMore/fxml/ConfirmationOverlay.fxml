@@ -8,24 +8,21 @@
 
 <VBox alignment="CENTER" style="-fx-background-color: rgba(0, 0, 0, 0.7);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="350.0" spacing="20.0" style="-fx-background-color: #1a1a1a; -fx-background-radius: 15; -fx-border-color: #333; -fx-border-radius: 15;">
+      <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="380.0" spacing="24.0" style="-fx-background-color: black; -fx-border-color: #262626; -fx-padding: 32;">
          <children>
             <Label style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 18;" text="CONFIRM ACTION" />
             
-            <Label style="-fx-text-fill: #ccc; -fx-font-size: 13;" text="This action can NOT be undone. Are you sure you want to proceed?" wrapText="true" />
+            <Label style="-fx-text-fill: #737373; -fx-font-size: 13;" text="This action can NOT be undone. Are you sure you want to proceed?" wrapText="true" />
 
             <HBox VBox.vgrow="ALWAYS" />
 
-            <HBox alignment="CENTER_RIGHT" spacing="15.0">
+            <HBox alignment="CENTER_RIGHT" spacing="16.0">
                <children>
-                  <Button fx:id="confirmCancelButton" style="-fx-background-color: transparent; -fx-text-fill: #888;" text="CANCEL" />
-                  <Button fx:id="confirmProceedButton" prefWidth="100.0" style="-fx-background-color: #d9534f; -fx-text-fill: white; -fx-font-weight: bold;" text="CONFIRM" />
+                  <Button fx:id="confirmCancelButton" style="-fx-background-color: transparent; -fx-text-fill: #737373; -fx-font-weight: bold; -fx-padding: 8 16;" text="CANCEL" />
+                  <Button fx:id="confirmProceedButton" prefWidth="120.0" style="-fx-background-color: #d9534f; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 24;" text="CONFIRM" />
                </children>
             </HBox>
          </children>
-         <padding>
-            <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
-         </padding>
       </VBox>
    </children>
 </VBox>

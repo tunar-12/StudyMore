@@ -4,19 +4,19 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:id="cardRoot" prefHeight="180.0" prefWidth="250.0" spacing="12.0" style="-fx-background-color: #1a1a1a; -fx-background-radius: 10; -fx-border-color: #333; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="cardRoot" prefHeight="180.0" prefWidth="250.0" spacing="12.0" style="-fx-background-color: black; -fx-border-color: #262626; -fx-padding: 16;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox alignment="CENTER_LEFT">
          <children>
             <Label fx:id="taskTitle" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14;" text="TASK TITLE" />
             <Region HBox.hgrow="ALWAYS" />
-            <Button fx:id="configBtn" style="-fx-background-color: transparent; -fx-text-fill: #555; -fx-cursor: hand;" text="⋮" />
+            <Button fx:id="configBtn" style="-fx-background-color: transparent; -fx-text-fill: #737373; -fx-cursor: hand;" text="⋮" />
          </children>
       </HBox>
       
-      <Label fx:id="taskContent" alignment="TOP_LEFT" prefHeight="65.0" style="-fx-text-fill: #999; -fx-font-size: 11;" text="Task details go here..." wrapText="true" />
+      <Label fx:id="taskContent" alignment="TOP_LEFT" prefHeight="65.0" style="-fx-text-fill: #737373; -fx-font-size: 11;" text="Task details go here..." wrapText="true" />
       
-      <Separator opacity="0.1" />
+      <Separator style="-fx-border-color: #262626; -fx-background-color: transparent;" opacity="0.5"/>
       
       <AnchorPane VBox.vgrow="ALWAYS">
          <children>
@@ -24,17 +24,17 @@
                <children>
                   <HBox spacing="15.0">
                      <children>
-                        <VBox>
+                        <VBox spacing="2.0">
                            <children>
-                              <Label style="-fx-text-fill: #555; -fx-font-size: 9; -fx-font-weight: bold;" text="RECALL IN" />
-                              <Label fx:id="recallLabel" style="-fx-background-color: #333; -fx-text-fill: white; -fx-font-size: 10; -fx-font-weight: bold; -fx-padding: 3 8 3 8; -fx-background-radius: 3;" text="4 DAYS" />
+                              <Label style="-fx-text-fill: #737373; -fx-font-size: 9; -fx-font-weight: bold;" text="RECALL IN" />
+                              <Label fx:id="recallLabel" style="-fx-background-color: #262626; -fx-text-fill: white; -fx-font-size: 10; -fx-font-weight: bold; -fx-padding: 4 8;" text="4 DAYS" />
                            </children>
                         </VBox>
                         
-                        <VBox>
+                        <VBox spacing="2.0">
                            <children>
-                              <Label style="-fx-text-fill: #555; -fx-font-size: 9; -fx-font-weight: bold;" text="INTENSITY" />
-                              <Label fx:id="intensityLabel" style="-fx-background-color: #333; -fx-text-fill: white; -fx-font-size: 10; -fx-font-weight: bold; -fx-padding: 3 8 3 8; -fx-background-radius: 3;" text="STANDARD" />
+                              <Label style="-fx-text-fill: #737373; -fx-font-size: 9; -fx-font-weight: bold;" text="INTENSITY" />
+                              <Label fx:id="intensityLabel" style="-fx-background-color: #262626; -fx-text-fill: white; -fx-font-size: 10; -fx-font-weight: bold; -fx-padding: 4 8;" text="STANDARD" />
                            </children>
                         </VBox>
                      </children>
@@ -42,11 +42,8 @@
                </children>
             </VBox>
             
-            <Button fx:id="completeBtn" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: transparent; -fx-border-color: #444; -fx-border-radius: 5;" text="✓" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+            <Button fx:id="completeBtn" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: transparent; -fx-border-color: #404040; -fx-text-fill: #737373;" text="✓" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" />
          </children>
       </AnchorPane>
    </children>
-   <padding>
-      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-   </padding>
 </VBox>
