@@ -799,11 +799,17 @@ public class DatabaseManager {
         return allItems;
     }
     public void updateUserCoinBalance(long userId, int newBalance) {
-        String query = "UPDATE user_stats SET coin_balance = ? WHERE user_id = ?";
+        // Add a new row if empty or else update the already made row.
+        String query = """
+                INSERT INTO user_stats (user_id, coin_balance) 
+                VALUES (?, ?)
+                ON CONFLICT(user_id) DO UPDATE SET coin_balance = excluded.coin_balance
+                """;
+        
         try (java.sql.PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, newBalance); 
+            stmt.setInt(1, newBalance);
             stmt.setLong(2, userId);    
-            stmt.executeUpdate();       
+            stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
             System.err.println("Failed to save new coin balance: " + e.getMessage());
         }
