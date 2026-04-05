@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import StudyMore.Main;
 import StudyMore.models.ReviewIntensity;
 import StudyMore.models.Task;
 
@@ -157,6 +158,7 @@ public class TasksController {
             promptConfirmation(() -> {
                 task.complete();
                 // TODO: Update db
+                AchievementsController.updateProgress(Main.user.getUserId(), "TASK_BASED", 1);
                 refreshTaskDisplay();
             });
         }
