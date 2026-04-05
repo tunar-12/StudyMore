@@ -1,0 +1,50 @@
+[
+    {
+        "id" : 11,
+        "name" : "default",
+        "type" : "BACKGROUND",
+        "price" : 100,
+        "path" : "assets/backgrounds/",
+        "description" : ""
+    },
+    {
+        "id" : 12,
+        "name" : "leaf",
+        "type" : "BACKGROUND",
+        "price" : 100,
+        "path" : "assets/backgrounds/",
+        "description" : ""
+    },
+    {
+        "id" : 13,
+        "name" : "polygon",
+        "type" : "BACKGROUND",
+        "price" : 100,
+        "path" : "assets/backgrounds/",
+        "description" : ""
+    },
+    {
+        "id" : 14,
+        "name" : "smoke",
+        "type" : "BACKGROUND",
+        "price" : 100,
+        "path" : "assets/backgrounds/",
+        "description" : ""
+    },
+    {
+        "id" : 15,
+        "name" : "superman",
+        "type" : "BACKGROUND",
+        "price" : 100,
+        "path" : "assets/backgrounds/",
+        "description" : ""
+    },
+    {
+        "id" : 16,
+        "name" : "win",
+        "type" : "BACKGROUND",
+        "price" : 100,
+        "path" : "assets/backgrounds/",
+        "description" : ""
+    }
+]

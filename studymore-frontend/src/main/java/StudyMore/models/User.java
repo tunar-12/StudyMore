@@ -1,6 +1,11 @@
 package StudyMore.models;
 
 import java.util.List;
+
+import StudyMore.Main;
+
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class User {
@@ -21,7 +26,8 @@ public class User {
     private List<Task> tasks;
 
     public User(Long userId) {
-        // TODO (write the fetch logic from backend -- or cache or local database -- and initlize this user object that fetched user)
+        //Friend
+        this.userId = userId;
     }
 
     // Constructing a new user
@@ -41,6 +47,27 @@ public class User {
         this.friends = new java.util.ArrayList<>();
         this.tasks = new java.util.ArrayList<>();
     }
+
+    // Constructor for database query
+    public User(long id, String username, String email, String passwordHash, Rank rank, int rating,
+        int coinBalance, int studyStreak, long totalStudyTime, long dailyStudyTime, 
+        MascotCat cat, Inventory inventory, ArrayList<User> friends, ArrayList<Task> tasks) {
+            this.userId = id;
+            this.username = username;
+            this.email = email;
+            this.passwordHash = passwordHash;
+            this.rank = rank;
+            this.rating = rating;
+            this.coinBalance = coinBalance;
+            this.studyStreak = studyStreak;
+            this.totalStudyTime = totalStudyTime;
+            this.dailyStudyTime = dailyStudyTime;
+            this.mascotCat = cat;
+            this.inventory = inventory;
+            this.friends = friends;
+            this.tasks = tasks;
+    }
+    
 
     public void login() {
         System.out.println("User " + username + " logged in.");
@@ -68,6 +95,9 @@ public class User {
     public String getUsername() { 
         return username; 
     }
+    public Inventory getInventory() {
+        return inventory;
+    }
     public String getEmail() { 
         return email; 
     }
@@ -83,9 +113,29 @@ public class User {
     public int getCoinBalance() { 
         return coinBalance; 
     }
-    public int getStudyStreak() { 
-        return studyStreak; 
+
+    public int getStudyStreak() {  
+        String query = "SELECT COUNT(*) FROM sessions WHERE user_id = ?";
+
+        try (java.sql.PreparedStatement stmt = Main.mngr.getConnection().prepareStatement(query)) {
+            stmt.setLong(1, this.userId);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt(1); 
+                    
+                    if (count != this.studyStreak) {
+                        this.studyStreak = count;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return this.studyStreak; 
     }
+    
     public long getTotalStudyTime() { 
         return totalStudyTime; 
     }

@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="mainLayout" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-image: url('/StudyMore/fxml/assets/bg.jpg'); -fx-background-size: cover; -fx-background-position: center; -fx-background-repeat: no-repeat;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StudyMore.controllers.Controller">
+<BorderPane fx:id="mainLayout" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StudyMore.controllers.Controller">
    
    <left>
       <VBox prefHeight="768.0" prefWidth="256.0" style="-fx-background-color: black; -fx-border-color: transparent #262626 transparent transparent;" BorderPane.alignment="CENTER">
@@ -24,36 +24,36 @@
             </VBox>
             
             <VBox spacing="8.0" style="-fx-padding: 8 8 8 8;" >
-               <children>
-                  <Button alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleStudy" style="-fx-background-color: white; -fx-text-fill: black; -fx-padding: 12 24;" text="Study">
-                     <font><Font name="System Bold" size="14.0" /></font>
-                  </Button>
-                  <Button alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleProfile" style="-fx-background-color: transparent; -fx-text-fill: #a3a3a3; -fx-padding: 12 24;" text="Profile">
-                     <font><Font size="14.0" /></font>
-                  </Button>
-                  <Button alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleFriends" style="-fx-background-color: transparent; -fx-text-fill: #a3a3a3; -fx-padding: 12 24;" text="Friends">
-                     <font><Font size="14.0" /></font>
-                  </Button>
-                  <Button alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleInventory" style="-fx-background-color: transparent; -fx-text-fill: #a3a3a3; -fx-padding: 12 24;" text="Inventory">
-                     <font><Font size="14.0" /></font>
-                  </Button>
-                  <Button alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleAchievements" style="-fx-background-color: transparent; -fx-text-fill: #a3a3a3; -fx-padding: 12 24;" text="Achievements">
-                     <font><Font size="14.0" /></font>
-                  </Button>
-                  <Button alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleTasks" style="-fx-background-color: transparent; -fx-text-fill: #a3a3a3; -fx-padding: 12 24;" text="Tasks">
-                     <font><Font size="14.0" /></font>
-                  </Button>
-                  <Button alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-text-fill: #a3a3a3; -fx-padding: 12 24;" text="Shop">
-                     <font><Font size="14.0" /></font>
-                  </Button>
-                  <Button alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleSettings" style="-fx-background-color: transparent; -fx-text-fill: #a3a3a3; -fx-padding: 12 24;" text="Settings">
-                     <font><Font size="14.0" /></font>
-                  </Button>
-               </children>
-               <VBox.margin>
-                  <Insets top="16.0" />
-               </VBox.margin>
-            </VBox>
+            <children>
+               <Button fx:id="btnStudy" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleStudy" style="-fx-background-color: white; -fx-text-fill: black; -fx-padding: 12 24;" text="Study">
+                  <font><Font name="System Bold" size="14.0" /></font>
+               </Button>
+               <Button fx:id="btnProfile" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleProfile" style="-fx-background-color: transparent; -fx-text-fill: #a3a3a3; -fx-padding: 12 24;" text="Profile">
+                  <font><Font size="14.0" /></font>
+               </Button>
+               <Button fx:id="btnFriends" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleFriends" style="-fx-background-color: transparent; -fx-text-fill: #a3a3a3; -fx-padding: 12 24;" text="Friends">
+                  <font><Font size="14.0" /></font>
+               </Button>
+               <Button fx:id="btnInventory" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleInventory" style="-fx-background-color: transparent; -fx-text-fill: #a3a3a3; -fx-padding: 12 24;" text="Inventory">
+                  <font><Font size="14.0" /></font>
+               </Button>
+               <Button fx:id="btnAchievements" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleAchievements" style="-fx-background-color: transparent; -fx-text-fill: #a3a3a3; -fx-padding: 12 24;" text="Achievements">
+                  <font><Font size="14.0" /></font>
+               </Button>
+               <Button fx:id="btnTasks" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleTasks" style="-fx-background-color: transparent; -fx-text-fill: #a3a3a3; -fx-padding: 12 24;" text="Tasks">
+                  <font><Font size="14.0" /></font>
+               </Button>
+               <Button fx:id="btnShop" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleShop" style="-fx-background-color: transparent; -fx-text-fill: #a3a3a3; -fx-padding: 12 24;" text="Shop">
+                  <font><Font size="14.0" /></font>
+               </Button>
+               <Button fx:id="btnSettings" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleSettings" style="-fx-background-color: transparent; -fx-text-fill: #a3a3a3; -fx-padding: 12 24;" text="Settings">
+                  <font><Font size="14.0" /></font>
+               </Button>
+            </children>
+            <VBox.margin>
+               <Insets top="16.0" />
+            </VBox.margin>
+         </VBox>
          </children>
       </VBox>
    </left>

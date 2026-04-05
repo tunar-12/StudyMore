@@ -23,6 +23,11 @@ public class Multiplier {
         isUpdated = true;
     }
 
+    public Multiplier(double val) {
+        this();
+        currentValue = val;
+    }
+
     public void increment() {
         if(checkIncrementDuration()) {
             incrementIntervalDuration--;

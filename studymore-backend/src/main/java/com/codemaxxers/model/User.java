@@ -2,8 +2,9 @@ package com.codemaxxers.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.codemaxxers.model.enums.Rank;
 
 @Entity
@@ -11,7 +12,6 @@ import com.codemaxxers.model.enums.Rank;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
     @Column(unique = true, nullable = false)
@@ -31,6 +31,14 @@ public class User {
     private int studyStreak;
     private long totalStudyTime;
     private long dailyStudyTime;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "user_friends",
+        joinColumns        = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "friend_id")
+    )
+    private Set<User> friends = new HashSet<>();
 
     private LocalDateTime createdAt;
 
@@ -54,6 +62,10 @@ public class User {
     public void updateProfile(String newUsername, String newEmail) {
         this.username = newUsername;
         this.email = newEmail;
+    }
+
+    public Set<User> getFriends() {
+        return friends;
     }
 
     public Long getUserId() { 
@@ -91,7 +103,19 @@ public class User {
     }
 
 
+    public void addFriend(User user) {
+        this.friends.add(user);
+        user.friends.add(this);
+    }
 
+    public void removeFriend(User user) {
+        this.friends.remove(user);
+        user.friends.remove(this);
+    }
+
+    public boolean isFriendWith(User user) {
+        return this.friends.contains(user);
+    }
 
     public void setUserId(Long userId) { 
         this.userId = userId; 

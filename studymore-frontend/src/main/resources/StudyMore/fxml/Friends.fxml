@@ -1,16 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" 
-    prefHeight="800.0" prefWidth="1000.0" 
-    style="-fx-background-color: #ff0000;" 
-    xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="StudyMore.controllers.FriendsController">
-    
-   <children>
+<HBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="StudyMore.controllers.FriendsController"
+      style="-fx-background-color: #0a0a0a;"
+      fillHeight="true">
+    <VBox prefWidth="380" minWidth="300" style="-fx-background-color: #0a0a0a; -fx-border-color: #1a1a1a; -fx-border-width: 0 1 0 0;">
+        <HBox alignment="CENTER_LEFT" spacing="10"
+              style="-fx-padding: 20 16 12 16; -fx-border-color: #1a1a1a; -fx-border-width: 0 0 1 0;">
+            <Label text="👥" style="-fx-font-size: 14px;"/>
+            <Label text="FRIEND LIST"
+                   style="-fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-font-family: monospace;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="onlineCountLabel" text="0 ONLINE"
+                   style="-fx-text-fill: white; -fx-font-size: 10px; -fx-font-family: monospace;
+                          -fx-background-color: #1a1a1a; -fx-padding: 3 8; -fx-background-radius: 2;"/>
+        </HBox>
+        <HBox alignment="CENTER_LEFT" spacing="8"
+              style="-fx-padding: 10 12 10 12; -fx-border-color: #1a1a1a; -fx-border-width: 0 0 1 0;
+                     -fx-background-color: #0d0d0d;">
+            <Label text="⌕" style="-fx-text-fill: #333; -fx-font-size: 16px;"/>
+            <TextField fx:id="searchField"
+                       promptText="SEARCH FRIENDS..."
+                       onAction="#onSearch"
+                       HBox.hgrow="ALWAYS"
+                       style="-fx-background-color: transparent; -fx-text-fill: white;
+                              -fx-prompt-text-fill: #333; -fx-border-width: 0;
+                              -fx-font-size: 11px; -fx-font-family: monospace;"/>
+        </HBox>
+        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                    style="-fx-background: transparent; -fx-background-color: transparent;
+                           -fx-border-width: 0;">
+            <VBox fx:id="friendListContainer"/>
+        </ScrollPane>
+        <HBox spacing="0" style="-fx-border-color: #1a1a1a; -fx-border-width: 1 0 0 0;">
+            <Button text="+ ADD FRIEND" onAction="#onAddFriend"
+                    HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                    style="-fx-background-color: transparent; -fx-text-fill: #555;
+                           -fx-font-size: 10px; -fx-font-family: monospace; -fx-font-weight: bold;
+                           -fx-padding: 12 0; -fx-cursor: hand; -fx-border-width: 0;"/>
+              <Button text="📬 REQUESTS" onAction="#onViewRequests"
+        HBox.hgrow="ALWAYS" maxWidth="Infinity"
+        style="-fx-background-color: transparent; -fx-text-fill: #555;
+               -fx-font-size: 10px; -fx-font-family: monospace; -fx-font-weight: bold;
+               -fx-padding: 12 0; -fx-cursor: hand; -fx-border-width: 0;"/>
+        </HBox>
 
-   </children>
-</StackPane>
+    </VBox>
+    <VBox HBox.hgrow="ALWAYS" style="-fx-background-color: #080808;">
+        <HBox alignment="CENTER_LEFT" spacing="12"
+              style="-fx-padding: 20 24 12 24; -fx-border-color: #1a1a1a; -fx-border-width: 0 0 1 0;">
+            <VBox spacing="3">
+                <Label text="STUDY GROUPS"
+                       style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-font-family: monospace;"/>
+                <Label text="JOIN A HOSTED SESSION OR START YOUR OWN."
+                       style="-fx-text-fill: #333; -fx-font-size: 10px; -fx-font-family: monospace;"/>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="statusLabel" text=""
+                   style="-fx-text-fill: #555; -fx-font-size: 10px; -fx-font-family: monospace;"/>
+            <Button text="+ CREATE GROUP" onAction="#onCreateGroup"
+                    style="-fx-background-color: white; -fx-text-fill: black;
+                           -fx-font-size: 10px; -fx-font-family: monospace; -fx-font-weight: bold;
+                           -fx-padding: 8 16; -fx-background-radius: 2; -fx-cursor: hand; -fx-border-width: 0;"/>
+        </HBox>
+        <HBox alignment="CENTER_LEFT"
+              style="-fx-padding: 14 24 10 24; -fx-border-color: #1a1a1a; -fx-border-width: 0 0 1 0;">
+            <Label text="GROUP LEADERBOARD"
+                   style="-fx-text-fill: #555; -fx-font-size: 10px; -fx-font-weight: bold; -fx-font-family: monospace;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="goalLabel" text="GOAL: 50H"
+                   style="-fx-text-fill: white; -fx-font-size: 10px; -fx-font-family: monospace;
+                          -fx-background-color: #1a1a1a; -fx-padding: 3 10; -fx-background-radius: 2;"/>
+        </HBox>
+        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                    style="-fx-background: transparent; -fx-background-color: transparent; -fx-border-width: 0;">
+            <VBox fx:id="leaderboardContainer"/>
+        </ScrollPane>
+
+    </VBox>
+
+</HBox>

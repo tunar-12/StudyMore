@@ -1,5 +1,7 @@
 package StudyMore.models;
 
+import StudyMore.db.DatabaseManager;
+
 public class Cosmetic {
     private String name;
     private CosmeticType type;
@@ -36,9 +38,11 @@ public class Cosmetic {
     public String getDescription() { 
         return description; 
     }
+    public long getId() {
+        return this.cosmeticId; 
+    }
 
-    //TO DO
-    public boolean obtain() {
-        return true; 
+    public boolean obtain(long userId, DatabaseManager db) {
+        return db.obtainCosmetic(userId, cosmeticId);
     }
 }

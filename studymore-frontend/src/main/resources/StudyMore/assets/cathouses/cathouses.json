@@ -1,0 +1,50 @@
+[
+    {
+        "id" : 31,
+        "name" : "brown",
+        "type" : "CATHOUSE",
+        "price" : 100,
+        "path" : "assets/cathouses/",
+        "description" : ""
+    },
+    {
+        "id" : 32,
+        "name" : "gray",
+        "type" : "CATHOUSE",
+        "price" : 100,
+        "path" : "assets/cathouses/",
+        "description" : ""
+    },
+    {
+        "id" : 33,
+        "name" : "minecraft",
+        "type" : "CATHOUSE",
+        "price" : 100,
+        "path" : "assets/cathouses/",
+        "description" : ""
+    },
+    {
+        "id" : 34,
+        "name" : "pc",
+        "type" : "CATHOUSE",
+        "price" : 100,
+        "path" : "assets/cathouses/",
+        "description" : ""
+    },
+    {
+        "id" : 35,
+        "name" : "stardew",
+        "type" : "CATHOUSE",
+        "price" : 100,
+        "path" : "assets/cathouses/",
+        "description" : ""
+    },
+    {
+        "id" : 36,
+        "name" : "terraria",
+        "type" : "CATHOUSE",
+        "price" : 100,
+        "path" : "assets/cathouses/",
+        "description" : ""
+    }
+]

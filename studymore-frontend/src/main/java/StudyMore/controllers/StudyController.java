@@ -1,5 +1,6 @@
 package StudyMore.controllers;
 
+import StudyMore.Main;
 import StudyMore.models.SessionState;
 import StudyMore.models.StudySession;
 import javafx.animation.KeyFrame;
@@ -12,6 +13,7 @@ import javafx.util.Duration;
 public class StudyController {
 
     @FXML private Label timerLabel;
+    @FXML private Label streakLabel;
     @FXML private Button timerControlButton;
     @FXML private Button longBreakButton;
     @FXML private Button shortBreakButton;
@@ -25,8 +27,10 @@ public class StudyController {
     private Timeline breakTimeline;
 
     public void initialize() {
-        session = new StudySession(null);
-        studyTimeline = buildStudyTimeline();
+        session = new StudySession(Main.user);
+        streakLabel.setText(Main.user.getStudyStreak() + " Days");
+        updateTimerLabel(session.getDuration());
+        studyTimeline = buildStudyTimeline(); 
     }
 
     // FXML handlers

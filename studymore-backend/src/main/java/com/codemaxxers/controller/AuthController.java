@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 import java.util.Map;
 
+
 @RestController
 @RequestMapping("/auth")
 @CrossOrigin(origins = "*")
@@ -40,5 +41,20 @@ public class AuthController {
             return ResponseEntity.ok(user.get());
         }
         return ResponseEntity.status(401).body("Invalid email or password");
+    }
+
+    @PostMapping("/users/sync")
+    public ResponseEntity<?> syncUser(@RequestBody Map<String, Object> body) {
+        try {
+            Long   userId   = Long.valueOf(body.get("userId").toString());
+            String username = (String) body.get("username");
+            String email    = (String) body.get("email");
+            String passHash = (String) body.get("passwordHash");
+
+            return ResponseEntity.ok(userService.syncUser(userId, username, email, passHash));
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
     }
 }
