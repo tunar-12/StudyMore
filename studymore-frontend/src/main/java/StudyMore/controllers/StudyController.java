@@ -70,6 +70,11 @@ public class StudyController {
     private void stopTimer() {
         studyTimeline.stop();
         session.stop();
+
+        session.calculateCoins();
+        session.end();
+
+        
         timerControlButton.setText("START");
     }
 
