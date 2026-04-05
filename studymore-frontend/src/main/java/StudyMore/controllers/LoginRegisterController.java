@@ -78,7 +78,7 @@ public class LoginRegisterController {
                             + "\"username\":\""     + username            + "\","
                             + "\"email\":\""        + email               + "\","
                             + "\"passwordHash\":\"" + sha256(password)    + "\"}";
-            ApiClient.post("/auth/users/sync", syncBody);
+            ApiClient.postAuth("/auth/users/sync", syncBody);
 
 
             Parent root = FXMLLoader.load(getClass().getResource("../fxml/Index.fxml"));
