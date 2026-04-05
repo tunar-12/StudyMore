@@ -108,10 +108,6 @@ public class Controller {
         loadFXML("../fxml/ItemShop.fxml");
         setActiveTab(btnShop);
     }
-    @FXML
-    private void handleTasks() {
-        loadFXML("../fxml/Tasks.fxml");
-    }
 
     @FXML
     private void handleSettings() {
