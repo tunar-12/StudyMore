@@ -38,6 +38,9 @@ public class Cosmetic {
     public String getDescription() { 
         return description; 
     }
+    public long getId() {
+        return this.cosmeticId; 
+    }
 
     public boolean obtain(long userId, DatabaseManager db) {
         return db.obtainCosmetic(userId, cosmeticId);

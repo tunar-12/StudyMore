@@ -237,7 +237,7 @@ public class InventoryController {
         if (equippedItem != null && item.getName().equals(equippedItem.getName())) {
             btn.setText("EQUIPPED");
             btn.setStyle("-fx-background-color: #262626; -fx-border-color: #262626; -fx-text-fill: #a3a3a3; -fx-font-weight: bold; -fx-padding: 5 15 5 15;");
-            btn.setDisable(true); // Don't let them click "Equip" on something already equipped
+            btn.setDisable(true);
         } else {
             btn.setCursor(javafx.scene.Cursor.HAND);
             btn.setStyle("-fx-background-color: transparent; -fx-border-color: #262626; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 15 5 15;");
@@ -245,10 +245,11 @@ public class InventoryController {
 
         btn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-                System.out.println("Equipped: " + item.getName());
-                //TODO: ADD EQUIP LOGIC 
+                Main.user.getInventory().equipItem(item);
+                Main.mngr.equipCosmetic(Main.user.getUserId(), item);
+                loadInventoryUI(); 
             }
-        });
+        }); 
         return btn;
     }
 

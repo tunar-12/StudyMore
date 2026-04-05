@@ -808,6 +808,35 @@ public class DatabaseManager {
             System.err.println("Failed to save new coin balance: " + e.getMessage());
         }
     }
+
+    public void equipCosmetic(long userId, Cosmetic item) {
+        String getInventoryId = "SELECT id FROM inventory WHERE user_id = ?";
+        String upsertEquipped = """
+                INSERT INTO inventory_equipped_items (inventory_id, cosmetic_type, cosmetic_id)
+                VALUES (?, ?, ?)
+                ON CONFLICT(inventory_id, cosmetic_type) DO UPDATE SET cosmetic_id = excluded.cosmetic_id
+                """;
+
+        try (PreparedStatement invStmt = connection.prepareStatement(getInventoryId)) {
+            invStmt.setLong(1, userId);
+            try (ResultSet rs = invStmt.executeQuery()) {
+                if (rs.next()) {
+                    long inventoryId = rs.getLong("id");
+                    
+                    try (PreparedStatement equipStmt = connection.prepareStatement(upsertEquipped)) {
+                        equipStmt.setLong(1, inventoryId);
+                        equipStmt.setString(2, item.getType().name());
+                        equipStmt.setLong(3, item.getId());
+                        equipStmt.executeUpdate();
+                        System.out.println("Database successfully saved equipped " + item.getType().name() + "!");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Failed to save equipped item: " + e.getMessage());
+        }
+    }
+    
     public void saveSettings(long userId, Settings settings) {
         String sql = """
                 INSERT INTO settings (
