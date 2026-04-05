@@ -5,7 +5,7 @@
         "description": "Complete a 10 minute study session",
         "type": "TIME_BASED",
         "target_value": 10,
-        "reward": 0
+        "reward": 25
     },
     {
         "id": 2,
@@ -13,7 +13,7 @@
         "description": "Complete a 30 minute study session",
         "type": "TIME_BASED",
         "target_value": 30,
-        "reward": 0
+        "reward": 75
     },
     {
         "id": 3,
@@ -21,7 +21,7 @@
         "description": "Complete a 60 minute study session",
         "type": "TIME_BASED",
         "target_value": 60,
-        "reward": 0
+        "reward": 150
     },
     {
         "id": 4,
@@ -29,7 +29,7 @@
         "description": "Complete a 180 minute study session",
         "type": "TIME_BASED",
         "target_value": 180,
-        "reward": 0
+        "reward": 400
     },
     {
         "id": 5,
@@ -37,7 +37,7 @@
         "description": "Accumulate 1000 total study minutes",
         "type": "TIME_BASED",
         "target_value": 1000,
-        "reward": 0
+        "reward": 1000
     },
     {
         "id": 6,
@@ -45,7 +45,7 @@
         "description": "Maintain a 1 day study streak",
         "type": "STREAK_BASED",
         "target_value": 1,
-        "reward": 0
+        "reward": 50
     },
     {
         "id": 7,
@@ -53,7 +53,7 @@
         "description": "Maintain a 3 day study streak",
         "type": "STREAK_BASED",
         "target_value": 3,
-        "reward": 0
+        "reward": 150
     },
     {
         "id": 8,
@@ -61,7 +61,7 @@
         "description": "Maintain a 7 day study streak",
         "type": "STREAK_BASED",
         "target_value": 7,
-        "reward": 0
+        "reward": 350
     },
     {
         "id": 9,
@@ -69,7 +69,7 @@
         "description": "Maintain a 14 day study streak",
         "type": "STREAK_BASED",
         "target_value": 14,
-        "reward": 0
+        "reward": 700
     },
     {
         "id": 10,
@@ -77,7 +77,7 @@
         "description": "Maintain a 30 day study streak",
         "type": "STREAK_BASED",
         "target_value": 30,
-        "reward":  0
+        "reward":  1500
     },
     {
         "id": 11,
@@ -85,7 +85,7 @@
         "description": "Add your first friend",
         "type": "SOCIAL",
         "target_value": 1,
-        "reward": 0
+        "reward": 50
     },
     {
         "id": 12,
@@ -93,7 +93,7 @@
         "description": "Have 5 friends in your list",
         "type": "SOCIAL",
         "target_value": 5,
-        "reward": 0
+        "reward": 200
     },
     {
         "id": 13,
@@ -101,7 +101,7 @@
         "description": "Create a new study group",
         "type": "SOCIAL",
         "target_value": 1,
-        "reward": 0
+        "reward": 100
     },
     {
         "id": 14,
@@ -109,7 +109,7 @@
         "description": "Have 10 friends in your list",
         "type": "SOCIAL",
         "target_value": 10,
-        "reward": 0
+        "reward": 400
     },
     {
         "id": 15,
@@ -117,7 +117,7 @@
         "description": "Be a member of 5 study groups",
         "type": "SOCIAL",
         "target_value": 5,
-        "reward": 0
+        "reward": 500
     },
     {
         "id": 16,
@@ -125,7 +125,7 @@
         "description": "Complete 1 task",
         "type": "TASK_BASED",
         "target_value": 1,
-        "reward": 0
+        "reward": 30
     },
     {
         "id": 17,
@@ -133,7 +133,7 @@
         "description": "Complete 5 tasks in one day",
         "type": "TASK_BASED",
         "target_value": 5,
-        "reward": 0
+        "reward": 100
     },
     {
         "id": 18,
@@ -141,7 +141,7 @@
         "description": "Complete 20 tasks total",
         "type": "TASK_BASED",
         "target_value": 20,
-        "reward": 0
+        "reward": 300
     },
     {
         "id": 19,
@@ -149,7 +149,7 @@
         "description": "Complete 50 tasks total",
         "type": "TASK_BASED",
         "target_value": 50,
-        "reward": 0
+        "reward": 600
     },
     {
         "id": 20,
@@ -157,7 +157,7 @@
         "description": "Complete 100 tasks total",
         "type": "TASK_BASED",
         "target_value": 100,
-        "reward":  0
+        "reward":  1000
     },
     {
         "id": 21,
@@ -165,7 +165,7 @@
         "description": "Earn 50 coins",
         "type": "COIN_BASED",
         "target_value": 50,
-        "reward": 0
+        "reward": 25
     },
     {
         "id": 22,
@@ -173,7 +173,7 @@
         "description": "Earn 500 coins",
         "type": "COIN_BASED",
         "target_value": 500,
-        "reward": 0
+        "reward": 100
     },
     {
         "id": 23,
@@ -181,7 +181,7 @@
         "description": "Earn 1000 coins",
         "type": "COIN_BASED",
         "target_value": 1000,
-        "reward": 0
+        "reward": 200
     },
     {
         "id": 24,
@@ -189,7 +189,7 @@
         "description": "Earn 5000 coins",
         "type": "COIN_BASED",
         "target_value": 5000,
-        "reward":  0
+        "reward":  500
     },
     {
         "id": 25,
@@ -197,6 +197,6 @@
         "description": "Earn 10000 coins",
         "type": "COIN_BASED",
         "target_value": 10000,
-        "reward":  0
+        "reward":  1000
     }
 ]
