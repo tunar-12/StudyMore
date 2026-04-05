@@ -234,6 +234,7 @@ public class AchievementsController {
                         coins.setLong(2, userId);
                         coins.executeUpdate();
                     }
+                    Main.user.setCoinBalance(Main.user.getCoinBalance() + reward);
                     System.out.println("Achievement unlocked! +" + reward + " coins.");
                 }
             }
