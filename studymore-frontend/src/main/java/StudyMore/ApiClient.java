@@ -9,8 +9,10 @@ import java.time.Duration;
 
 public class ApiClient {
 
-    private static final String BASE      = "https://studymore-production.up.railway.app/api";
-    private static final String AUTH_BASE = "https://studymore-production.up.railway.app";
+    private static final String BASE      = "http://localhost:8080/api";
+    private static final String AUTH_BASE = "http://localhost:8080";
+    //private static final String BASE      = "https://studymore-production.up.railway.app/api";
+    //private static final String AUTH_BASE = "https://studymore-production.up.railway.app";
     
     // Updated to include the connection timeout originally present in SyncClient
     private static final HttpClient HTTP  = HttpClient.newBuilder()
