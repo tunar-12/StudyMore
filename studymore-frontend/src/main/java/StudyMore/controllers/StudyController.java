@@ -1,6 +1,7 @@
 package StudyMore.controllers;
 
 import StudyMore.Main;
+import StudyMore.models.CosmeticType;
 import StudyMore.models.SessionState;
 import StudyMore.models.StudySession;
 import javafx.animation.KeyFrame;
@@ -8,16 +9,30 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.util.Duration;
+import StudyMore.ApiClient;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Priority;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class StudyController {
 
     @FXML private Label timerLabel;
     @FXML private Label streakLabel;
+    @FXML private Label studyTime;
+    @FXML private Label goal;
     @FXML private Button timerControlButton;
     @FXML private Button longBreakButton;
     @FXML private Button shortBreakButton;
     @FXML private Label multiplierLabel;
+    @FXML private ImageView catSkin;
+    @FXML private ImageView catHouse;
+    @FXML private VBox leaderboardContainer;
 
     private static final int LONG_BREAK_SECONDS  = 1200; // 20 min
     private static final int SHORT_BREAK_SECONDS = 600;  // 10 min
@@ -27,10 +42,15 @@ public class StudyController {
     private Timeline breakTimeline;
 
     public void initialize() {
+        catSkin.setImage(new Image("/StudyMore/" + Main.user.getInventory().getEquipped(CosmeticType.MASCOT_SKIN).getImagePath()));
+        catHouse.setImage(new Image("/StudyMore/" + Main.user.getInventory().getEquipped(CosmeticType.MASCOT_HOUSE).getImagePath()));
+        studyTime.setText(ProfileController.calculateStudyTimes()[1] + "H");
         session = new StudySession(Main.user);
         streakLabel.setText(Main.user.getStudyStreak() + " Days");
         updateTimerLabel(session.getDuration());
         studyTimeline = buildStudyTimeline(); 
+
+        loadGroupLeaderboard();
     }
 
     // FXML handlers
@@ -52,6 +72,82 @@ public class StudyController {
     @FXML
     private void shortBreak() {
         startBreak(SHORT_BREAK_SECONDS);
+    }
+
+    private void loadGroupLeaderboard() {
+        leaderboardContainer.getChildren().clear();
+
+        JSONArray groups;
+        try {
+            groups = new JSONArray(ApiClient.get("/groups/user/" + Main.user.getUserId()));
+        } catch (Exception e) {
+            System.err.println("Groups parse error: " + e.getMessage());
+            groups = new JSONArray();
+        }
+
+        if (groups.isEmpty()) {
+            goal.setText("Goal: No Study Group");
+            return;
+        }
+
+        JSONObject group = groups.getJSONObject(0);
+        long groupId = group.getLong("groupId");
+        int studyGoal = group.optInt("studyGoal", 50);
+        goal.setText("Goal: " + studyGoal + "H");
+
+        JSONArray members;
+        try {
+            members = new JSONArray(ApiClient.get("/groups/" + groupId + "/leaderboard"));
+        } catch (Exception e) {
+            System.err.println("Leaderboard parse error: " + e.getMessage());
+            members = new JSONArray();
+        }
+
+        for (int i = 0; i < members.length(); i++) {
+            JSONObject u = members.getJSONObject(i);
+            long uid = u.optLong("userId", -1);
+            String uname = u.optString("username", "?");
+            long sec = u.optLong("totalStudyTime", 0);
+            int hours = (int)(sec / 3600);
+            boolean isMe = (uid == Main.user.getUserId());
+            
+            leaderboardContainer.getChildren().add(
+                buildLeaderboardRow(i + 1, isMe ? "You" : uname, hours, isMe)
+            );
+        }
+    }
+
+    private HBox buildLeaderboardRow(int rank, String username, int hours, boolean isMe) {
+        Label nameLbl = new Label(rank + ". " + username);
+        nameLbl.setStyle("-fx-font-size: 14px;");
+        
+        if (isMe) {
+            nameLbl.setStyle(nameLbl.getStyle() + " -fx-font-weight: bold; -fx-text-fill: black;");
+        } else {
+            nameLbl.setStyle(nameLbl.getStyle() + " -fx-text-fill: #a3a3a3;");
+        }
+
+        AnchorPane spacer = new AnchorPane();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        Label hoursLbl = new Label(hours + "H");
+        hoursLbl.setStyle("-fx-font-family: 'Monospaced'; -fx-font-size: 14px;");
+        if (isMe) {
+            hoursLbl.setStyle(hoursLbl.getStyle() + " -fx-font-weight: bold; -fx-text-fill: black;");
+        } else {
+            hoursLbl.setStyle(hoursLbl.getStyle() + " -fx-text-fill: #737373;");
+        }
+
+        HBox row = new HBox(nameLbl, spacer, hoursLbl);
+        row.setStyle("-fx-padding: 12;");
+
+        if (isMe) {
+            row.setStyle(row.getStyle() + " -fx-background-color: white;");
+        } else {
+            row.setStyle(row.getStyle() + " -fx-background-color: black; -fx-border-color: #262626;");
+        }
+        
+        return row;
     }
 
     // Timer control
