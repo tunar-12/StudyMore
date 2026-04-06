@@ -393,9 +393,10 @@ public class DatabaseManager {
                                     tasksRs.getString("content"),
                                     tasksRs.getInt("srs_enabled") == 1,
                                     intensity);
-
+                            
                             task.setCompleted(tasksRs.getInt("is_complete") == 1);
                             task.setTaskId(tasksRs.getLong("id"));
+                            task.setNextRecallDateFromString(tasksRs.getString("next_recall_date"));
                             task.setCreatedAtFromString(createdAtStr);
 
                             if (task.isSrsEnabled() && task.getSrsData() != null) {
@@ -990,10 +991,15 @@ public class DatabaseManager {
     public void updateTask(Task task) {
         String sql = """
                     UPDATE tasks SET
-                        title = ?,
-                        content = ?,
-                        is_complete = ?,
-                        next_recall_date = ?
+                        title = ?, 
+                        content = ?, 
+                        srs_enabled = ?, 
+                        review_intensity = ?, 
+                        is_complete = ?, 
+                        next_recall_date = ?,
+                        repetition_count = ?,
+                        ease_factor = ?,
+                        current_interval = ?
                     WHERE id = ?
                 """;
 
@@ -1001,8 +1007,28 @@ public class DatabaseManager {
             stmt.setString(1, task.getTitle());
             stmt.setString(2, task.getContent());
             stmt.setInt(3, task.isCompleted() ? 1 : 0);
-            stmt.setString(4, task.getNextRecallDateAsString());
-            stmt.setLong(5, task.getID());
+
+            if (task.isSrsEnabled() && task.getSrsData() != null) {
+                stmt.setString(4, task.getSrsData().getIntensity().name());
+            } else {
+                stmt.setString(4, null);
+            }
+
+            stmt.setInt(5, task.isCompleted() ? 1 : 0);
+            stmt.setString(6, task.getNextRecallDateAsString());
+
+            if (task.isSrsEnabled() && task.getSrsData() != null) {
+                stmt.setInt(7, task.getSrsData().getRepetitionCount());
+                stmt.setDouble(8, task.getSrsData().getCurrentEaseFactor());
+                stmt.setInt(9, task.getSrsData().getCurrentInterval());
+            } else {
+                // Bypassing the NullPointerException
+                stmt.setInt(7, 0); 
+                stmt.setDouble(8, 2.5);
+                stmt.setInt(9, 0); 
+            }
+
+            stmt.setLong(10, task.getID());
 
             stmt.executeUpdate();
             System.out.println("Task updated in database!");
