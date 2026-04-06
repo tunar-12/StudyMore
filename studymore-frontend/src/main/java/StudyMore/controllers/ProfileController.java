@@ -64,14 +64,16 @@ public class ProfileController {
         rank.setText(Main.user.getRank().toString());
         studyStreak.setText(Main.user.getStudyStreak() + "");
         title.setText(Main.user.getInventory().getEquipped(CosmeticType.TITLE).getName().toUpperCase());
-        calculateStudyTimes();
+        int [] times = calculateStudyTimes();
+        totalStudyTime.setText(times[0] + "");
+        weeklyStudyTime.setText(times[1] + "");
         bannerImageView.setImage(new Image("/StudyMore/" + Main.user.getInventory().getEquipped(CosmeticType.BANNER).getImagePath()));
         profileImageView.setImage(new Image("/StudyMore/" + Main.user.getInventory().getEquipped(CosmeticType.MASCOT_SKIN).getImagePath()));
         addMedalImage("/StudyMore/" + Main.user.getInventory().getEquipped(CosmeticType.MEDAL).getImagePath());
         loadAndDisplayHeatmap(Main.user);
     }
 
-    public void calculateStudyTimes() {
+    public static int [] calculateStudyTimes() {
         int totalTime = 0;
         int weeklyTime = 0;
 
@@ -90,9 +92,7 @@ public class ProfileController {
             }
         }
 
-        totalStudyTime.setText((totalTime / 3600) + "");
-        weeklyStudyTime.setText((weeklyTime / 3600) + "");
-
+        return new int[]{(totalTime / 3600), (weeklyTime / 3600)};
     }
 
     public void loadAndDisplayHeatmap(User user) {

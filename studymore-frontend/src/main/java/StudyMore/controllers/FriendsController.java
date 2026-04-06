@@ -109,7 +109,7 @@ public class FriendsController {
         }
 
         if (groups.isEmpty()) {
-            goalLabel.setText("GOAL: 50H");
+            goalLabel.setText("GOAL: No Study Group");
             Label l = new Label("JOIN OR CREATE A GROUP TO SEE THE LEADERBOARD");
             l.setStyle("-fx-text-fill: #333; -fx-font-size: 11px; -fx-font-family: monospace;");
             l.setPadding(new Insets(32, 24, 0, 24));

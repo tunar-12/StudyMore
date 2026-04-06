@@ -103,7 +103,7 @@
                                  <font><Font name="System Bold" size="14.0" /></font>
                               </Label>
                               <AnchorPane HBox.hgrow="ALWAYS" />
-                              <Label style="-fx-background-color: white; -fx-padding: 4 8;" text="Goal: 50H" textFill="BLACK">
+                              <Label fx:id="goal" style="-fx-background-color: white; -fx-padding: 4 8;" text="Goal: No Study Group" textFill="BLACK">
                                  <font><Font name="System Bold" size="10.0" /></font>
                               </Label>
                            </children>
@@ -117,23 +117,14 @@
                                     </Label>
                                     <AnchorPane HBox.hgrow="ALWAYS" />
                                     
-                                    <Label text="47H" textFill="BLACK">
+                                    <Label fx:id="studyTime" text="0H" textFill="BLACK">
                                        <font><Font name="Monospaced Bold" size="14.0" /></font>
                                     </Label>
                                     
                                  </children>
                               </HBox>
-                              <!-- <HBox style="-fx-background-color: black; -fx-border-color: #262626; -fx-padding: 12;">
-                                 <children>
-                                    add this to add friends
-                                    <Label text="2. Bro 1" textFill="#a3a3a3" />
-                                    <AnchorPane HBox.hgrow="ALWAYS" />
-                                    <Label text="32H" textFill="#737373">
-                                       <font><Font name="Monospaced Regular" size="14.0" /></font>
-                                    </Label>
-                                    
-                                 </children>
-                              </HBox>  -->
+                              <VBox fx:id="leaderboardContainer" spacing="8.0" style="-fx-padding: 20;">
+                              </VBox>
                            </children>
                         </VBox>
                      </children>
@@ -143,31 +134,20 @@
             </VBox>
          </children>
       </HBox>
-      <!-- Motivation cat 
+      <!-- Motivation cat -->
       <AnchorPane pickOnBounds="false">
          <children>
-            <VBox alignment="CENTER" AnchorPane.bottomAnchor="32.0" AnchorPane.leftAnchor="32.0">
+            <AnchorPane AnchorPane.bottomAnchor="32.0" AnchorPane.leftAnchor="32.0">
                <children>
-                  <Label style="-fx-background-color: white; -fx-text-fill: black; -fx-padding: 8 16;" text="KEEP GOING!">
-                     <font><Font name="System Bold" size="10.0" /></font>
-                     <VBox.margin>
-                        <Insets bottom="8.0" />
-                     </VBox.margin>
-                  </Label>
+                  <ImageView fx:id="catHouse" fitHeight="96.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+                  </ImageView>
+                  <ImageView fx:id="catSkin" fitHeight="96.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="64.0" AnchorPane.leftAnchor="0.0">
+                  </ImageView>
                   
-                  <ImageView fitHeight="96.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="40.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                     </image>
-                  </ImageView>
                </children>
-            </VBox>
+            </AnchorPane>
          </children>
       </AnchorPane>
-      -->
       
    </children>
 </StackPane>
