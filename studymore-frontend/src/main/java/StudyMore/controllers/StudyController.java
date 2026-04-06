@@ -34,14 +34,21 @@ public class StudyController {
     @FXML private ImageView catHouse;
     @FXML private VBox leaderboardContainer;
 
-    private static final int LONG_BREAK_SECONDS  = 1200; // 20 min
-    private static final int SHORT_BREAK_SECONDS = 600;  // 10 min
+    private int LONG_BREAK_SECONDS  = 1200; // 20 min
+    private int SHORT_BREAK_SECONDS = 600;  // 10 min
+    private int STUDY_SECONDS = 1500; 
 
     private StudySession session;
     private Timeline studyTimeline;
     private Timeline breakTimeline;
 
     public void initialize() {
+        StudyMore.models.Settings settings = Main.mngr.getSettings(Main.user.getUserId());
+        STUDY_SECONDS = settings.getStudyTime() * 60;
+        SHORT_BREAK_SECONDS = settings.getShortBreak() * 60;
+        LONG_BREAK_SECONDS  = settings.getLongBreak() * 60;
+
+
         catSkin.setImage(new Image("/StudyMore/" + Main.user.getInventory().getEquipped(CosmeticType.MASCOT_SKIN).getImagePath()));
         catHouse.setImage(new Image("/StudyMore/" + Main.user.getInventory().getEquipped(CosmeticType.MASCOT_HOUSE).getImagePath()));
         studyTime.setText(ProfileController.calculateStudyTimes()[1] + "H");
