@@ -1,7 +1,3 @@
-/**
- * add a time check to make sure the tasks are valid
- */
-
 package StudyMore.controllers;
 
 import javafx.fxml.FXML;
@@ -15,9 +11,12 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import StudyMore.Main;
 import StudyMore.models.ReviewIntensity;
+import StudyMore.models.SRSHistoryEntry;
+import StudyMore.models.SRSScheduler;
 import StudyMore.models.Task;
 
 public class TasksController {
@@ -163,14 +162,37 @@ public class TasksController {
 
     @FXML
     private void markTaskAsCompleted(Task task) {
-        if (!task.isCompleted()) {
+        // NORMAL TASK LOGIC
+        if (!task.isSrsEnabled()) {
             promptConfirmation(() -> {
                 task.complete();
                 Main.mngr.updateTask(task);
                 AchievementsController.updateProgress(Main.user.getUserId(), "TASK_BASED", 1);
                 refreshTaskDisplay();
             });
+            return;
         }
+
+        // SRS TASK LOGIC
+        promptQualityScore(task, (qualityScore) -> {
+            
+            SRSScheduler.processReview(task, qualityScore); 
+            
+            // Completed recently, will be INACTIVE soon
+            task.setCompleted(true);
+        
+            Main.mngr.updateTask(task);
+            
+            SRSHistoryEntry latestLog = task.getSrsData().getLatestHistoryEntry();
+            if (latestLog != null) {
+                Main.mngr.insertTaskHistory(task.getID(), latestLog);
+            }
+
+            AchievementsController.updateProgress(Main.user.getUserId(), "TASK_BASED", 1);
+            refreshTaskDisplay();
+        });        
+
+
     }
 
     @FXML
@@ -184,8 +206,12 @@ public class TasksController {
         normalTasksContainer.getChildren().clear();
         srsTasksContainer.getChildren().clear();
 
+        // 0-ACTIVE comes first, 1-INACTIVE comes second, 2-COMPLETED comes third
+        tempDatabase.sort((t1, t2) -> Integer.compare(t1.getCurrentState(), t2.getCurrentState()));
+
         for (Task task : tempDatabase) {
-            addTaskToGrid(task, "1 DAY"); // TODO: update the second parameter after testing
+            String recallTime = task.getDaysUntilRecall();
+            addTaskToGrid(task, recallTime);
         }
     }
 
@@ -232,6 +258,40 @@ public class TasksController {
         }
     }
 
+    private void promptQualityScore(Task task, Consumer<Integer> onScoreSelected) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/QualityScoreOverlay.fxml"));
+            loader.setController(this);
+            Parent overlay = loader.load();
+
+            Button blackoutBtn = (Button) loader.getNamespace().get("blackoutBtn");
+            Button hardBtn = (Button) loader.getNamespace().get("hardBtn");
+            Button mediumBtn = (Button) loader.getNamespace().get("mediumBtn");
+            Button goodBtn = (Button) loader.getNamespace().get("goodBtn");
+            Button easyBtn = (Button) loader.getNamespace().get("easyBtn");
+
+            // QUALITYSCORE LOGIC
+            if (blackoutBtn != null) blackoutBtn.setOnAction(e -> confirmAndSubmit(1, onScoreSelected));
+            if (hardBtn != null)    hardBtn.setOnAction(e -> confirmAndSubmit(2, onScoreSelected));
+            if (mediumBtn != null)  mediumBtn.setOnAction(e -> confirmAndSubmit(3, onScoreSelected));
+            if (goodBtn != null)    goodBtn.setOnAction(e -> confirmAndSubmit(4, onScoreSelected));
+            if (easyBtn != null)    easyBtn.setOnAction(e -> confirmAndSubmit(5, onScoreSelected));
+
+            pageRoot.getChildren().add(overlay);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // A helper method to handle the nested confirmation logic for qualityScore
+    private void confirmAndSubmit(int score, Consumer<Integer> onScoreSelected) {
+        // Runs if user decides to proceed with the selected qualityScore
+        promptConfirmation(() -> {
+            closeOverlay(); 
+            onScoreSelected.accept(score);
+        });
+    }
+
     private void addTaskToGrid(Task task, String recallTime) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/TaskCard.fxml"));
@@ -249,38 +309,56 @@ public class TasksController {
             if (titleLabel != null) titleLabel.setText(task.getTitle().toUpperCase());
             if (contentLabel != null) contentLabel.setText(task.getContent());
 
-            if (task.isCompleted()) {
-                // COMPLETED TASK: grayed out task card + vibrant complete button
-                if (titleLabel != null) titleLabel.setOpacity(0.4);
-                if (contentLabel != null) contentLabel.setOpacity(0.4);
-                if (srsBadge != null) srsBadge.setOpacity(0.4);
-                card.getChildren().get(2).setOpacity(0.1);
+            int state = task.getCurrentState();
+            switch (state) {
+                case 2: // COMPLETED (Grayed out + vibrant completed button)
+                    if (titleLabel != null) titleLabel.setOpacity(0.4);
+                    if (contentLabel != null) contentLabel.setOpacity(0.4);
+                    if (srsBadge != null) srsBadge.setOpacity(0.4);
+                    card.getChildren().get(2).setOpacity(0.1);
 
-                if (configBtn != null) {
-                    configBtn.setOpacity(0.4);
-                    configBtn.setDisable(true);
-                }
+                    if (configBtn != null) {
+                        configBtn.setOpacity(0.4);
+                        configBtn.setDisable(true);
+                    }
+                    if (completeBtn != null) {
+                        completeBtn.setStyle("-fx-background-color: transparent; -fx-border-color: #4CAF50; -fx-text-fill: #4CAF50; -fx-border-radius: 5;");
+                        completeBtn.setDisable(true);
+                    }
+                    break;
 
-                if (completeBtn != null) {
-                    completeBtn.setStyle("-fx-background-color: transparent; -fx-border-color: #00ff08; -fx-text-fill: #00ff08; -fx-border-radius: 5;");
-                    completeBtn.setDisable(true); 
-                }
-            } else {
-                // ACTIVE TASK: brighter task card + slightly grayed out complete button
-                if (titleLabel != null) titleLabel.setOpacity(1.0);
-                if (contentLabel != null) contentLabel.setOpacity(1.0);
-                if (srsBadge != null) srsBadge.setOpacity(1.0);
-                card.getChildren().get(2).setOpacity(0.5);
+                case 1: // INACTIVE (SRS waiting for future date) - (Grayed out + locked out)
+                    if (titleLabel != null) titleLabel.setOpacity(0.3);
+                    if (contentLabel != null) contentLabel.setOpacity(0.3);
+                    if (srsBadge != null) srsBadge.setOpacity(0.3);
+                    card.getChildren().get(2).setOpacity(0.1);
 
-                if (configBtn != null) {
-                    configBtn.setOpacity(1.0);
-                    configBtn.setOnAction(event -> openTaskConfig(task));
-                }
+                    if (configBtn != null) {
+                        configBtn.setOpacity(1.0);
+                        configBtn.setOnAction(event -> openTaskConfig(task));
+                    }
+                    if (completeBtn != null) {
+                        completeBtn.setStyle("-fx-background-color: transparent; -fx-border-color: #262626; -fx-text-fill: #404040; -fx-border-radius: 5;");
+                        completeBtn.setDisable(true); 
+                    }
+                    break;
 
-                if (completeBtn != null) {
-                    completeBtn.setStyle("-fx-background-color: transparent; -fx-border-color: #404040; -fx-text-fill: #737373; -fx-border-radius: 5; -fx-cursor: hand;");
-                    completeBtn.setOnAction(event -> markTaskAsCompleted(task));
-                }
+                case 0: // ACTIVE (Due now) - (Bright task card + normal completed button)
+                    if (titleLabel != null) titleLabel.setOpacity(1.0);
+                    if (contentLabel != null) contentLabel.setOpacity(1.0);
+                    if (srsBadge != null) srsBadge.setOpacity(1.0);
+                    card.getChildren().get(2).setOpacity(0.5);
+
+                    if (configBtn != null) {
+                        configBtn.setOpacity(1.0);
+                        configBtn.setOnAction(event -> openTaskConfig(task));
+                    }
+                    if (completeBtn != null) {
+                        completeBtn.setStyle("-fx-background-color: transparent; -fx-border-color: #404040; -fx-text-fill: #737373; -fx-border-radius: 5; -fx-cursor: hand;");
+                        completeBtn.setOnAction(event -> markTaskAsCompleted(task));
+                        completeBtn.setDisable(false);
+                    }
+                    break;
             }
 
             if (task.isSrsEnabled()) {
