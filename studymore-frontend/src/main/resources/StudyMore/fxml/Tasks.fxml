@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane fx:id="pageRoot" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StudyMore.controllers.TasksController">
+<StackPane fx:id="pageRoot" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StudyMore.controllers.TasksController">
    <children>
       <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
          <content>
