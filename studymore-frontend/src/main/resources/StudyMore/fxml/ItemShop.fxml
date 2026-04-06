@@ -128,7 +128,7 @@
                                           <Insets bottom="16.0" left="24.0" right="24.0" top="16.0" />
                                        </padding>
                                        <children>
-                                          <Label text="COSMETICS &amp; EXTRAS" textFill="WHITE">
+                                          <Label text="BACKGROUNDS &amp; BANNERS" textFill="WHITE">
                                              <font>
                                                 <Font name="System Bold" size="14.0" />
                                              </font>

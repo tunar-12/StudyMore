@@ -6,15 +6,16 @@ import StudyMore.models.CosmeticType;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.control.Alert;
-
 
 public class ShopController {
 
@@ -25,28 +26,33 @@ public class ShopController {
 
     @FXML
     public void initialize() {
+        // Main.mngr.updateUserCoinBalance(Main.user.getUserId(), 10000);
+        // Main.user.setCoinBalance(10000); //FOR CHECKING 
+        
         balanceLabel.setText(String.valueOf(Main.user.getCoinBalance()));
         loadShopUI();
     }
 
     private void loadShopUI() {
-
         List<Cosmetic> shopItems = getShopItemsFromDatabase();
 
         for (Cosmetic item : shopItems) {
+            if (item.getType() == CosmeticType.TITLE || item.getType() == CosmeticType.MEDAL) { //ignore medals and titles
+                continue; 
+            }
+
             Pane itemCard = createShopItemCard(item);
+            
             if(item.getType() == CosmeticType.MASCOT_SKIN) {
                 mascotCatsContainer.getChildren().add(itemCard);  
             } else if (item.getType() == CosmeticType.MASCOT_HOUSE) {
                 catHousesContainer.getChildren().add(itemCard);
-                
-            }else if (item.getType() == CosmeticType.BANNER || item.getType() == CosmeticType.BACKGROUND) {
+            } else if (item.getType() == CosmeticType.BANNER || item.getType() == CosmeticType.BACKGROUND) {
                 cosmeticsExtrasContainer.getChildren().add(itemCard);
             }
         }
     }
 
-    //all items will use the same box
     private VBox createShopItemCard(Cosmetic item) {
         VBox card = new VBox(16);
         card.setAlignment(Pos.CENTER);
@@ -59,17 +65,14 @@ public class ShopController {
         imageView.setFitHeight(80);
         imageView.setPreserveRatio(true);
 
-        try {
-            String imageResourcePath = "/StudyMore/" + item.getImagePath();
-            java.io.InputStream imageStream = getClass().getResourceAsStream(imageResourcePath);
+        try { //TO PREVENT TITLE IMAGES
+            java.io.InputStream imageStream = getClass().getResourceAsStream("/StudyMore/" + item.getImagePath());
             if (imageStream != null) {
-                javafx.scene.image.Image img = new javafx.scene.image.Image(imageStream);
-                imageView.setImage(img);
-            } else {
-                System.out.println("COULD NOT FIND IMAGE: " + imageResourcePath); 
-            }
+                imageView.setImage(new javafx.scene.image.Image(imageStream));
+                imageStream.close(); 
+            } 
         } catch (Exception e) {
-            System.out.println("Error loading image for " + item.getName());
+            System.out.println("Error loading image for: " + item.getName());
         }
 
         StackPane imagePlaceholder = new StackPane(imageView);
@@ -86,37 +89,31 @@ public class ShopController {
     }
 
     private Button createBuyButton(Cosmetic item, VBox card) {
-        String buttonText = "BUY (" + item.getPrice() + ")";
-        Button btn = new Button(buttonText);    
+        Button btn = new Button("BUY (" + item.getPrice() + ")");    
         btn.setStyle("-fx-background-color: transparent; -fx-text-fill: #fbbf24; -fx-border-color: #fbbf24; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4; -fx-font-weight: bold; -fx-padding: 7 15; -fx-cursor: hand;");
         
         btn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-                //check if the user have enough money
                 int currentBalance = Main.user.getCoinBalance();
                 int price = item.getPrice();
+                
                 if (currentBalance >= price) {
-                    int newBalance = currentBalance - price; //deduct the money
-                    Main.user.setCoinBalance(newBalance);    //update their balance 
-                    Main.user.getInventory().addItem(item);  //add the bought item in their owned items
-                    Main.mngr.updateUserCoinBalance(Main.user.getUserId(), newBalance); //save new balance 
-                    item.obtain(Main.user.getUserId(), Main.mngr); //save item to owned item
-                    balanceLabel.setText(String.valueOf(newBalance)); //show new balacne on top right
-                    ((javafx.scene.layout.Pane) card.getParent()).getChildren().remove(card); //remove this item from shop
-                    Alert success = new Alert(Alert.AlertType.INFORMATION);
-                    success.setTitle("Purchase Successful!");
-                    success.setHeaderText(null);
-                    success.setContentText("You successfully bought " + item.getName());
-                    success.show();
+                    
+                    showConfirmationOverlay(new Runnable() {
+                        @Override
+                        public void run() {
+                            int newBalance = currentBalance - price; 
+                            Main.user.setCoinBalance(newBalance);    
+                            Main.user.getInventory().addItem(item);  
+                            Main.mngr.updateUserCoinBalance(Main.user.getUserId(), newBalance); 
+                            item.obtain(Main.user.getUserId(), Main.mngr); 
+                            balanceLabel.setText(String.valueOf(newBalance)); 
+                            ((javafx.scene.layout.Pane) card.getParent()).getChildren().remove(card); 
+                        }
+                    });
 
                 } else {
-                    // SHOW VISUAL
-                    Alert error = new Alert(Alert.AlertType.ERROR);
-                    error.setTitle("Not Enough Coins");
-                    error.setHeaderText(null);
-                    int coinsNeeded = price - currentBalance; //HOW MANY MORE COINS NEEDED
-                    error.setContentText("You need " + coinsNeeded + " more coins to buy this.");
-                    error.show();
+                    showErrorOverlay("You need " + (price - currentBalance) + " more coins to buy this item.");
                 }
             }
         });
@@ -124,19 +121,59 @@ public class ShopController {
         return btn;
     }
 
+    private void showConfirmationOverlay(Runnable onConfirmAction) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/StudyMore/fxml/ConfirmationOverlay.fxml"));
+            VBox overlay = loader.load();
+
+            Button confirmBtn = (Button) overlay.lookup("#confirmProceedButton");
+            Button cancelBtn = (Button) overlay.lookup("#confirmCancelButton");
+
+            StackPane rootStack = null;
+            Parent parent = mascotCatsContainer.getParent();
+            
+            while (parent != null) { //get the outermost parent to add the overlay to
+                if (parent instanceof StackPane) {
+                    rootStack = (StackPane) parent;
+                }
+                parent = parent.getParent();
+            }
+
+            if (rootStack != null) {
+                final StackPane finalRootStack = rootStack;
+                
+                overlay.prefWidthProperty().bind(finalRootStack.widthProperty());
+                overlay.prefHeightProperty().bind(finalRootStack.heightProperty());
+
+                finalRootStack.getChildren().add(overlay); 
+                overlay.toFront(); 
+
+                confirmBtn.setOnAction(new EventHandler<ActionEvent>() {
+                    public void handle(ActionEvent event) {
+                        onConfirmAction.run();
+                        finalRootStack.getChildren().remove(overlay);
+                    }
+                });
+
+                cancelBtn.setOnAction(new EventHandler<ActionEvent>() {
+                    public void handle(ActionEvent event) {
+                        finalRootStack.getChildren().remove(overlay);
+                    }
+                });
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private List<Cosmetic> getShopItemsFromDatabase() {
         List<Cosmetic> allItems = Main.mngr.getAllCosmetics();
-        
-        //Get the items the user already owns
         List<Cosmetic> ownedItems = Main.user.getInventory().getOwnedItems();
-        
-        //Create a empty list for the items we actually want to show in the shop
         List<Cosmetic> unownedItems = new ArrayList<>();
 
-        // Remove the already owned items
         for (Cosmetic catalogItem : allItems) {
             boolean alreadyOwnsIt = false;
-            
             for (Cosmetic ownedItem : ownedItems) {
                 if (ownedItem.getName().equals(catalogItem.getName())) {
                     alreadyOwnsIt = true;
@@ -149,5 +186,50 @@ public class ShopController {
         }
         
         return unownedItems;
+    }
+
+    private void showErrorOverlay(String messageText) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/StudyMore/fxml/ErrorOverlay.fxml"));
+            VBox overlay = loader.load();
+
+            // Find the label and set the custom text
+            Label msgLabel = (Label) overlay.lookup("#errorMessageLabel");
+            if (msgLabel != null) {
+                msgLabel.setText(messageText);
+            }
+
+            Button okBtn = (Button) overlay.lookup("#errorOkButton");
+
+            StackPane rootStack = null;
+            Parent parent = mascotCatsContainer.getParent();
+            
+            while (parent != null) {
+                if (parent instanceof StackPane) {
+                    rootStack = (StackPane) parent;
+                }
+                parent = parent.getParent();
+            }
+
+            if (rootStack != null) {
+                final StackPane finalRootStack = rootStack;
+                
+                overlay.prefWidthProperty().bind(finalRootStack.widthProperty());
+                overlay.prefHeightProperty().bind(finalRootStack.heightProperty());
+
+                finalRootStack.getChildren().add(overlay);
+                overlay.toFront();
+
+                // Remove overlay when click button
+                okBtn.setOnAction(new EventHandler<ActionEvent>() {
+                    public void handle(ActionEvent event) {
+                        finalRootStack.getChildren().remove(overlay);
+                    }
+                });
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
