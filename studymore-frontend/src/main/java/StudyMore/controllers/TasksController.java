@@ -270,12 +270,16 @@ public class TasksController {
             Button goodBtn = (Button) loader.getNamespace().get("goodBtn");
             Button easyBtn = (Button) loader.getNamespace().get("easyBtn");
 
+            Button cancelBtn = (Button) loader.getNamespace().get("cancelReviewBtn");
+
             // QUALITYSCORE LOGIC
             if (blackoutBtn != null) blackoutBtn.setOnAction(e -> confirmAndSubmit(1, onScoreSelected));
             if (hardBtn != null)    hardBtn.setOnAction(e -> confirmAndSubmit(2, onScoreSelected));
             if (mediumBtn != null)  mediumBtn.setOnAction(e -> confirmAndSubmit(3, onScoreSelected));
             if (goodBtn != null)    goodBtn.setOnAction(e -> confirmAndSubmit(4, onScoreSelected));
             if (easyBtn != null)    easyBtn.setOnAction(e -> confirmAndSubmit(5, onScoreSelected));
+
+            if (cancelBtn != null) cancelBtn.setOnAction(e -> closeOverlay());
 
             pageRoot.getChildren().add(overlay);
         } catch (IOException e) {
