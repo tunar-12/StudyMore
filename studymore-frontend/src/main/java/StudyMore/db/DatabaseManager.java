@@ -953,8 +953,8 @@ public class DatabaseManager {
         String sql = """
             INSERT INTO tasks (id, user_id, title, content, created_at, srs_enabled, 
                             repetition_count, ease_factor, current_interval, 
-                            review_intensity, is_complete) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) 
+                            review_intensity, is_complete, next_recall_date) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) 
         """;
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
