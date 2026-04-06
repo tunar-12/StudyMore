@@ -12,6 +12,7 @@ public class FriendRequest {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long requestId;
  
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

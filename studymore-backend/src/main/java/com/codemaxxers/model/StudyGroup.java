@@ -19,22 +19,22 @@ public class StudyGroup {
  
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long groupId;
  
     @Column(nullable = false)
     private String title;
- 
-    /** A short description of what the group plans to study. */
+
     @Column(length = 500)
     private String studyGoal;
  
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "host_id", nullable = false)
     private User host;
- 
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-        name = "group_members",
+        name = "study_group_members",
         joinColumns = @JoinColumn(name = "group_id"),
         inverseJoinColumns = @JoinColumn(name = "user_id")
     )

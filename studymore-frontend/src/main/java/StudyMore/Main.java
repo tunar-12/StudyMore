@@ -7,6 +7,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.sql.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.json.JSONObject;
 
@@ -73,10 +76,16 @@ public class Main extends Application {
     }
 
     private void startSyncLoop() {
-        JSONObject payload = Main.mngr.loadSyncPayload(user.getUserId());
-        System.out.println(payload.toString(1));
-        //JSONObject response = ApiClient.sync(user.getUserId(), payload);
-        // TODO: sync the response to the database.
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.scheduleAtFixedRate(() -> {
+            JSONObject payload = Main.mngr.loadSyncPayload(user.getUserId());
+            try {
+                JSONObject response = ApiClient.sync(user.getUserId(), payload);
+                System.out.println(response.toString(1));
+            } catch (Exception e) {
+                System.out.println("ERROR SYNC");
+            }
+        }, 0, 20, TimeUnit.MINUTES);
     }
 }
     

@@ -54,12 +54,12 @@ public class SyncRepository {
         
         int i = 0;
         for (Map.Entry<String, Object> entry : data.entrySet()) {
-            // We do not want to update the primary key itself
             if (entry.getKey().equals(pkColumn)) continue; 
             
             if (i > 0) sql.append(", ");
             sql.append(entry.getKey()).append(" = ?");
-            args.add(entry.getValue());
+    
+            args.add(formatValue(entry.getKey(), entry.getValue()));
             i++;
         }
         
@@ -82,7 +82,8 @@ public class SyncRepository {
             }
             sql.append(entry.getKey());
             placeholders.append("?");
-            args.add(entry.getValue());
+
+            args.add(formatValue(entry.getKey(), entry.getValue()));
             i++;
         }
         
@@ -92,4 +93,84 @@ public class SyncRepository {
         
         jdbcTemplate.update(sql.toString(), args.toArray());
     }
+
+    private Object formatValue(String key, Object value) {
+
+        if (value instanceof Integer && (key.startsWith("is_") || 
+            key.equals("srs_enabled") || key.equals("dark_mode") || 
+            key.equals("lock_in_mode") || key.equals("show_mascot") || 
+            key.equals("start_sound") || key.equals("break_alert") || 
+            key.equals("popups"))) {
+            
+            return (Integer) value != 0;
+        }
+
+        if (value instanceof String && (key.endsWith("_at") || key.endsWith("_time") || 
+            key.endsWith("_date") || key.equals("timestamp"))) {
+            
+            String dateStr = (String) value;
+            try {
+                dateStr = dateStr.replace("T", " ");
+                if (dateStr.length() == 10) {
+                    dateStr += " 00:00:00";
+                }
+                return java.sql.Timestamp.valueOf(dateStr);
+            } catch (Exception e) {
+                return value;
+            }
+        }
+        return value;
+    }
+
+    public void upsertMultipleRowsComposite(String tableName, List<String> pkColumns, List<Map<String, Object>> rows) {
+        if (rows == null || rows.isEmpty()) return;
+        for (Map<String, Object> row : rows) {
+            upsertSingleRowComposite(tableName, pkColumns, row);
+        }
+    }
+
+    public void upsertSingleRowComposite(String tableName, List<String> pkColumns, Map<String, Object> data) {
+        if (data == null || data.isEmpty()) return;
+
+        StringBuilder whereClause = new StringBuilder();
+        List<Object> pkValues = new ArrayList<>();
+        
+        for (int i = 0; i < pkColumns.size(); i++) {
+            String col = pkColumns.get(i);
+            Object val = data.get(col);
+            if (val == null) {
+                System.err.println("Missing composite PK component " + col + " for table " + tableName);
+                return;
+            }
+            if (i > 0) whereClause.append(" AND ");
+            whereClause.append(col).append(" = ?");
+            pkValues.add(val);
+        }
+
+        String checkSql = "SELECT COUNT(1) FROM " + tableName + " WHERE " + whereClause;
+        Integer count = jdbcTemplate.queryForObject(checkSql, Integer.class, pkValues.toArray());
+
+        if (count != null && count > 0) {
+            StringBuilder sql = new StringBuilder("UPDATE ").append(tableName).append(" SET ");
+            List<Object> args = new ArrayList<>();
+            int i = 0;
+            for (Map.Entry<String, Object> entry : data.entrySet()) {
+                if (pkColumns.contains(entry.getKey())) continue; 
+                if (i > 0) sql.append(", ");
+                sql.append(entry.getKey()).append(" = ?");
+                args.add(formatValue(entry.getKey(), entry.getValue()));
+                i++;
+            }
+
+            if (i > 0) {
+                sql.append(" WHERE ").append(whereClause);
+                args.addAll(pkValues);
+                jdbcTemplate.update(sql.toString(), args.toArray());
+            }
+        } else {
+            executeInsert(tableName, data); 
+        }
+    }
+
+    
 }

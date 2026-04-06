@@ -9,10 +9,10 @@ import java.time.Duration;
 
 public class ApiClient {
 
-    private static final String BASE      = "http://localhost:8080/api";
-    private static final String AUTH_BASE = "http://localhost:8080";
-    //private static final String BASE      = "https://studymore-production.up.railway.app/api";
-    //private static final String AUTH_BASE = "https://studymore-production.up.railway.app";
+    //private static final String BASE      = "http://localhost:8080/api";
+    //private static final String AUTH_BASE = "http://localhost:8080";
+    private static final String BASE      = "https://studymore-production.up.railway.app/api";
+    private static final String AUTH_BASE = "https://studymore-production.up.railway.app";
     
     // Updated to include the connection timeout originally present in SyncClient
     private static final HttpClient HTTP  = HttpClient.newBuilder()
@@ -82,7 +82,7 @@ public class ApiClient {
     public static JSONObject sync(long userId, JSONObject payload) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(BASE + "/sync/" + userId))
+                    .uri(URI.create(BASE + "/sync"))
                     .header("Content-Type", "application/json")
                     .timeout(Duration.ofSeconds(15))
                     .POST(BodyPublishers.ofString(payload.toString()))
@@ -91,7 +91,7 @@ public class ApiClient {
             HttpResponse<String> response = HTTP.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                System.out.println("SYNC /sync/" + userId + "-" + response.statusCode());
+                System.out.println("SYNC /sync" + "-" + response.statusCode());
                 return new JSONObject(response.body());
             } else {
                 System.err.println("Sync failed — HTTP " + response.statusCode() + ": " + response.body());

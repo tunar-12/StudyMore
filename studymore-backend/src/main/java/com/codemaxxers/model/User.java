@@ -12,6 +12,7 @@ import com.codemaxxers.model.enums.Rank;
 public class User {
 
     @Id
+    @Column(name = "id")
     private Long userId;
 
     @Column(unique = true, nullable = false)
