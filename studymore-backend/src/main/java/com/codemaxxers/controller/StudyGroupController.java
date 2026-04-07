@@ -40,14 +40,47 @@ public class StudyGroupController {
  
     // GET /api/groups/user/{userId}
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<StudyGroup>> getGroupsForUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(studyGroupService.getGroupsForUser(userId));
+    public ResponseEntity<?> getGroupsForUser(@PathVariable Long userId) {
+        try {
+            List<StudyGroup> groups = studyGroupService.getGroupsForUser(userId);
+            List<java.util.Map<String, Object>> result = new java.util.ArrayList<>();
+            for (StudyGroup g : groups) {
+                java.util.Map<String, Object> map = new java.util.HashMap<>();
+                map.put("groupId",     g.getGroupId());
+                map.put("title",       g.getTitle());
+                map.put("studyGoal",   g.getStudyGoal());
+                map.put("memberCount", g.getMemberCount());
+                map.put("maxMembers",  g.getMaxMembers());
+                map.put("active",      g.isActive());
+                map.put("createdAt",   g.getCreatedAt());
+                result.add(map);
+            }
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
+        }
     }
  
     // GET /api/groups/{groupId}/leaderboard
     @GetMapping("/{groupId}/leaderboard")
-    public ResponseEntity<List<User>> getLeaderboard(@PathVariable Long groupId) {
-        return ResponseEntity.ok(studyGroupService.getLeaderboard(groupId));
+    public ResponseEntity<?> getLeaderboard(@PathVariable Long groupId) {
+        try {
+            List<User> members = studyGroupService.getLeaderboard(groupId);
+            List<java.util.Map<String, Object>> result = new java.util.ArrayList<>();
+            for (User u : members) {
+                java.util.Map<String, Object> map = new java.util.HashMap<>();
+                map.put("userId",         u.getUserId());
+                map.put("username",       u.getUsername());
+                map.put("coinBalance",    u.getCoinBalance());
+                map.put("totalStudyTime", u.getTotalStudyTime());
+                map.put("rank",           u.getRank());
+                map.put("lastSeen",       u.getLastSeen());
+                result.add(map);
+            }
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
+        }
     }
  
     // POST /api/groups
