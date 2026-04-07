@@ -437,58 +437,43 @@ public class DatabaseManager {
     }
 
     public StudySession getTodaysStudySession(User user) {
-
         String query = """
                 SELECT s.id, s.start_time, s.end_time, s.multiplier_value, s.coins_earned, s.duration
                 FROM sessions s
                 WHERE s.user_id = ?
-                AND DATE(s.start_time, 'localtime') = DATE('now', 'localtime')
                 ORDER BY s.start_time DESC
-                LIMIT 1
                 """;
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setLong(1, user.getUserId());
 
-            // I left your debug block intact so you can still track timezone weirdness if
-            // needed!
-            try (PreparedStatement debugStmt = connection.prepareStatement(
-                    "SELECT id, user_id, start_time, DATE(start_time), DATE('now'), DATE('now','localtime') FROM sessions")) {
-                try (ResultSet debugRs = debugStmt.executeQuery()) {
-                    while (debugRs.next()) {
-                        System.out.println("DEBUG SESSION ROW: id=" + debugRs.getLong(1)
-                                + " user_id=" + debugRs.getLong(2)
-                                + " start_time=" + debugRs.getString(3)
-                                + " DATE(start_time)=" + debugRs.getString(4)
-                                + " DATE('now')=" + debugRs.getString(5)
-                                + " DATE('now','localtime')=" + debugRs.getString(6));
+            try (ResultSet rs = stmt.executeQuery()) {
+                java.time.LocalDate today = java.time.LocalDate.now();
+
+                while (rs.next()) {
+                    String startStr = rs.getString("start_time");
+                    LocalDateTime startTime = safeParseDate(startStr);
+
+                    if (startTime == null) continue;
+
+                    if (startTime.toLocalDate().equals(today)) {
+                        String endStr = rs.getString("end_time");
+                        LocalDateTime endTime = safeParseDate(endStr);
+                        Multiplier multiplier = new Multiplier(rs.getDouble("multiplier_value"));
+
+                        return new StudySession(user,
+                                rs.getLong("id"),
+                                startTime,
+                                endTime,
+                                multiplier,
+                                rs.getInt("duration"),
+                                rs.getInt("coins_earned"));
+                    }
+
+                    if (startTime.toLocalDate().isBefore(today)) {
+                        break;
                     }
                 }
-            }
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (!rs.next())
-                    return null;
-
-                Multiplier multiplier = new Multiplier(rs.getDouble("multiplier_value"));
-
-                // Safely grab the raw SQLite strings
-                String startStr = rs.getString("start_time");
-                String endStr = rs.getString("end_time");
-
-                // Parse them manually using the formatter
-                LocalDateTime startTime = safeParseDate(startStr);
-                LocalDateTime endTime = safeParseDate(endStr);
-
-                StudySession session = new StudySession(user,
-                        rs.getLong("id"),
-                        startTime,
-                        endTime,
-                        multiplier,
-                        rs.getInt("duration"),
-                        rs.getInt("coins_earned"));
-
-                return session;
             }
 
         } catch (SQLException e) {
@@ -1005,12 +990,12 @@ public class DatabaseManager {
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, task.getTitle());
             stmt.setString(2, task.getContent());
-            stmt.setInt(3, task.isCompleted() ? 1 : 0);
+            stmt.setInt(3, task.isSrsEnabled() ? 1 : 0);
 
             if (task.isSrsEnabled() && task.getSrsData() != null) {
                 stmt.setString(4, task.getSrsData().getIntensity().name());
             } else {
-                stmt.setString(4, null);
+                stmt.setString(4, "STANDARD");
             }
 
             stmt.setInt(5, task.isCompleted() ? 1 : 0);
