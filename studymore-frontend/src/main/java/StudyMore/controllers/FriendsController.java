@@ -39,11 +39,7 @@ public class FriendsController {
     private void loadFriends(String keyword) {
         friendListContainer.getChildren().clear();
 
-        String url = keyword == null || keyword.isEmpty()
-                ? "/friends/" + Main.user.getUserId()
-                : "/friends/search?keyword=" + keyword + "&requestingUserId=" + Main.user.getUserId();
-
-        String response = ApiClient.get(url);
+        String response = ApiClient.get("/friends/" + Main.user.getUserId());
         JSONArray arr;
         try {
             arr = new JSONArray(response);
@@ -52,10 +48,20 @@ public class FriendsController {
             arr = new JSONArray();
         }
 
+        JSONArray filtered = new JSONArray();
+        for (int i = 0; i < arr.length(); i++) {
+            JSONObject u = arr.getJSONObject(i);
+            String username = u.optString("username", "");
+            if (keyword == null || keyword.isEmpty() || 
+                username.toLowerCase().contains(keyword.toLowerCase())) {
+                filtered.put(u);
+            }
+        }
+
         int onlineCount = 0;
 
-        for (int i = 0; i < arr.length(); i++) {
-            JSONObject u       = arr.getJSONObject(i);
+        for (int i = 0; i < filtered.length(); i++) {
+            JSONObject u       = filtered.getJSONObject(i);
             String username    = u.optString("username", "?");
             String lastSeenStr = u.optString("lastSeen", null);
 
@@ -65,7 +71,7 @@ public class FriendsController {
             if (lastSeenStr != null) {
                 try {
                     java.time.LocalDateTime lastSeen = java.time.LocalDateTime.parse(lastSeenStr);
-                    java.time.LocalDateTime utcNow = java.time.LocalDateTime.now(java.time.ZoneOffset.UTC);
+                    java.time.LocalDateTime utcNow   = java.time.LocalDateTime.now(java.time.ZoneOffset.UTC);
                     long minutesAgo = java.time.Duration.between(lastSeen, utcNow).toMinutes();
                     if (minutesAgo <= 6) {
                         online     = true;
@@ -80,8 +86,10 @@ public class FriendsController {
             friendListContainer.getChildren().add(buildFriendRow(username, statusText, online));
         }
 
-        if (arr.isEmpty()) {
-            Label l = new Label("NO FRIENDS YET — ADD SOMEONE TO GET STARTED");
+        if (filtered.isEmpty()) {
+            Label l = new Label(keyword != null && !keyword.isEmpty() 
+                ? "NO FRIENDS MATCHING \"" + keyword.toUpperCase() + "\""
+                : "NO FRIENDS YET — ADD SOMEONE TO GET STARTED");
             l.setStyle("-fx-text-fill: #404040; -fx-font-size: 11px; -fx-font-weight: bold;");
             l.setPadding(new Insets(32, 16, 0, 16));
             friendListContainer.getChildren().add(l);
