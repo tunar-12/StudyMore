@@ -37,6 +37,7 @@ public class StudyController {
     @FXML private VBox studyTasksContainer;
     @FXML private Label userRankLabel;
     @FXML private Label catQuoteLabel;
+    @FXML private AnchorPane mascotContainer;
 
     private int LONG_BREAK_SECONDS  = 1200; // 20 min
     private int SHORT_BREAK_SECONDS = 600;  // 10 min
@@ -47,7 +48,7 @@ public class StudyController {
     private static Timeline breakTimeline;
     private static StudyController currentInstance;
 
-public void initialize() {
+    public void initialize() {
         currentInstance = this;
 
         StudyMore.models.Settings settings = Main.settings;
@@ -64,12 +65,21 @@ public void initialize() {
         SHORT_BREAK_SECONDS = settings.getShortBreak() * 60;
         LONG_BREAK_SECONDS  = settings.getLongBreak() * 60;
 
-        catSkin.setImage(new Image("/StudyMore/" + Main.user.getInventory().getEquipped(CosmeticType.MASCOT_SKIN).getImagePath()));
-        catHouse.setImage(new Image("/StudyMore/" + Main.user.getInventory().getEquipped(CosmeticType.MASCOT_HOUSE).getImagePath()));
         studyTime.setText(ProfileController.calculateStudyTimes()[1] + "H");
         streakLabel.setText(Main.user.getStudyStreak() + " Days");
-        StudyMore.models.MascotCat mascot = new StudyMore.models.MascotCat(Main.user.getUserId());
-        catQuoteLabel.setText(mascot.getRandomQuote());
+
+        if (settings.isMascotVisible()) { 
+            mascotContainer.setVisible(true);
+            
+            catSkin.setImage(new Image("/StudyMore/" + Main.user.getInventory().getEquipped(CosmeticType.MASCOT_SKIN).getImagePath()));
+            catHouse.setImage(new Image("/StudyMore/" + Main.user.getInventory().getEquipped(CosmeticType.MASCOT_HOUSE).getImagePath()));
+            
+            StudyMore.models.MascotCat mascot = new StudyMore.models.MascotCat(Main.user.getUserId());
+            catQuoteLabel.setText(mascot.getRandomQuote());
+        } else {
+            mascotContainer.setVisible(false);
+            mascotContainer.setManaged(false);
+        }
 
         // Session is created only if it doesnt already exist
         if (session == null) {
