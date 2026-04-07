@@ -36,6 +36,7 @@ public class StudyController {
     @FXML private VBox leaderboardContainer;
     @FXML private VBox studyTasksContainer;
     @FXML private Label userRankLabel;
+    @FXML private Label catQuoteLabel;
 
     private int LONG_BREAK_SECONDS  = 1200; // 20 min
     private int SHORT_BREAK_SECONDS = 600;  // 10 min
@@ -67,6 +68,8 @@ public void initialize() {
         catHouse.setImage(new Image("/StudyMore/" + Main.user.getInventory().getEquipped(CosmeticType.MASCOT_HOUSE).getImagePath()));
         studyTime.setText(ProfileController.calculateStudyTimes()[1] + "H");
         streakLabel.setText(Main.user.getStudyStreak() + " Days");
+        StudyMore.models.MascotCat mascot = new StudyMore.models.MascotCat(Main.user.getUserId());
+        catQuoteLabel.setText(mascot.getRandomQuote());
 
         // Session is created only if it doesnt already exist
         if (session == null) {
