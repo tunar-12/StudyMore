@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 import com.codemaxxers.model.enums.RequestStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "friend_requests",
@@ -17,10 +19,18 @@ public class FriendRequest {
  
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "sender_id", nullable = false)
+    @JsonIgnore  
     private User sender;
+
+    @JsonProperty("senderId")
+    public Long getSenderId() { return sender != null ? sender.getUserId() : null; }
+
+    @JsonProperty("senderUsername")
+    public String getSenderUsername() { return sender != null ? sender.getUsername() : null; }
  
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "receiver_id", nullable = false)
+    @JsonIgnore
     private User receiver;
  
     @Enumerated(EnumType.STRING)

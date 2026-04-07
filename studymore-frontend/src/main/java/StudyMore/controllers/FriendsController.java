@@ -258,10 +258,16 @@ public class FriendsController {
 
     @FXML
     private void onViewRequests() {
+        String raw = ApiClient.get("/friends/requests/pending?userId=" + Main.user.getUserId());
+        System.out.println("REQUESTS RAW: " + raw);
+
         JSONArray arr;
         try {
-            arr = new JSONArray(ApiClient.get("/friends/requests/pending?userId=" + Main.user.getUserId()));
-        } catch (Exception e) { setStatus("Error loading requests."); return; }
+            arr = new JSONArray(raw);
+        } catch (Exception e) { 
+            setStatus("Error loading requests."); 
+            return; 
+        }
 
         if (arr.isEmpty()) { setStatus("No pending requests."); return; }
 
@@ -269,9 +275,8 @@ public class FriendsController {
         List<Long>   reqIds = new ArrayList<>();
         for (int i = 0; i < arr.length(); i++) {
             JSONObject req    = arr.getJSONObject(i);
-            JSONObject sender = req.optJSONObject("sender");
-            names.add(sender != null ? sender.optString("username", "?") : "?");
-            reqIds.add(req.getLong("requestId"));
+            names.add(req.optString("senderUsername", "?"));
+            reqIds.add(req.getLong("requestId"));   
         }
 
         ChoiceDialog<String> d = new ChoiceDialog<>(names.get(0), names);

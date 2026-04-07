@@ -10,17 +10,11 @@ import javafx.scene.control.TextField;
 
 public class SettingsController {
 
-    @FXML private CheckBox darkModeCheck;
     @FXML private CheckBox lockInModeCheck;
     @FXML private CheckBox mascotCheck;
-    @FXML private CheckBox startSoundCheck;
-    @FXML private CheckBox breakAlertCheck;
-    @FXML private CheckBox popupsCheck;
 
-    @FXML private TextField studyTimeField;
     @FXML private TextField shortBreakField;
     @FXML private TextField longBreakField;
-    @FXML private TextField longBreakAfterField;
 
     @FXML private Label unsavedLabel;
 
@@ -36,16 +30,10 @@ public class SettingsController {
     }
 
     private void loadSettings() {
-        darkModeCheck.setSelected(settings.isDarkMode());
         lockInModeCheck.setSelected(settings.isLockInMode());
         mascotCheck.setSelected(settings.isMascotVisible());
-        startSoundCheck.setSelected(settings.isStartSound());
-        breakAlertCheck.setSelected(settings.isBreakAlert());
-        popupsCheck.setSelected(settings.isPopups());
-        studyTimeField.setText(String.valueOf(settings.getStudyTime()));
         shortBreakField.setText(String.valueOf(settings.getShortBreak()));
         longBreakField.setText(String.valueOf(settings.getLongBreak()));
-        longBreakAfterField.setText(String.valueOf(settings.getLongBreakAfter()));
         unsavedLabel.setVisible(false);
     }
 
@@ -56,18 +44,18 @@ public class SettingsController {
 
     @FXML
     private void saveSettings() {
-        settings.setDarkMode(darkModeCheck.isSelected());
+        settings.setDarkMode(true);
         settings.setLockInMode(lockInModeCheck.isSelected());
         settings.setMascotVisible(mascotCheck.isSelected());
-        settings.setStartSound(startSoundCheck.isSelected());
-        settings.setBreakAlert(breakAlertCheck.isSelected());
-        settings.setPopups(popupsCheck.isSelected());
+        settings.setStartSound(true);
+        settings.setBreakAlert(true);
+        settings.setPopups(true);
 
         try {
-            settings.setStudyTime(Integer.parseInt(studyTimeField.getText()));
+            settings.setStudyTime(0);
             settings.setShortBreak(Integer.parseInt(shortBreakField.getText()));
             settings.setLongBreak(Integer.parseInt(longBreakField.getText()));
-            settings.setLongBreakAfter(Integer.parseInt(longBreakAfterField.getText()));
+            settings.setLongBreakAfter(0);
         } catch (NumberFormatException e) {
             System.out.println("Invalid number input in settings.");
             return;
