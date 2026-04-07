@@ -50,6 +50,17 @@ public class Main extends Application {
         }
     }
 
+    @Override
+    public void stop() throws Exception {
+        stopSyncLoop();
+        
+        if(mngr != null) {
+            mngr.closeConnection();
+        }
+
+        super.stop();
+    }
+
     // Helper method 
     private void loadLoginScreen(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("fxml/loginRegister.fxml"));
