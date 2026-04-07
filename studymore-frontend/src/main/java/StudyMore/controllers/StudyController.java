@@ -96,7 +96,6 @@ public class StudyController {
         try {
             groups = new JSONArray(ApiClient.get("/groups/user/" + Main.user.getUserId()));
         } catch (Exception e) {
-            System.err.println("Groups parse error: " + e.getMessage());
             groups = new JSONArray();
         }
 
@@ -105,30 +104,43 @@ public class StudyController {
             return;
         }
 
-        JSONObject group = groups.getJSONObject(0);
-        long groupId = group.getLong("groupId");
-        int studyGoal = group.optInt("studyGoal", 50);
+        JSONObject bestGroup = groups.getJSONObject(0);
+        for (int i = 1; i < groups.length(); i++) {
+            JSONObject g = groups.getJSONObject(i);
+            if (g.optInt("memberCount", 0) > bestGroup.optInt("memberCount", 0)) {
+                bestGroup = g;
+            }
+        }
+
+        long groupId   = bestGroup.getLong("groupId");
+        int  studyGoal = 50;
+        try { studyGoal = Integer.parseInt(bestGroup.optString("studyGoal", "50")); } 
+        catch (NumberFormatException ignored) {}
         goal.setText("Goal: " + studyGoal + "H");
 
         JSONArray members;
         try {
             members = new JSONArray(ApiClient.get("/groups/" + groupId + "/leaderboard"));
         } catch (Exception e) {
-            System.err.println("Leaderboard parse error: " + e.getMessage());
-            members = new JSONArray();
+            return;
         }
 
-        for (int i = 0; i < members.length(); i++) {
-            JSONObject u = members.getJSONObject(i);
-            long uid = u.optLong("userId", -1);
-            String uname = u.optString("username", "?");
-            long sec = u.optLong("totalStudyTime", 0);
-            int hours = (int)(sec / 3600);
-            boolean isMe = (uid == Main.user.getUserId());
-            
+        java.util.List<JSONObject> memberList = new java.util.ArrayList<>();
+        for (int i = 0; i < members.length(); i++) memberList.add(members.getJSONObject(i));
+        memberList.sort((a, b) -> Long.compare(
+            b.optLong("totalStudyTime", 0),
+            a.optLong("totalStudyTime", 0)
+        ));
+
+        for (int i = 0; i < memberList.size(); i++) {
+            JSONObject u  = memberList.get(i);
+            long   uid    = u.optLong("userId", -1);
+            String uname  = u.optString("username", "?");
+            long   sec    = u.optLong("totalStudyTime", 0);
+            int    hours  = (int)(sec / 3600);
+            boolean isMe  = (uid == Main.user.getUserId());
             leaderboardContainer.getChildren().add(
-                buildLeaderboardRow(i + 1, isMe ? "You" : uname, hours, isMe)
-            );
+                buildLeaderboardRow(i + 1, isMe ? "You" : uname, hours, isMe));
         }
     }
 
