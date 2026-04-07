@@ -49,6 +49,7 @@
                   </HBox>
                   <VBox spacing="32.0">
                      <children>
+                        
                         <VBox style="-fx-background-color: #000000; -fx-border-color: #262626; -fx-border-width: 1;">
                            <children>
                               <HBox alignment="CENTER_LEFT" spacing="8.0" style="-fx-background-color: #171717; -fx-border-color: #262626; -fx-border-width: 0 0 1 0;">
@@ -63,7 +64,7 @@
                                     </Label>
                                  </children>
                               </HBox>
-                              <ScrollPane fitToHeight="true" style="-fx-background: #000000; -fx-background-color: transparent; -fx-border-color: transparent;" vbarPolicy="NEVER">
+                              <ScrollPane fitToHeight="true" VBox.vgrow="ALWAYS" style="-fx-background: #000000; -fx-background-color: transparent; -fx-border-color: transparent;" vbarPolicy="NEVER">
                                  <padding>
                                     <Insets />
                                  </padding>
@@ -77,6 +78,7 @@
                               </ScrollPane>
                            </children>
                         </VBox>
+
                         <VBox style="-fx-background-color: #000000; -fx-border-color: #262626; -fx-border-width: 1;">
                            <children>
                               <HBox alignment="CENTER_LEFT" spacing="8.0" style="-fx-background-color: #171717; -fx-border-color: #262626; -fx-border-width: 0 0 1 0;">
@@ -91,7 +93,7 @@
                                     </Label>
                                  </children>
                               </HBox>
-                              <ScrollPane fitToHeight="true" style="-fx-background: #000000; -fx-background-color: transparent; -fx-border-color: transparent;" vbarPolicy="NEVER">
+                              <ScrollPane fitToHeight="true" VBox.vgrow="ALWAYS" style="-fx-background: #000000; -fx-background-color: transparent; -fx-border-color: transparent;" vbarPolicy="NEVER">
                                  <padding>
                                     <Insets />
                                  </padding>
@@ -122,7 +124,7 @@
                                           </Label>
                                        </children>
                                     </HBox>
-                                    <ScrollPane fitToHeight="true" style="-fx-background: #000000; -fx-background-color: transparent; -fx-border-color: transparent;" vbarPolicy="NEVER">
+                                    <ScrollPane fitToHeight="true" VBox.vgrow="ALWAYS" style="-fx-background: #000000; -fx-background-color: transparent; -fx-border-color: transparent;" vbarPolicy="NEVER">
                                        <padding>
                                           <Insets />
                                        </padding>
@@ -151,7 +153,7 @@
                                           </Label>
                                        </children>
                                     </HBox>
-                                    <ScrollPane fitToHeight="true" style="-fx-background: #000000; -fx-background-color: transparent; -fx-border-color: transparent;" vbarPolicy="NEVER">
+                                    <ScrollPane fitToHeight="true" VBox.vgrow="ALWAYS" style="-fx-background: #000000; -fx-background-color: transparent; -fx-border-color: transparent;" vbarPolicy="NEVER">
                                        <padding>
                                           <Insets />
                                        </padding>
@@ -184,7 +186,7 @@
                                           </Label>
                                        </children>
                                     </HBox>
-                                    <ScrollPane fitToHeight="true" style="-fx-background: #000000; -fx-background-color: transparent; -fx-border-color: transparent;" vbarPolicy="NEVER">
+                                    <ScrollPane fitToHeight="true" VBox.vgrow="ALWAYS" style="-fx-background: #000000; -fx-background-color: transparent; -fx-border-color: transparent;" vbarPolicy="NEVER">
                                        <padding>
                                           <Insets />
                                        </padding>
@@ -213,7 +215,7 @@
                                           </Label>
                                        </children>
                                     </HBox>
-                                    <ScrollPane fitToHeight="true" style="-fx-background: #000000; -fx-background-color: transparent; -fx-border-color: transparent;" vbarPolicy="NEVER">
+                                    <ScrollPane fitToHeight="true" VBox.vgrow="ALWAYS" style="-fx-background: #000000; -fx-background-color: transparent; -fx-border-color: transparent;" vbarPolicy="NEVER">
                                        <padding>
                                           <Insets />
                                        </padding>
@@ -229,6 +231,7 @@
                               </VBox>
                            </children>
                         </HBox>
+                  
                      </children>
                   </VBox>
                </children>

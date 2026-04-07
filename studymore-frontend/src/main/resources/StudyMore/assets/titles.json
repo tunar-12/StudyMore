@@ -1,22 +1,6 @@
-[
+[   
     {
         "id": 1,
-        "name": "Grandmaster",
-        "type": "TITLE",
-        "price": 100,
-        "path": "",
-        "description": ""
-    },
-    {
-        "id": 2,
-        "name": "Master",
-        "type": "TITLE",
-        "price": 100,
-        "path": "",
-        "description": ""
-    },
-    {
-        "id": 3,
         "name": "Rookie",
         "type": "TITLE",
         "price": 100,
@@ -24,10 +8,28 @@
         "description": ""
     },
     {
-        "id": 4,
+        "id": 2,
         "name": "Elite",
         "type": "TITLE",
-        "price": 100,
+        "price": 250,
+        "path": "",
+        "description": ""
+    },
+    
+    {
+        "id": 3,
+        "name": "Master",
+        "type": "TITLE",
+        "price": 500,
+        "path": "",
+        "description": ""
+
+    },
+    {
+        "id": 4,
+        "name": "Grandmaster",
+        "type": "TITLE",
+        "price": 800,
         "path": "",
         "description": ""
     },
@@ -35,7 +37,7 @@
         "id": 5,
         "name": "Study Master",
         "type": "TITLE",
-        "price": 100,
+        "price": 1500,
         "path": "",
         "description": ""
     }

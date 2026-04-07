@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: #000000; -fx-font-family: 'Segoe UI', Helvetica, Arial, sans-serif;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StudyMore.controllers.ShopController">
+<StackPane prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: transparent; -fx-font-family: 'Segoe UI', Helvetica, Arial, sans-serif;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StudyMore.controllers.ShopController">
    <children>
       <ScrollPane fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent;">
          <content>
@@ -19,7 +19,7 @@
                </padding>
                <children>
                   
-                  <HBox alignment="CENTER_LEFT" style="-fx-background-color: #000000; -fx-border-color: #262626; -fx-border-width: 1;">
+                  <HBox alignment="CENTER_LEFT" style="-fx-background-color: #000000; -fx-border-color: #262626; -fx-border-width: 1; -fx-background-radius: 4; -fx-border-radius: 4;">
                      <padding>
                         <Insets bottom="24.0" left="24.0" right="24.0" top="24.0" />
                      </padding>
@@ -67,7 +67,7 @@
 
                   <VBox spacing="32.0">
                      <children>
-                        <VBox style="-fx-background-color: #000000; -fx-border-color: #262626; -fx-border-width: 1;">
+                        <VBox style="-fx-background-color: #000000; -fx-border-color: #262626; -fx-border-width: 1; -fx-background-radius: 4; -fx-border-radius: 4;">
                            <children>
                               <HBox alignment="CENTER_LEFT" style="-fx-background-color: #171717; -fx-border-color: #262626; -fx-border-width: 0 0 1 0;">
                                  <padding>
@@ -81,7 +81,7 @@
                                     </Label>
                                  </children>
                               </HBox>
-                              <ScrollPane fitToHeight="true" prefHeight="320.0" style="-fx-background: transparent; -fx-background-color: transparent;" vbarPolicy="NEVER">
+                              <ScrollPane fitToHeight="true" VBox.vgrow="ALWAYS" style="-fx-background: transparent; -fx-background-color: transparent;" vbarPolicy="NEVER">
                                  <content>
                                     <HBox fx:id="mascotCatsContainer" spacing="24.0">
                                        <padding>
@@ -95,7 +95,7 @@
 
                         <HBox spacing="32.0">
                            <children>
-                              <VBox prefWidth="500.0" style="-fx-background-color: #000000; -fx-border-color: #262626; -fx-border-width: 1;" HBox.hgrow="ALWAYS">
+                              <VBox prefWidth="500.0" style="-fx-background-color: #000000; -fx-border-color: #262626; -fx-border-width: 1; -fx-background-radius: 4; -fx-border-radius: 4;" HBox.hgrow="ALWAYS">
                                  <children>
                                     <HBox alignment="CENTER_LEFT" style="-fx-background-color: #171717; -fx-border-color: #262626; -fx-border-width: 0 0 1 0;">
                                        <padding>
@@ -109,7 +109,7 @@
                                           </Label>
                                        </children>
                                     </HBox>
-                                    <ScrollPane fitToHeight="true" prefHeight="320.0" style="-fx-background: transparent; -fx-background-color: transparent;" vbarPolicy="NEVER">
+                                    <ScrollPane fitToHeight="true" VBox.vgrow="ALWAYS" style="-fx-background: transparent; -fx-background-color: transparent;" vbarPolicy="NEVER">
                                        <content>
                                           <HBox fx:id="catHousesContainer" spacing="24.0">
                                              <padding>
@@ -121,7 +121,7 @@
                                  </children>
                               </VBox>
                               
-                              <VBox prefWidth="500.0" style="-fx-background-color: #000000; -fx-border-color: #262626; -fx-border-width: 1;" HBox.hgrow="ALWAYS">
+                              <VBox prefWidth="500.0" style="-fx-background-color: #000000; -fx-border-color: #262626; -fx-border-width: 1; -fx-background-radius: 4; -fx-border-radius: 4;" HBox.hgrow="ALWAYS">
                                  <children>
                                     <HBox alignment="CENTER_LEFT" style="-fx-background-color: #171717; -fx-border-color: #262626; -fx-border-width: 0 0 1 0;">
                                        <padding>
@@ -135,7 +135,7 @@
                                           </Label>
                                        </children>
                                     </HBox>
-                                    <ScrollPane fitToHeight="true" prefHeight="320.0" style="-fx-background: transparent; -fx-background-color: transparent;" vbarPolicy="NEVER">
+                                    <ScrollPane fitToHeight="true" VBox.vgrow="ALWAYS" style="-fx-background: transparent; -fx-background-color: transparent;" vbarPolicy="NEVER">
                                        <content>
                                           <HBox fx:id="cosmeticsExtrasContainer" spacing="24.0">
                                              <padding>
@@ -148,6 +148,65 @@
                               </VBox>
                            </children>
                         </HBox>
+
+                        <HBox spacing="32.0">
+                           <children>
+                              
+                              <VBox prefWidth="500.0" style="-fx-background-color: #000000; -fx-border-color: #262626; -fx-border-width: 1; -fx-background-radius: 4; -fx-border-radius: 4;" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" style="-fx-background-color: #171717; -fx-border-color: #262626; -fx-border-width: 0 0 1 0;">
+                                       <padding>
+                                          <Insets bottom="16.0" left="24.0" right="24.0" top="16.0" />
+                                       </padding>
+                                       <children>
+                                          <Label text="TITLES" textFill="WHITE">
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background: transparent; -fx-background-color: transparent;" hbarPolicy="NEVER">
+                                       <content>
+                                          <VBox fx:id="titlesContainer" spacing="16.0">
+                                             <padding>
+                                                <Insets bottom="24.0" left="24.0" right="24.0" top="24.0" />
+                                             </padding>
+                                          </VBox>
+                                       </content>
+                                    </ScrollPane>
+                                 </children>
+                              </VBox>
+
+                              <VBox prefWidth="500.0" style="-fx-background-color: #000000; -fx-border-color: #262626; -fx-border-width: 1; -fx-background-radius: 4; -fx-border-radius: 4;" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" style="-fx-background-color: #171717; -fx-border-color: #262626; -fx-border-width: 0 0 1 0;">
+                                       <padding>
+                                          <Insets bottom="16.0" left="24.0" right="24.0" top="16.0" />
+                                       </padding>
+                                       <children>
+                                          <Label text="MEDALS" textFill="WHITE">
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <ScrollPane fitToHeight="true" VBox.vgrow="ALWAYS" style="-fx-background: transparent; -fx-background-color: transparent;" vbarPolicy="NEVER">
+                                       <content>
+                                          <HBox fx:id="medalsContainer" spacing="24.0">
+                                             <padding>
+                                                <Insets bottom="24.0" left="24.0" right="24.0" top="24.0" />
+                                             </padding>
+                                          </HBox>
+                                       </content>
+                                    </ScrollPane>
+                                 </children>
+                              </VBox>
+                              
+                           </children>
+                        </HBox>
+
                      </children>
                   </VBox>
                </children>
