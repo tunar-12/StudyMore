@@ -12,17 +12,18 @@ import java.util.Optional;
 @Repository
 public interface FriendRequestRepository extends JpaRepository<FriendRequest, Long> {
 
-    List<FriendRequest> findByReceiver_UserIdAndStatus(Long receiverId, RequestStatus status);
+       @Query("SELECT fr FROM FriendRequest fr JOIN FETCH fr.sender WHERE fr.receiver.userId = :userId AND fr.status = :status")
+       List<FriendRequest> findByReceiverUserIdAndStatus(@Param("userId") Long userId, @Param("status") RequestStatus status);
 
-    List<FriendRequest> findBySender_UserId(Long senderId);
+       List<FriendRequest> findBySender_UserId(Long senderId);
 
-    @Query("SELECT fr FROM FriendRequest fr WHERE " +
-           "(fr.sender.userId = :a AND fr.receiver.userId = :b) OR " +
-           "(fr.sender.userId = :b AND fr.receiver.userId = :a)")
-    Optional<FriendRequest> findBetweenUsers(@Param("a") Long userAId, @Param("b") Long userBId);
+       @Query("SELECT fr FROM FriendRequest fr WHERE " +
+              "(fr.sender.userId = :a AND fr.receiver.userId = :b) OR " +
+              "(fr.sender.userId = :b AND fr.receiver.userId = :a)")
+       Optional<FriendRequest> findBetweenUsers(@Param("a") Long userAId, @Param("b") Long userBId);
 
-    @Query("SELECT fr FROM FriendRequest fr WHERE " +
-           "fr.status = 'ACCEPTED' AND " +
-           "(fr.sender.userId = :userId OR fr.receiver.userId = :userId)")
-    List<FriendRequest> findAcceptedByUserId(@Param("userId") Long userId);
+       @Query("SELECT fr FROM FriendRequest fr WHERE " +
+              "fr.status = 'ACCEPTED' AND " +
+              "(fr.sender.userId = :userId OR fr.receiver.userId = :userId)")
+       List<FriendRequest> findAcceptedByUserId(@Param("userId") Long userId);
 }

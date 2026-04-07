@@ -11,45 +11,39 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Table(name = "friend_requests",
        uniqueConstraints = @UniqueConstraint(columnNames = {"sender_id", "receiver_id"}))
 public class FriendRequest {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long requestId;
- 
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "sender_id", nullable = false)
-    @JsonIgnore  
+    @JsonIgnore
     private User sender;
 
-    @JsonProperty("senderId")
-    public Long getSenderId() { return sender != null ? sender.getUserId() : null; }
-
-    @JsonProperty("senderUsername")
-    public String getSenderUsername() { return sender != null ? sender.getUsername() : null; }
- 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "receiver_id", nullable = false)
     @JsonIgnore
     private User receiver;
- 
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RequestStatus status = RequestStatus.PENDING;
- 
+
     @Column(nullable = false)
     private LocalDateTime sentAt = LocalDateTime.now();
 
     public FriendRequest() {}
- 
+
     public FriendRequest(User sender, User receiver) {
-        this.sender = sender;
+        this.sender   = sender;
         this.receiver = receiver;
     }
 
-     public void accept() {
+    public void accept() {
         if (status != RequestStatus.PENDING) {
-            throw new IllegalStateException("Only PENDING requests can be accepted."); // look again
+            throw new IllegalStateException("Only PENDING requests can be accepted.");
         }
         this.status = RequestStatus.ACCEPTED;
         sender.getFriends().add(receiver);
@@ -62,17 +56,33 @@ public class FriendRequest {
         }
         this.status = RequestStatus.DENIED;
     }
- 
+
     public boolean isPending()  { return status == RequestStatus.PENDING; }
     public boolean isAccepted() { return status == RequestStatus.ACCEPTED; }
 
+    public Long getRequestId()                  { return requestId; }
 
-    public Long getRequestId()                        { return requestId; }
-    public User getSender()                           { return sender; }
-    public void setSender(User sender)                { this.sender = sender; }
-    public User getReceiver()                         { return receiver; }
-    public void setReceiver(User receiver)            { this.receiver = receiver; }
-    public RequestStatus getStatus()                  { return status; }
-    public void setStatus(RequestStatus status)       { this.status = status; }
-    public LocalDateTime getSentAt()                  { return sentAt; }
+    @JsonIgnore
+    public User getSender()                     { return sender; }
+    public void setSender(User sender)          { this.sender = sender; }
+
+    @JsonIgnore
+    public User getReceiver()                   { return receiver; }
+    public void setReceiver(User receiver)      { this.receiver = receiver; }
+
+    @JsonProperty("senderId")
+    public Long getSenderId()                   { return sender   != null ? sender.getUserId()   : null; }
+
+    @JsonProperty("senderUsername")
+    public String getSenderUsername()           { return sender   != null ? sender.getUsername() : null; }
+
+    @JsonProperty("receiverId")
+    public Long getReceiverId()                 { return receiver != null ? receiver.getUserId() : null; }
+
+    @JsonProperty("receiverUsername")
+    public String getReceiverUsername()         { return receiver != null ? receiver.getUsername() : null; }
+
+    public RequestStatus getStatus()            { return status; }
+    public void setStatus(RequestStatus status) { this.status = status; }
+    public LocalDateTime getSentAt()            { return sentAt; }
 }
