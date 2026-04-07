@@ -113,6 +113,9 @@ public class User {
     public int getCoinBalance() { 
         return coinBalance; 
     }
+    public MascotCat getMascotCat() {
+        return mascotCat;
+    }
 
     public int getStudyStreak() {  
         String query = "SELECT COUNT(*) FROM sessions WHERE user_id = ?";
