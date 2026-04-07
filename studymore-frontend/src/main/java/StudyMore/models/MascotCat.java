@@ -11,11 +11,21 @@ public class MascotCat {
 
     public MascotCat(Long catId) {
         this.catId = catId;
-        this.quotes = new ArrayList<>(); 
+        this.quotes = new ArrayList<>(List.of(
+            "You're doing great, keep going!",
+            "One session at a time.",
+            "Focus. You got this.",
+            "Every minute counts!",
+            "Stay locked in!",
+            "You're building something great.",
+            "Rest is part of the process too.",
+            "Consistency beats intensity."
+        ));
     }
 
-    public void showMotivationalQuote() {
-        // TODO: pick and show a quote
+    public String getRandomQuote() {
+        if (quotes.isEmpty()) return "Keep studying!";
+        return quotes.get((int)(Math.random() * quotes.size()));
     }
 
     public void congratulate() {

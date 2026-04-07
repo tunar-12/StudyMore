@@ -37,14 +37,16 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
-        Optional<User> user = userService.login(
-            body.get("email"),
-            body.get("password")
-        );
+        String username     = body.get("username");
+        String passwordHash = body.get("passwordHash");
+
+        Optional<User> user = userService.findByUsername(username)
+                .filter(u -> u.getPasswordHash().equals(passwordHash));
+
         if (user.isPresent()) {
             return ResponseEntity.ok(user.get());
         }
-        return ResponseEntity.status(401).body("Invalid email or password");
+        return ResponseEntity.status(401).body("Invalid username or password");
     }
 
     @PostMapping("/users/sync")
