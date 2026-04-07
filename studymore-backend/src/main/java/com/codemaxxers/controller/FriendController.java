@@ -20,18 +20,49 @@ public class FriendController {
         this.friendService = friendService;
     }
  
-    // GET /api/friends/{userId}
     @GetMapping("/{userId}")
-    public ResponseEntity<List<User>> getFriends(@PathVariable Long userId) {
-        return ResponseEntity.ok(friendService.getFriends(userId));
+    public ResponseEntity<?> getFriends(@PathVariable Long userId) {
+        try {
+            List<User> friends = friendService.getFriends(userId);
+            List<java.util.Map<String, Object>> result = new java.util.ArrayList<>();
+            for (User u : friends) {
+                java.util.Map<String, Object> map = new java.util.HashMap<>();
+                map.put("userId",       u.getUserId());
+                map.put("username",     u.getUsername());
+                map.put("email",        u.getEmail());
+                map.put("coinBalance",  u.getCoinBalance());
+                map.put("rank",         u.getRank());
+                map.put("lastSeen",     u.getLastSeen());
+                map.put("totalStudyTime", u.getTotalStudyTime());
+                result.add(map);
+            }
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
+        }
     }
  
     // GET /api/friends/search?keyword= &requestingUserId= 
     @GetMapping("/search")
-    public ResponseEntity<List<User>> search(
+    public ResponseEntity<?> search(
             @RequestParam String keyword,
             @RequestParam Long requestingUserId) {
-        return ResponseEntity.ok(friendService.searchUsers(keyword, requestingUserId));
+        try {
+            List<User> users = friendService.searchUsers(keyword, requestingUserId);
+            List<java.util.Map<String, Object>> result = new java.util.ArrayList<>();
+            for (User u : users) {
+                java.util.Map<String, Object> map = new java.util.HashMap<>();
+                map.put("userId",   u.getUserId());
+                map.put("username", u.getUsername());
+                map.put("email",    u.getEmail());
+                map.put("lastSeen", u.getLastSeen());
+                map.put("rank",     u.getRank());
+                result.add(map);
+            }
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
+        }
     }
  
     // GET /api/friends/requests/pending?userId=
