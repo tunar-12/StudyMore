@@ -990,12 +990,12 @@ public class DatabaseManager {
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, task.getTitle());
             stmt.setString(2, task.getContent());
-            stmt.setInt(3, task.isCompleted() ? 1 : 0);
+            stmt.setInt(3, task.isSrsEnabled() ? 1 : 0);
 
             if (task.isSrsEnabled() && task.getSrsData() != null) {
                 stmt.setString(4, task.getSrsData().getIntensity().name());
             } else {
-                stmt.setString(4, null);
+                stmt.setString(4, "STANDARD");
             }
 
             stmt.setInt(5, task.isCompleted() ? 1 : 0);
