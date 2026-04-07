@@ -36,8 +36,23 @@ public class FriendController {
  
     // GET /api/friends/requests/pending?userId=
     @GetMapping("/requests/pending")
-    public ResponseEntity<List<FriendRequest>> getPendingRequests(@RequestParam Long userId) {
-        return ResponseEntity.ok(friendService.getPendingRequests(userId));
+    public ResponseEntity<?> getPendingRequests(@RequestParam Long userId) {
+        try {
+            List<FriendRequest> requests = friendService.getPendingRequests(userId);
+            List<java.util.Map<String, Object>> result = new java.util.ArrayList<>();
+            for (FriendRequest fr : requests) {
+                java.util.Map<String, Object> map = new java.util.HashMap<>();
+                map.put("requestId", fr.getRequestId());
+                map.put("senderId", fr.getSenderId());
+                map.put("senderUsername", fr.getSenderUsername());
+                map.put("receiverId", fr.getReceiverId());
+                map.put("status", fr.getStatus().toString());
+                result.add(map);
+            }
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
+        }
     }
  
     // POST /api/friends/requests
