@@ -11,12 +11,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import StudyMore.models.Settings;
 import StudyMore.models.User;
 
 public class Main extends Application {
     public static DatabaseManager mngr;
     public static Stage primarStageStatic;
     public static User user;
+    public static Settings settings; 
     private static ScheduledExecutorService syncScheduler;
 
     @Override
@@ -26,7 +28,7 @@ public class Main extends Application {
 
         if(check != -1) {
             user = mngr.getUser(check);
-            
+            settings = mngr.getSettings(user.getUserId()); 
             if (user != null) {
                 startSyncLoop();
                 Parent root = FXMLLoader.load(getClass().getResource("fxml/Index.fxml"));
