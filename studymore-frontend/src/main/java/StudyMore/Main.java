@@ -21,24 +21,35 @@ public class Main extends Application {
     public static User user;
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
-        primarStageStatic = primaryStage; // will use this to change the fxml for the user
+    public void start(Stage primaryStage) throws Exception {
+        primarStageStatic = primaryStage; 
         long check = isUserLoggedIn();
 
         if(check != -1) {
             user = mngr.getUser(check);
-            startSyncLoop();
-
-            Parent root = FXMLLoader.load(getClass().getResource("fxml/Index.fxml"));
-            primaryStage.setTitle("StudyMore");
-            primaryStage.setScene(new Scene(root, 1200, 800));
-            primaryStage.show();
+            
+            if (user != null) {
+                startSyncLoop();
+                Parent root = FXMLLoader.load(getClass().getResource("fxml/Index.fxml"));
+                primaryStage.setTitle("StudyMore");
+                primaryStage.setScene(new Scene(root, 1200, 800));
+                primaryStage.show();
+            } else {
+                System.err.println("Local DB corrupted or incomplete. Forcing re-login.");
+                mngr.wipeAndRebuildDatabase(); // Use the wipe method 
+                loadLoginScreen(primaryStage);
+            }
         } else {
-            Parent root = FXMLLoader.load(getClass().getResource("fxml/loginRegister.fxml"));
-            primaryStage.setTitle("StudyMore");
-            primaryStage.setScene(new Scene(root, 1200, 800));
-            primaryStage.show();
+            loadLoginScreen(primaryStage);
         }
+    }
+
+    // Helper method 
+    private void loadLoginScreen(Stage stage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("fxml/loginRegister.fxml"));
+        stage.setTitle("StudyMore - Login");
+        stage.setScene(new Scene(root, 1200, 800));
+        stage.show();
     }
 
 

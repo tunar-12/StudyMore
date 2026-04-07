@@ -1168,6 +1168,99 @@ public class DatabaseManager {
         }
     }
 
+    public void wipeAndRebuildDatabase() {
+        closeConnection();
+        
+        java.io.File dbFile = new java.io.File("studymore_database.db");
+        if (dbFile.exists()) {
+            boolean deleted = dbFile.delete();
+            if (deleted) {
+                System.out.println("Old local database wiped successfully.");
+            } else {
+                System.err.println("Failed to delete the local database file. It might be locked.");
+            }
+        }
+
+        initilizeDB(); 
+        insertAssets(); 
+    }
+
+    public void restoreFromSyncPayload(JSONObject payload) {
+        try {
+            connection.setAutoCommit(false); 
+
+            // Restore 1-to-1 Tables (Objects)
+            restoreSingleRowFromJson("users", payload.optJSONObject("user"));
+            restoreSingleRowFromJson("user_stats", payload.optJSONObject("userStats"));
+            restoreSingleRowFromJson("settings", payload.optJSONObject("settings"));
+            restoreSingleRowFromJson("multipliers", payload.optJSONObject("multipliers"));
+            restoreSingleRowFromJson("inventory", payload.optJSONObject("inventory"));
+
+            // Restore 1-to-Many Tables (Arrays)
+            restoreArrayFromJson("tasks", payload.optJSONArray("tasks"));
+            restoreArrayFromJson("sessions", payload.optJSONArray("sessions"));
+            restoreArrayFromJson("user_achievements", payload.optJSONArray("userAchievements"));
+            restoreArrayFromJson("task_srs_history", payload.optJSONArray("taskSrsHistory"));
+            restoreArrayFromJson("inventory_owned_items", payload.optJSONArray("inventoryOwnedItems"));
+            restoreArrayFromJson("inventory_equipped_items", payload.optJSONArray("inventoryEquippedItems"));
+            restoreArrayFromJson("friends", payload.optJSONArray("friends"));
+            restoreArrayFromJson("friend_requests", payload.optJSONArray("friendRequests"));
+            restoreArrayFromJson("study_groups", payload.optJSONArray("studyGroups"));
+
+            connection.commit();
+            System.out.println("Local database successfully restored from server payload!");
+        } catch (SQLException e) {
+            try { connection.rollback(); } catch (SQLException ignored) {}
+            System.err.println("Failed to restore from sync payload: " + e.getMessage());
+        } finally {
+            try { connection.setAutoCommit(true); } catch (SQLException ignored) {}
+        }
+    }
+
+    private void restoreSingleRowFromJson(String tableName, JSONObject obj) throws SQLException {
+        if (obj == null || obj.isEmpty()) return;
+        JSONArray array = new JSONArray();
+        array.put(obj);
+        restoreArrayFromJson(tableName, array);
+    }
+
+    private void restoreArrayFromJson(String tableName, JSONArray array) throws SQLException {
+        if (array == null || array.length() == 0) return;
+
+        // Extract columns from the first object to build the query dynamically
+        JSONObject firstObj = array.getJSONObject(0);
+        String[] columns = JSONObject.getNames(firstObj);
+        if (columns == null) return;
+
+        StringBuilder sql = new StringBuilder("INSERT OR REPLACE INTO ").append(tableName).append(" (");
+        StringBuilder placeholders = new StringBuilder(" VALUES (");
+
+        for (int i = 0; i < columns.length; i++) {
+            sql.append(columns[i]);
+            placeholders.append("?");
+            if (i < columns.length - 1) {
+                sql.append(", ");
+                placeholders.append(", ");
+            }
+        }
+        sql.append(")").append(placeholders.toString()).append(")");
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql.toString())) {
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject row = array.getJSONObject(i);
+                for (int j = 0; j < columns.length; j++) {
+                    Object val = row.opt(columns[j]);
+                    if (JSONObject.NULL.equals(val)) {
+                        stmt.setObject(j + 1, null);
+                    } else {
+                        stmt.setObject(j + 1, val);
+                    }
+                }
+                stmt.addBatch();
+            }
+            stmt.executeBatch();
+        }
+    }
 
 
 }

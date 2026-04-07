@@ -94,4 +94,50 @@ public class SyncService {
             syncRepository.upsertMultipleRows("study_groups", "id", payload.getStudyGroups());
         }
     }
+
+    @Autowired
+    private org.springframework.jdbc.core.JdbcTemplate jdbcTemplate;
+
+    public SyncModel exportUserData(Long userId) {
+        SyncModel payload = new SyncModel();
+
+        // 1-to-1 Mappings
+        var users = jdbcTemplate.queryForList("SELECT * FROM users WHERE id = ?", userId);
+        if (!users.isEmpty()) {
+            payload.setUser(users.get(0)); 
+            payload.setUserStats(users.get(0)); 
+        }
+
+        var settings = jdbcTemplate.queryForList("SELECT * FROM settings WHERE id = ?", userId);
+        if (!settings.isEmpty()) payload.setSettings(settings.get(0));
+
+        var multipliers = jdbcTemplate.queryForList("SELECT * FROM multipliers WHERE id = ?", userId);
+        if (!multipliers.isEmpty()) payload.setMultipliers(multipliers.get(0));
+
+        var inventory = jdbcTemplate.queryForList("SELECT * FROM inventory WHERE id = ?", userId);
+        if (!inventory.isEmpty()) payload.setInventory(inventory.get(0));
+
+        // 1-to-Many Collections
+        payload.setTasks(jdbcTemplate.queryForList("SELECT * FROM tasks WHERE user_id = ?", userId));
+        payload.setSessions(jdbcTemplate.queryForList("SELECT * FROM sessions WHERE user_id = ?", userId));
+        payload.setUserAchievements(jdbcTemplate.queryForList("SELECT * FROM user_achievements WHERE user_id = ?", userId));
+
+        // Nested / Join Tables
+        payload.setTaskSrsHistory(jdbcTemplate.queryForList(
+            "SELECT tsh.* FROM task_srs_history tsh JOIN tasks t ON tsh.task_id = t.id WHERE t.user_id = ?", userId));
+            
+        payload.setInventoryOwnedItems(jdbcTemplate.queryForList(
+            "SELECT ioi.* FROM inventory_owned_items ioi JOIN inventory i ON ioi.inventory_id = i.id WHERE i.user_id = ?", userId));
+            
+        payload.setInventoryEquippedItems(jdbcTemplate.queryForList(
+            "SELECT iei.* FROM inventory_equipped_items iei JOIN inventory i ON iei.inventory_id = i.id WHERE i.user_id = ?", userId));
+
+        // Social
+        payload.setFriends(jdbcTemplate.queryForList("SELECT * FROM friends WHERE user_id = ? OR friend_id = ?", userId, userId));
+        payload.setFriendRequests(jdbcTemplate.queryForList("SELECT * FROM friend_requests WHERE sender_id = ? OR receiver_id = ?", userId, userId));
+        payload.setStudyGroups(jdbcTemplate.queryForList(
+            "SELECT DISTINCT sg.* FROM study_groups sg LEFT JOIN study_group_members sgm ON sg.id = sgm.group_id WHERE sg.host_id = ? OR sgm.user_id = ?", userId, userId));
+
+        return payload;
+    }
 }

@@ -39,4 +39,18 @@ public class SyncController {
             ));
         }
     }
+
+    @GetMapping("/pull/{userId}")
+    public ResponseEntity<?> pullUserData(@PathVariable Long userId) {
+        try {
+            SyncModel payload = syncService.exportUserData(userId);
+            return ResponseEntity.ok(payload);
+        } catch (Exception e) {
+            System.err.println("Pull sync failed: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                "status", "error",
+                "message", "Failed to pull user data: " + e.getMessage()
+            ));
+        }
+    }
 }

@@ -20,7 +20,11 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Map<String, String> body) {
         try {
+            // Parse the ID sent from the frontend
+            Long userId = Long.valueOf(body.get("userId")); 
+            
             User user = userService.register(
+                userId,
                 body.get("username"),
                 body.get("email"),
                 body.get("password")

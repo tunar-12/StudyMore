@@ -15,7 +15,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User register(String username, String email, String password) {
+    public User register(Long userId, String username, String email, String password) {
         if (userRepository.findByEmail(email).isPresent()) {
             throw new RuntimeException("Email already in use");
         }
@@ -23,6 +23,7 @@ public class UserService {
             throw new RuntimeException("Username already taken");
         }
         User user = new User(username, email, sha256(password));
+        user.setUserId(userId); 
         return userRepository.save(user);
     }
 
