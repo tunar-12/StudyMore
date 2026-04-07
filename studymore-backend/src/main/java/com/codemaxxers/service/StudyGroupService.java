@@ -24,10 +24,13 @@ public class StudyGroupService {
     }
  
     //  CRUD
+    @Transactional
     public StudyGroup createGroup(String title, String studyGoal, Long hostId, int maxMembers) {
         User host = findUser(hostId);
         StudyGroup group = new StudyGroup(title, studyGoal, host, maxMembers);
-        return studyGroupRepository.save(group);
+        StudyGroup saved = studyGroupRepository.save(group);
+        saved.getMembers().size(); // initialize
+        return saved;
     }
  
     @Transactional(readOnly = true)
@@ -48,7 +51,12 @@ public class StudyGroupService {
  
     @Transactional(readOnly = true)
     public List<StudyGroup> getGroupsForUser(Long userId) {
-        return studyGroupRepository.findActiveGroupsByMemberId(userId);
+        List<StudyGroup> groups = studyGroupRepository.findActiveGroupsByMemberId(userId);
+        // Force initialize lazy collections within transaction
+        for (StudyGroup g : groups) {
+            g.getMembers().size();
+        }
+        return groups;
     }
  
     public void disbandGroup(Long groupId, Long requestingUserId) {
@@ -81,7 +89,9 @@ public class StudyGroupService {
     // leaderboard
     @Transactional(readOnly = true)
     public List<User> getLeaderboard(Long groupId) {
-        return getGroup(groupId).getLeaderboard();
+        StudyGroup group = getGroup(groupId);
+        group.getMembers().size(); // initialize within transaction
+        return group.getLeaderboard();
     }
  
     
