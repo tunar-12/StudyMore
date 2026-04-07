@@ -175,7 +175,10 @@ public class Task {
 
     public void setNextRecallDateFromString(String dateStr) {
         if (dateStr != null && !dateStr.isEmpty() && !dateStr.equals("null")) {
-            this.nextRecallDate = LocalDate.parse(dateStr, DATE_FORMAT);
+            // Handles both formats (e.g. turns "2026-04-08 03:00:00" into "2026-04-08")
+            String justTheDate = dateStr.split(" ")[0]; 
+            
+            this.nextRecallDate = LocalDate.parse(justTheDate, DATE_FORMAT);
         }
     }
 
