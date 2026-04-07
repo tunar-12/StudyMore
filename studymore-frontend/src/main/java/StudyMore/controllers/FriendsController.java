@@ -196,14 +196,23 @@ public class FriendsController {
             return;
         }
 
-        long maxSec = 1;
+        List<JSONObject> memberList = new ArrayList<>();
         for (int i = 0; i < members.length(); i++) {
-            long t = members.getJSONObject(i).optLong("totalStudyTime", 0);
+            memberList.add(members.getJSONObject(i));
+        }
+        memberList.sort((a, b) -> Long.compare(
+            b.optLong("totalStudyTime", 0),
+            a.optLong("totalStudyTime", 0)
+        ));
+
+        long maxSec = 1;
+        for (JSONObject u : memberList) {
+            long t = u.optLong("totalStudyTime", 0);
             if (t > maxSec) maxSec = t;
         }
 
-        for (int i = 0; i < members.length(); i++) {
-            JSONObject u  = members.getJSONObject(i);
+        for (int i = 0; i < memberList.size(); i++) {
+            JSONObject u  = memberList.get(i);
             long   uid    = u.optLong("userId", -1);
             String uname  = u.optString("username", "?");
             long   sec    = u.optLong("totalStudyTime", 0);
