@@ -135,7 +135,7 @@
          </children>
       </HBox>
 
-      <AnchorPane pickOnBounds="false">
+      <AnchorPane fx:id="mascotContainer" pickOnBounds="false">
          <children>
             <AnchorPane AnchorPane.bottomAnchor="32.0" AnchorPane.leftAnchor="32.0">
                <children>
