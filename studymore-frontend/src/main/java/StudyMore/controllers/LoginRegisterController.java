@@ -36,62 +36,65 @@ public class LoginRegisterController {
         String username = loginUsernameField.getText().trim();
         String password = loginPasswordField.getText();
 
-        if (username.isEmpty() || password.isEmpty()) {
-            showLoginError("Please fill in all fields.");
+        if (username.isEmpty() || password.isEmpty()) return;
+        String loginBody = "{\"username\":\"" + username + "\","
+                        + "\"passwordHash\":\"" + sha256(password) + "\"}";
+        String loginResponse = ApiClient.postAuth("/auth/login", loginBody);
+
+        long userId = -1;
+        String email = "";
+        try {
+            org.json.JSONObject res = new org.json.JSONObject(loginResponse);
+            if (!res.has("userId")) {
+                loginPasswordField.setStyle("-fx-border-color: red; -fx-background-color: #000; -fx-text-fill: white; -fx-padding: 10px;");
+                return;
+            }
+            userId = res.getLong("userId");
+            email  = res.optString("email", "");
+        } catch (Exception e) {
+            loginPasswordField.setStyle("-fx-border-color: red; -fx-background-color: #000; -fx-text-fill: white; -fx-padding: 10px;");
             return;
         }
-
-        // Authenticate with the backend first
-        String loginBody = "{\"email\":\"" + username + "\", \"password\":\"" + password + "\"}";
+        final long finalUserId = userId;
+        final String finalEmail = email;
         try {
-            String loginResponse = ApiClient.postAuth("/auth/login", loginBody);
-
-            if (loginResponse != null && loginResponse.contains("\"userId\"")) {
-                org.json.JSONObject userJson = new org.json.JSONObject(loginResponse);
-                long serverUserId = userJson.getLong("userId");
-
-                // Fetch Master Payload
-                String syncResponse = ApiClient.get("/api/sync/pull/" + serverUserId); 
-                org.json.JSONObject masterPayload = new org.json.JSONObject(syncResponse);
-
-                // WIPE AND REBUILD
-                Main.mngr.wipeAndRebuildDatabase();
-                Main.mngr.restoreFromSyncPayload(masterPayload);
-
-                Main.user = Main.mngr.getUser(serverUserId);
-                
-                // Start heartbeat/sync loops
-                try {
-                    ApiClient.postAuth("/auth/users/heartbeat", "{\"userId\":" + serverUserId + "}");
-                } catch (Exception ignored) {}
-
-                navigateToMain();
-            } else {
-                // Not found on server, fallback to local check (for offline logins)
-                String sql = "SELECT id FROM users WHERE email = ? AND password_hash = ?";
-                try (java.sql.PreparedStatement pstmt = Main.mngr.getConnection().prepareStatement(sql)) {
-                    pstmt.setString(1, username);
-                    pstmt.setString(2, sha256(password));
-                    try (java.sql.ResultSet rs = pstmt.executeQuery()) {
-                        if (rs.next()) {
-                            Main.user = Main.mngr.getUser(rs.getLong("id"));
-                            navigateToMain();
-                            return;
+            try (java.sql.PreparedStatement check = Main.mngr.getConnection().prepareStatement(
+                    "SELECT id FROM users WHERE id = ?")) {
+                check.setLong(1, finalUserId);
+                try (java.sql.ResultSet rs = check.executeQuery()) {
+                    if (!rs.next()) {
+                        try (java.sql.PreparedStatement ins = Main.mngr.getConnection().prepareStatement(
+                                "INSERT INTO users(id, username, email, password_hash) VALUES(?,?,?,?)")) {
+                            ins.setLong(1, finalUserId);
+                            ins.setString(2, username);
+                            ins.setString(3, finalEmail);
+                            ins.setString(4, sha256(password));
+                            ins.executeUpdate();
                         }
+                        Main.mngr.initializeNewUserInventory(finalUserId);
+                        Main.mngr.insertAchievements(finalUserId);
                     }
                 }
-                showLoginError("Invalid username or password.");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            showLoginError("Login failed. Check your connection.");
-        }
+
+            Main.user = Main.mngr.getUser(finalUserId);
+
+            ApiClient.postAuth("/auth/users/heartbeat",
+                    "{\"userId\":" + finalUserId + "}");
+            Main.startSyncLoop();
+
+            Parent root = FXMLLoader.load(getClass().getResource("../fxml/Index.fxml"));
+            Main.primarStageStatic.setTitle("StudyMore");
+            Main.primarStageStatic.setScene(new Scene(root, 1200, 800));
+            Main.primarStageStatic.show();
+
+        } catch (Exception e) { e.printStackTrace(); }
     }
 
     @FXML
     private void handleRegister(ActionEvent event) {
         String username = registerUsernameField.getText().trim();
-        String email = registerEmailField.getText().trim();
+        String email    = registerEmailField.getText().trim();
         String password = registerPasswordField.getText();
 
         if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
@@ -99,58 +102,38 @@ public class LoginRegisterController {
             return;
         }
 
-        // Generate the Snowflake ID locally first
-        long generatedId = SnowflakeIDGenerator.generate();
-
-        // Send the registration request to the backend including the new ID
-        String requestBody = "{\"userId\":\"" + generatedId + "\","
-                           + "\"username\":\"" + username + "\","
-                           + "\"email\":\"" + email + "\","
-                           + "\"password\":\"" + password + "\"}";
+        long   generatedId   = SnowflakeIDGenerator.generate();
+        String passwordHash  = sha256(password);
+        String syncBody = "{\"userId\":"        + generatedId   + ","
+                        + "\"username\":\""     + username      + "\","
+                        + "\"email\":\""        + email         + "\","
+                        + "\"passwordHash\":\"" + passwordHash  + "\"}";
 
         try {
-            String response = ApiClient.postAuth("/auth/register", requestBody);
+            String syncResponse = ApiClient.postAuth("/auth/users/sync", syncBody);
+            org.json.JSONObject res = new org.json.JSONObject(syncResponse);
 
-            // Basic check to see if the server accepted it
-            if (response == null || response.contains("error") || response.contains("taken") || response.contains("use")) {
-                showRegisterError("Registration failed. Username or email may already exist.");
+            if (res.has("error")) {
+                showRegisterError("Registration failed: " + res.getString("error"));
                 return;
             }
-
-            // The backend successfully registered the user. Now save locally.
-            final String sql = """
-                INSERT INTO users(id, username, email, password_hash)
-                VALUES (?, ?, ?, ?)
-                """;
-
+            String sql = "INSERT INTO users(id, username, email, password_hash) VALUES (?, ?, ?, ?)";
             try (java.sql.PreparedStatement pstmt = Main.mngr.getConnection().prepareStatement(sql)) {
                 pstmt.setLong(1, generatedId);
                 pstmt.setString(2, username);
                 pstmt.setString(3, email);
-                pstmt.setString(4, sha256(password)); 
-                int rows = pstmt.executeUpdate();
-
-                if (rows != 1) {
-                    throw new IllegalStateException("Insert failed locally, no rows affected");
-                }
-
-                System.out.println("User successfully registered on server and saved locally.");
-                
-                // Initialize local states
-                Main.mngr.initializeNewUserInventory(generatedId);
-                Main.mngr.insertAchievements(generatedId);
-                Main.user = Main.mngr.getUser(generatedId);
-
-                try {
-                    ApiClient.postAuth("/auth/users/heartbeat", "{\"userId\":" + generatedId + "}");
-                } catch (Exception ignored) {}
-
-                navigateToMain();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                showRegisterError("Local database error during registration.");
+                pstmt.setString(4, passwordHash);
+                pstmt.executeUpdate();
             }
+
+            Main.mngr.initializeNewUserInventory(generatedId);
+            Main.mngr.insertAchievements(generatedId);
+            Main.user = Main.mngr.getUser(generatedId);
+            ApiClient.postAuth("/auth/users/heartbeat",
+                    "{\"userId\":" + generatedId + "}");
+            Main.startSyncLoop();
+
+            navigateToMain();
 
         } catch (Exception e) {
             e.printStackTrace();
