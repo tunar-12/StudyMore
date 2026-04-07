@@ -62,7 +62,8 @@ public class SyncService {
             syncRepository.upsertMultipleRows("sessions", "id", payload.getSessions());
         }
         if (payload.getUserAchievements() != null) {
-            syncRepository.upsertMultipleRows("user_achievements", "id", payload.getUserAchievements());
+            syncRepository.upsertMultipleRowsComposite("user_achievements", 
+                java.util.List.of("user_id", "achievement_id"), payload.getUserAchievements());
         }
 
         // nested
