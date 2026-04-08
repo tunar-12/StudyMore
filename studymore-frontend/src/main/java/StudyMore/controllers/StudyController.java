@@ -238,6 +238,10 @@ public class StudyController {
             stopBreakTimeline();
         }
 
+        if (Main.settings != null && Main.settings.isLockInMode()) {
+            Controller.instance.setFullScreenMode(true);
+        }
+
         session.start();
         studyTimeline.play();
         timerControlButton.setText("STOP");
@@ -246,6 +250,10 @@ public class StudyController {
     private void stopTimer() {
         studyTimeline.stop();
         session.stop();
+
+        if (Main.settings != null) {
+            Controller.instance.setFullScreenMode(false);
+        }
 
         session.calculateCoins();
         session.end();

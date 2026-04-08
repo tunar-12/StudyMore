@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.Parent;
+import javafx.stage.Stage; // Make sure to import Stage
 
 public class Controller {
     public static Controller instance;
@@ -42,6 +43,15 @@ public class Controller {
         instance = this; 
         refreshBackground(); 
         handleStudy(); 
+    }
+
+    // --- NEW FULLSCREEN METHOD ---
+    public void setFullScreenMode(boolean enable) {
+        // Grab the current window (Stage)
+        Stage stage = (Stage) mainLayout.getScene().getWindow();
+        if (stage != null) {
+            stage.setFullScreen(enable);
+        }
     }
 
     public void refreshBackground() {
