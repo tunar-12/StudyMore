@@ -70,14 +70,7 @@
                             </VBox>
 
                             <VBox spacing="8.0" HBox.hgrow="ALWAYS">
-                                <HBox spacing="24.0">
-                                    <Label text="JAN" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
-                                    <Label text="FEB" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
-                                    <Label text="MAR" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
-                                    <Label text="APR" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
-                                    <Label text="MAY" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
-                                    <Label text="JUN" style="-fx-text-fill: #737373; -fx-font-size: 10; -fx-font-family: monospace;" />
-                                </HBox>
+                                
                                 <HBox fx:id="heatmapGrid" prefHeight="80.0" prefWidth="600.0" style="-fx-background-color: #0a0a0a; -fx-border-color: #262626;" />
                             </VBox>
                         </HBox>
