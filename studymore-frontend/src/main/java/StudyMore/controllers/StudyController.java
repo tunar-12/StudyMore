@@ -40,6 +40,7 @@ public class StudyController {
     @FXML private Label userRankLabel;
     @FXML private Label catQuoteLabel;
     @FXML private AnchorPane mascotContainer;
+    @FXML private VBox timerBox;
 
     private int LONG_BREAK_SECONDS  = 1200; // 20 min
     private int SHORT_BREAK_SECONDS = 600;  // 10 min
@@ -94,12 +95,15 @@ public class StudyController {
         if (session.getState() == SessionState.STUDYING) {
             timerControlButton.setText("STOP");
             updateTimerLabel(session.getDuration());
+            setTimerBackgroundStudy(); 
         } else if (session.getState() == SessionState.ON_BREAK) {
             timerControlButton.setText("START");
             updateTimerLabel(session.getBreakTimeRemaining());
+            setTimerBackgroundBreak();
         } else {
             timerControlButton.setText("START");
             updateTimerLabel(session.getDuration());
+            setTimerBackgroundStudy();
         }
 
         updateMultiplier(session.getMultiplier().getValue());
@@ -114,6 +118,19 @@ public class StudyController {
             stopTimer();
         } else {
             startTimer();
+        }
+    }
+
+    private void setTimerBackgroundStudy() {
+        if (timerBox != null) {
+            timerBox.setStyle("-fx-background-color: black; -fx-border-color: #262626;");
+        }
+    }
+
+    private void setTimerBackgroundBreak() {
+        if (timerBox != null) {
+            // Dark faded red to match the dark theme aesthetic
+            timerBox.setStyle("-fx-background-color: #2b1111; -fx-border-color: #4a1c1c;");
         }
     }
 
@@ -245,6 +262,18 @@ public class StudyController {
         session.start();
         studyTimeline.play();
         timerControlButton.setText("STOP");
+        setTimerBackgroundStudy(); 
+    }
+
+    private void startBreak(int seconds) {
+        stopTimer();
+        stopBreakTimeline();
+
+        session.startBreak(seconds);
+        setTimerBackgroundBreak();
+        
+        breakTimeline = buildBreakTimeline();
+        breakTimeline.play();
     }
 
     private void stopTimer() {
@@ -260,15 +289,6 @@ public class StudyController {
 
         
         timerControlButton.setText("START");
-    }
-
-    private void startBreak(int seconds) {
-        stopTimer();
-        stopBreakTimeline();
-
-        session.startBreak(seconds);
-        breakTimeline = buildBreakTimeline();
-        breakTimeline.play();
     }
 
     private static void stopBreakTimeline() {
@@ -314,6 +334,7 @@ public class StudyController {
                     // Update UI button if they are looking at it
                     if (currentInstance != null) {
                         currentInstance.timerControlButton.setText("STOP");
+                        currentInstance.setTimerBackgroundStudy(); 
                     }
                 } else {
                     if (currentInstance != null) {
