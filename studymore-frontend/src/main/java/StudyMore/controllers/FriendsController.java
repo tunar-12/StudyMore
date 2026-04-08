@@ -255,26 +255,65 @@ public class FriendsController {
 
         if (arr.isEmpty()) { setStatus("No friends to invite."); return; }
 
-        List<String> names = new ArrayList<>();
-        List<Long>   ids   = new ArrayList<>();
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Add Friend to Group");
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+        dialog.getDialogPane().setStyle(
+            "-fx-background-color: #0a0a0a; -fx-border-color: #262626; -fx-border-width: 1;");
+        dialog.getDialogPane().lookupButton(ButtonType.CANCEL).setStyle(
+            "-fx-background-color: transparent; -fx-text-fill: #a3a3a3; " +
+            "-fx-border-color: #262626; -fx-border-width: 1; -fx-font-weight: bold;");
+
+        Label titleLbl = new Label("SELECT A FRIEND TO ADD");
+        titleLbl.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;");
+
+        Label hintLbl = new Label("Click a friend to add them to the group");
+        hintLbl.setStyle("-fx-text-fill: #404040; -fx-font-size: 11px;");
+
+        VBox friendsBox = new VBox(6);
         for (int i = 0; i < arr.length(); i++) {
-            JSONObject u = arr.getJSONObject(i);
-            names.add(u.optString("username", "?"));
-            ids.add(u.optLong("userId", -1));
+            JSONObject u  = arr.getJSONObject(i);
+            String uname  = u.optString("username", "?");
+            long   uid    = u.optLong("userId", -1);
+
+            Button btn = new Button(uname.toUpperCase());
+            btn.setMaxWidth(Double.MAX_VALUE);
+            btn.setStyle(
+                "-fx-background-color: #111111; -fx-text-fill: white; -fx-font-weight: bold; " +
+                "-fx-border-color: #262626; -fx-border-width: 1; -fx-padding: 12; " +
+                "-fx-cursor: hand; -fx-alignment: CENTER-LEFT;");
+            btn.setOnMouseEntered(e -> btn.setStyle(
+                "-fx-background-color: #1a1a1a; -fx-text-fill: white; -fx-font-weight: bold; " +
+                "-fx-border-color: #404040; -fx-border-width: 1; -fx-padding: 12; " +
+                "-fx-cursor: hand; -fx-alignment: CENTER-LEFT;"));
+            btn.setOnMouseExited(e -> btn.setStyle(
+                "-fx-background-color: #111111; -fx-text-fill: white; -fx-font-weight: bold; " +
+                "-fx-border-color: #262626; -fx-border-width: 1; -fx-padding: 12; " +
+                "-fx-cursor: hand; -fx-alignment: CENTER-LEFT;"));
+            btn.setOnAction(e -> {
+                dialog.close();
+                String response = ApiClient.post("/groups/" + groupId + "/join?userId=" + uid, "");
+                try {
+                    JSONObject res = new JSONObject(response);
+                    if (res.has("error")) setStatus("Could not add: " + res.getString("error"));
+                    else { setStatus(uname + " added to group!"); loadGroupLeaderboard(); }
+                } catch (Exception ex) { setStatus("Error: " + ex.getMessage()); }
+            });
+            friendsBox.getChildren().add(btn);
         }
 
-        ChoiceDialog<String> d = new ChoiceDialog<>(names.get(0), names);
-        d.setTitle("Invite to Group"); d.setHeaderText(null); d.setContentText("Select friend:");
-        d.showAndWait().ifPresent(sel -> {
-            int  idx      = names.indexOf(sel);
-            long friendId = ids.get(idx);
-            String response = ApiClient.post("/groups/" + groupId + "/join?userId=" + friendId, "");
-            try {
-                JSONObject res = new JSONObject(response);
-                if (res.has("error")) setStatus("Could not invite: " + res.getString("error"));
-                else { setStatus(sel + " added to group!"); loadGroupLeaderboard(); }
-            } catch (Exception e) { setStatus("Error: " + e.getMessage()); }
-        });
+        ScrollPane scroll = new ScrollPane(friendsBox);
+        scroll.setFitToWidth(true);
+        scroll.setPrefHeight(220);
+        scroll.setStyle("-fx-background: transparent; -fx-background-color: transparent; -fx-border-width: 0;");
+
+        VBox content = new VBox(12, titleLbl, hintLbl, scroll);
+        content.setPadding(new Insets(20));
+        content.setPrefWidth(360);
+        dialog.getDialogPane().setContent(content);
+        dialog.getDialogPane().setPrefHeight(380);
+
+        dialog.showAndWait();
     }
 
 

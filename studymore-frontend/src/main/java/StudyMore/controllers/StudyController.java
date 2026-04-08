@@ -8,6 +8,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -20,6 +21,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Priority;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 
 public class StudyController {
 
@@ -136,7 +138,11 @@ public class StudyController {
         }
 
         if (groups.isEmpty()) {
-            goal.setText("Goal: No Study Group");
+            goal.setText("Goal: —");
+            if (userRankLabel != null) {
+                userRankLabel.setVisible(false);
+                userRankLabel.setManaged(false);
+            }
             return;
         }
 
@@ -148,25 +154,37 @@ public class StudyController {
             }
         }
 
-        long groupId   = bestGroup.getLong("groupId");
-        int  studyGoal = 50;
-        try { studyGoal = Integer.parseInt(bestGroup.optString("studyGoal", "50")); } 
+        long groupId = bestGroup.getLong("groupId");
+        int studyGoal = 50;
+        try { studyGoal = Integer.parseInt(bestGroup.optString("studyGoal", "50")); }
         catch (NumberFormatException ignored) {}
+
+        if (userRankLabel != null) {
+            userRankLabel.setVisible(true);
+            userRankLabel.setManaged(true);
+            userRankLabel.setText(bestGroup.optString("title", "GROUP").toUpperCase());
+        }
+
         goal.setText("Goal: " + studyGoal + "H");
 
         JSONArray members;
         try {
             members = new JSONArray(ApiClient.get("/groups/" + groupId + "/leaderboard"));
-        } catch (Exception e) {
-            return;
-        }
+        } catch (Exception e) { return; }
+
+        if (members.isEmpty()) return;
 
         java.util.List<JSONObject> memberList = new java.util.ArrayList<>();
         for (int i = 0; i < members.length(); i++) memberList.add(members.getJSONObject(i));
-        memberList.sort((a, b) -> Long.compare(
-            b.optLong("totalStudyTime", 0),
-            a.optLong("totalStudyTime", 0)
-        ));
+        memberList.sort((a, b) -> {
+            long diff = b.optLong("totalStudyTime", 0) - a.optLong("totalStudyTime", 0);
+            if (diff != 0) return (int) Math.signum(diff);
+            boolean aIsMe = a.optLong("userId", -1) == Main.user.getUserId();
+            boolean bIsMe = b.optLong("userId", -1) == Main.user.getUserId();
+            if (aIsMe) return -1;
+            if (bIsMe) return 1;
+            return 0;
+        });
 
         for (int i = 0; i < memberList.size(); i++) {
             JSONObject u  = memberList.get(i);
@@ -175,46 +193,40 @@ public class StudyController {
             long   sec    = u.optLong("totalStudyTime", 0);
             int    hours  = (int)(sec / 3600);
             boolean isMe  = (uid == Main.user.getUserId());
-
-            if (isMe) {
-                userRankLabel.setText((i + 1) + ". You");
-            }
-            
             leaderboardContainer.getChildren().add(
                 buildLeaderboardRow(i + 1, isMe ? "You" : uname, hours, isMe));
         }
     }
 
     private HBox buildLeaderboardRow(int rank, String username, int hours, boolean isMe) {
-        Label nameLbl = new Label(rank + ". " + username);
-        nameLbl.setStyle("-fx-font-size: 14px;");
-        
-        if (isMe) {
-            nameLbl.setStyle(nameLbl.getStyle() + " -fx-font-weight: bold; -fx-text-fill: black;");
-        } else {
-            nameLbl.setStyle(nameLbl.getStyle() + " -fx-text-fill: #a3a3a3;");
-        }
+        Label rankLbl = new Label("#" + rank);
+        rankLbl.setMinWidth(36);
+        rankLbl.setStyle("-fx-text-fill: " + (isMe ? "white" : "#404040") + "; " +
+                        "-fx-font-size: 16px; -fx-font-weight: bold;");
+        Label avatar = new Label(username.substring(0, 1).toUpperCase());
+        avatar.setPrefSize(36, 36); avatar.setMinSize(36, 36);
+        avatar.setAlignment(javafx.geometry.Pos.CENTER);
+        avatar.setStyle(isMe
+            ? "-fx-background-color: #1a1a1a; -fx-border-color: #fbbf24; -fx-border-width: 1; " +
+            "-fx-background-radius: 18; -fx-border-radius: 18; " +
+            "-fx-text-fill: #fbbf24; -fx-font-size: 12px; -fx-font-weight: bold;"
+            : "-fx-background-color: #111111; -fx-border-color: #262626; -fx-border-width: 1; " +
+            "-fx-background-radius: 18; -fx-border-radius: 18; " +
+            "-fx-text-fill: #a3a3a3; -fx-font-size: 12px; -fx-font-weight: bold;");
 
-        AnchorPane spacer = new AnchorPane();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-
+        Label nameLbl = new Label(username.toUpperCase());
+        nameLbl.setStyle("-fx-text-fill: " + (isMe ? "white" : "#737373") + "; " +
+                        "-fx-font-weight: bold; -fx-font-size: 12px;");
+        HBox.setHgrow(nameLbl, Priority.ALWAYS);
         Label hoursLbl = new Label(hours + "H");
-        hoursLbl.setStyle("-fx-font-family: 'Monospaced'; -fx-font-size: 14px;");
-        if (isMe) {
-            hoursLbl.setStyle(hoursLbl.getStyle() + " -fx-font-weight: bold; -fx-text-fill: black;");
-        } else {
-            hoursLbl.setStyle(hoursLbl.getStyle() + " -fx-text-fill: #737373;");
-        }
+        hoursLbl.setStyle("-fx-text-fill: " + (isMe ? "white" : "#404040") + "; " +
+                        "-fx-font-size: 14px; -fx-font-weight: bold;");
 
-        HBox row = new HBox(nameLbl, spacer, hoursLbl);
-        row.setStyle("-fx-padding: 12;");
-
-        if (isMe) {
-            row.setStyle(row.getStyle() + " -fx-background-color: white;");
-        } else {
-            row.setStyle(row.getStyle() + " -fx-background-color: black; -fx-border-color: #262626;");
-        }
-        
+        HBox row = new HBox(10, rankLbl, avatar, nameLbl, hoursLbl);
+        row.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+        row.setPadding(new Insets(10, 12, 10, 12));
+        row.setStyle("-fx-background-color: " + (isMe ? "#111100" : "#0a0a0a") + "; " +
+                    "-fx-border-color: #1a1a1a; -fx-border-width: 0 0 1 0;");
         return row;
     }
 
