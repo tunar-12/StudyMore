@@ -117,26 +117,40 @@ public class User {
         return mascotCat;
     }
 
-    public int getStudyStreak() {  
-        String query = "SELECT COUNT(*) FROM sessions WHERE user_id = ?";
+    public int getStudyStreak() {
+        String query = """
+            SELECT DISTINCT DATE(start_time, 'localtime') as study_date
+            FROM sessions
+            WHERE user_id = ?
+            AND start_time IS NOT NULL
+            ORDER BY study_date DESC
+            """;
 
         try (java.sql.PreparedStatement stmt = Main.mngr.getConnection().prepareStatement(query)) {
             stmt.setLong(1, this.userId);
-            
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    int count = rs.getInt(1); 
-                    
-                    if (count != this.studyStreak) {
-                        this.studyStreak = count;
+
+            try (java.sql.ResultSet rs = stmt.executeQuery()) {
+                int streak = 0;
+                java.time.LocalDate expected = java.time.LocalDate.now();
+
+                while (rs.next()) {
+                    java.time.LocalDate studyDate = java.time.LocalDate.parse(rs.getString("study_date"));
+
+                    if (studyDate.equals(expected) || studyDate.equals(expected.minusDays(1))) {
+                        streak++;
+                        expected = studyDate.minusDays(1);
+                    } else {
+                        break;
                     }
                 }
+
+                this.studyStreak = streak;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return this.studyStreak; 
+        return this.studyStreak;
     }
     
     public long getTotalStudyTime() { 
