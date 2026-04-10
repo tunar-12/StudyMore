@@ -112,16 +112,14 @@ public class Main extends Application {
     }
 
     public static void startSyncLoop() {
-        // Prevent multiple loops from starting if called twice
         if (syncScheduler != null && !syncScheduler.isShutdown()) {
-            return; 
+            return;
         }
 
         syncScheduler = Executors.newSingleThreadScheduledExecutor();
         syncScheduler.scheduleAtFixedRate(() -> {
-            if (user == null) return; // Failsafe
+            if (user == null) return;
 
-            // Heartbeat
             try {
                 String heartbeatBody = "{\"userId\":" + user.getUserId() 
                                     + ",\"coinBalance\":" + user.getCoinBalance() + "}";
@@ -133,12 +131,12 @@ public class Main extends Application {
             // Sync
             org.json.JSONObject payload = Main.mngr.loadSyncPayload(user.getUserId());
             try {
-                org.json.JSONObject response = ApiClient.sync(user.getUserId(), payload); 
+                org.json.JSONObject response = ApiClient.sync(user.getUserId(), payload);
                 System.out.println("Auto-sync successful.");
             } catch (Exception e) {
                 System.out.println("ERROR SYNC");
             }
-        }, 0, 5, TimeUnit.MINUTES); 
+        }, 0, 5, TimeUnit.MINUTES);
     }
 
     public static void stopSyncLoop() {

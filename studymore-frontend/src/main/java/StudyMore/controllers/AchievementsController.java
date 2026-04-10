@@ -1,5 +1,6 @@
 package StudyMore.controllers;
 
+import StudyMore.ApiClient;
 import StudyMore.Main;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -245,6 +246,11 @@ public class AchievementsController {
                     }
                     Main.user.setCoinBalance(Main.user.getCoinBalance() + reward);
                     showUnlockNotification(achTitle, reward);
+                    try {
+                        String heartbeatBody = "{\"userId\":" + userId
+                                            + ",\"coinBalance\":" + Main.user.getCoinBalance() + "}";
+                        ApiClient.postAuth("/auth/users/heartbeat", heartbeatBody);
+                    } catch (Exception ignored) {}
                     System.out.println("Achievement unlocked! +" + reward + " coins.");
                 }
             }
